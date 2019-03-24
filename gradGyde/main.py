@@ -1,22 +1,23 @@
 from gradGyde import app
-from flask import request, session, url_for
+from flask import jsonify, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
+import json
 
 oauth = OAuth()
-github = oauth.remote_app('github',
-	consumer_key='2', #We need to register and obtain our own
-    consumer_secret='2', 
-    request_token_params={'scope': 'user:email'},
-    base_url='https://api.github.com/',
+google = oauth.remote_app('google',
+	consumer_key=app.config['GOOGLE_CONS_KEY'], 
+    consumer_secret=app.config['GOOGLE_CONS_SECRET'], 
+    request_token_params={'scope': 'email'},
+    base_url='https://www.googleapis.com/oauth2/v1/',
     request_token_url=None,
     access_token_method='POST',
-    access_token_url='https://github.com/login/oauth/access_token',
-	authorize_url='https://github.com/login/oauth/authorize'
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+	authorize_url='https://accounts.google.com/o/oauth2/auth'
 	)
 
-@github.tokengetter
-def get_github_token(token=None):
-	return session.get("github_token")
+@google.tokengetter
+def get_google_token(token=None):
+	return session.get("google_token")
 
 
 @app.route('/')
@@ -29,25 +30,26 @@ def test():
 
 @app.route('/oauth_test')
 def oauth_test():
-	return github.authorize(callback=url_for('oauth_github_authorized', 
-		next =request.args.get('next') or request.referrer or None))
+	return google.authorize(callback=url_for('oauth_google_authorized', 
+		_external=True))
 
-@app.route('/oauth_github_authorized')
-def oauth_github_authorized():
+@app.route('/authorized/')
+def oauth_google_authorized():
 	next_url = request.args.get('next') or url_for('oauth_sucess')
-	resp = github.authorized_response()
+	resp = google.authorized_response()
 	if resp is None:
-		flash(u'You denied the request to sign in.')
 		print('You denied the request to sign in.')
-		return redirect(next_url)
-	session['github_token'] = (
-		resp['oauth_token'],
-		resp['oauth_token_secret'])
-	session['github_user']=resp['screen_name']
-	flash(u'You were signed in as %/' % resp['screen_name'])
-	print('You were signed in as %/' % resp['screen_name'])
+		return 'Google denied access. Reason: %s \n Error: %s' %(
+			request.args['error_reason'],
+			request.args['error_description'])
+	session['google_token'] = (
+		resp['access_token'], '')
+	user_info = google.get('userinfo').data
+	session['google_user']= user_info
+	session['user_name'] = session['google_user']['email']
+	print('You were signed in as %s' % session['user_name'])
 	return redirect('/oauth_test_success')
 
 @app.route('/oauth_test_success')
 def oauth_sucess():
-	return "%/ Successfully logged in! Yaaaay!" % resp['screen_name']
+	return "%s Successfully logged in! Yaaaay!" % session['user_name']
