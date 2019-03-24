@@ -28,8 +28,8 @@ def index():
 def test():
     return "test"
 
-@app.route('/oauth_test')
-def oauth_test():
+@app.route('/oauth_google')
+def oauth_google():
 	return google.authorize(callback=url_for('oauth_google_authorized', 
 		_external=True))
 
@@ -50,6 +50,11 @@ def oauth_google_authorized():
 	print('You were signed in as %s' % session['user_name'])
 	return redirect('/oauth_test_success')
 
-@app.route('/oauth_test_success')
+@app.route('/login_success')
 def oauth_sucess():
 	return "%s Successfully logged in! Yaaaay!" % session['user_name']
+
+@app.route('/logout')
+def oauth_logout():
+	session.pop('google_token', None)
+	return "Logged out"
