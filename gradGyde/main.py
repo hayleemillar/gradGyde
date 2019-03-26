@@ -1,12 +1,12 @@
 from gradGyde import app
-from flask import jsonify, request, session, url_for
+from flask import jsonify, render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 import os, json
 
 oauth = OAuth()
 google = oauth.remote_app('google',
-	consumer_key=app.config['GOOGLE_CONS_KEY'] #os.getenv('GOOGLE_CONS_KEY'), 
-    consumer_secret=app.config['GOOGLE_CONS_SECRET'] #os.getenv('GOOGLE_CONS_SECRET'), 
+	consumer_key=app.config['GOOGLE_CONS_KEY'], #os.getenv('GOOGLE_CONS_KEY'), 
+    consumer_secret=app.config['GOOGLE_CONS_SECRET'], #os.getenv('GOOGLE_CONS_SECRET'), 
     request_token_params={'scope': 'email'},
     base_url='https://www.googleapis.com/oauth2/v1/',
     request_token_url=None,
@@ -51,6 +51,11 @@ def oauth_google_authorized():
 	print('You were signed in as %s' % session['user_name'])
 	return redirect('/login_success')
 
+@app.route('/login')
+def login():
+	return render_template('login.html')
+
+
 @app.route('/login_success')
 def oauth_sucess():
 	return "%s Successfully logged in! Yaaaay!" % session['user_name']
@@ -59,3 +64,7 @@ def oauth_sucess():
 def oauth_logout():
 	session.pop('google_token', None)
 	return "Logged out"
+
+@app.route('/signup')
+def signup():
+	return render_template('signup.html')
