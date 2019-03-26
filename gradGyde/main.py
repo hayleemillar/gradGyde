@@ -45,10 +45,11 @@ def oauth_google_authorized():
 	session['google_token'] = (
 		resp['access_token'], '')
 	user_info = google.get('userinfo').data
+	print(user_info)
 	session['google_user']= user_info
 	session['user_name'] = session['google_user']['email']
 	print('You were signed in as %s' % session['user_name'])
-	return redirect('/oauth_test_success')
+	return redirect('/login_success')
 
 @app.route('/login_success')
 def oauth_sucess():
