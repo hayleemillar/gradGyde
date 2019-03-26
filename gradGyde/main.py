@@ -1,12 +1,12 @@
 from gradGyde import app
 from flask import jsonify, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
-import json
+import os, json
 
 oauth = OAuth()
 google = oauth.remote_app('google',
-	consumer_key=app.config['GOOGLE_CONS_KEY'], 
-    consumer_secret=app.config['GOOGLE_CONS_SECRET'], 
+	consumer_key=app.config['GOOGLE_CONS_KEY'] #os.getenv('GOOGLE_CONS_KEY'), 
+    consumer_secret=app.config['GOOGLE_CONS_SECRET'] #os.getenv('GOOGLE_CONS_SECRET'), 
     request_token_params={'scope': 'email'},
     base_url='https://www.googleapis.com/oauth2/v1/',
     request_token_url=None,
