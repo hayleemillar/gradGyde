@@ -5,24 +5,30 @@
 <head>
 	<title>gradGyde Dashboard</title>
 
-	<link rel="stylesheet" type="text/css" href="../static/style.css" />
-	<link rel='shortcut icon' href='../static/favicon.ico'>
+	<link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.grid.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap-reboot.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="../static/style.css" />
+    <link rel='shortcut icon' href='../static/favicon.ico'>
 </head>
 
 <body>
 
-	<!-- Nav Bar -->
-	<div class="navigation-bar">
-		<div class="navigation-container">
-			<img src="../static/img/ncf-whitelogo.png" Alt="New College of Florida" style="width:20%">
-
-			<ul>
-				<li><a href="#">Dashboard</a></li>
-				<li><a href="#">LACs</a></li>
-				<li><a href="#">Explore</a></li>
-			</ul>
-		</div>
-	</div>
+	<!-- NAV BAR -->
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+        <img src="../static/img/ncf-whitelogo.png" Alt="New College of Florida" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+        <li class="nav-item">
+            <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="lac-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
+        </li>
+        <button class="navbar-btn" type="button" style="float:right;">Logout</button>
+    </ul>
 
 </body>
 

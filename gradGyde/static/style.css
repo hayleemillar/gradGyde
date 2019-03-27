@@ -6,55 +6,27 @@ body {
 
 }
 
+button {
+  backrgound-color: #aeb4b7;
+  border: none;
+  padding: 5px 10px;
+  font-family: "Verdana", Geneva, sans-serif;
+  color: black;
+}
+
 /***********
  * NAV BAR *
  ***********/
- #navigation-container {
-  width: 100%;
-  margin: 0 auto;
-  height: 100px;
-}
-
-.navigation-bar {
-  height: 100px;
-  width: 100%;
-}
-
-.navigation-bar ul {
-  padding: 0px;
-  margin: 0px;
-  text-align: center;
-  display:inline-block;
-}
-
-.navigation-bar li {
-  list-style-type: none;
-  padding: 0px;
-  height: 24px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-  display: inline;
-  background-color: #aeb4b7;
-}
-
-.navigation-bar li a {
-  color: black;
-  font-size: 24px;
+.nav-link {
   font-family: "Verdana", Geneva, sans-serif;
-  text-decoration: none;
-  line-height: 100px;
-  padding: 10px 20px;
-  opacity: 0.7;
+  color: white;
 }
 
-.navigation-bar li.selected {
-	border-bottom-color: #FFF;
+.nav-link:hover {
+  background-color: #aeb4b7;
+  color: white;
 }
 
-button {
-    backrgound-color: #aeb4b7;
-    border: none;
-    padding: 5px 10px;
-    font-family: "Verdana", Geneva, sans-serif;
-    color: black;
+.navbar-btn {
+  margin-right: 6px;
 }
