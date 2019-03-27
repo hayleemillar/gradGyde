@@ -66,7 +66,7 @@ def oauth_sucess():
 @app.route('/logout')
 def oauth_logout():
 	session.pop('google_token', None)
-	return "Logged out"
+	return redirect('/login')
 
 @app.route('/signup')
 def signup():
