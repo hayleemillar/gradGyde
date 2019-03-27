@@ -68,3 +68,7 @@ def oauth_logout():
 @app.route('/signup')
 def signup():
 	return render_template('signup.html')
+
+@app.route('/signup_form')
+def signup_form():
+	return render_template('signup_form')
