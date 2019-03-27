@@ -14,6 +14,9 @@ button {
   color: black;
 }
 
+
+
+
 /***********
  * NAV BAR *
  ***********/
@@ -27,6 +30,55 @@ button {
   color: white;
 }
 
-.navbar-btn {
-  margin-right: 6px;
+
+
+
+/********
+ * MAIN *
+ ********/
+.main {
+    margin-left: 300px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.display-countworth {
+    background: #d4d4dc;
+    color: #1d1e22;
+    text-align: center;
+}
+
+.chart {
+    background-color: white;
+    width: 75%;
+}
+
+
+
+
+
+/**********************
+ * SIDEBAR NAVIGATION *
+ **********************/
+.sidenav {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 58px;
+    left: 7px;
+    background-color: #003482;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
