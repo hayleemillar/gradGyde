@@ -18,7 +18,7 @@
   <h1>Please fill in the following to complete your sign up for gradGyde.</h1>
   <br/><br/>
 
-  <form action="{{ url_for('') }}" method="post">
+  <form action="{{ url_for('signup_form') }}" method="post">
       <div class="form-group">
       <label for="inputName">Preferred Name</label>
       <input name='name'btype="text" class="form-control" id="inputName" placeholder="Enter your preferred name">
@@ -51,7 +51,9 @@
 
     <br/>
 
-      <button type="submit" class="btn btn-primary">Sign up</button>
+      <!-- The commented out button code below is correct, the redirect one is only for demonstration purposes and should be removed when we have form actions set up. -->
+      <!-- <button type="submit" class="btn btn-primary">Sign up</button> -->
+      <button onclick="location.href='/student_dashboard';"type="button" class="btn btn-primary">Sign up</button>
   </form>
 </body>
 

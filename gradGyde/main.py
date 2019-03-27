@@ -49,10 +49,13 @@ def oauth_google_authorized():
 	session['google_user']= user_info
 	session['user_name'] = session['google_user']['email']
 	print('You were signed in as %s' % session['user_name'])
-	return redirect('/login_success')
+	if(session['NewUser']):
+		return redirect('/signup_form')
+	return redirect('/student_dashboard')
 
 @app.route('/login')
 def login():
+	session['NewUser'] = False
 	return render_template('login.html')
 
 
@@ -63,12 +66,19 @@ def oauth_sucess():
 @app.route('/logout')
 def oauth_logout():
 	session.pop('google_token', None)
-	return "Logged out"
+	return redirect('/login')
 
 @app.route('/signup')
 def signup():
+	#This is temporary code to distinguish between current and new users. 
+	#Should be removed and replaced with database stuff when that is implemented
+	session['NewUser'] = True
 	return render_template('signup.html')
 
 @app.route('/signup_form')
 def signup_form():
-	return render_template('signup_form')
+	return render_template('signup_form.html')
+
+@app.route('/student_dashboard')
+def dash_stud():
+	return render_template('dash_stud.html')
