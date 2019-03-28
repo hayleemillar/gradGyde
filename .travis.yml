@@ -1,0 +1,10 @@
+language: python
+python: "3.6"
+dist: bionic
+
+install:
+  - pip install -r requirements.txt
+  - pip install pylint
+
+script:
+  - pylint
