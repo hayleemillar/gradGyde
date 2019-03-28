@@ -7,4 +7,4 @@ install:
   - pip install pylint
 
 script:
-  - pylint gradGyde/
+  - env PYTHONPATH=. pylint gradGyde/
