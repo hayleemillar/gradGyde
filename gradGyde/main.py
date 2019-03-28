@@ -7,8 +7,8 @@ from gradGyde import app
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
-                          consumer_key=os.getenv('GOOGLE_CONS_KEY'), 
-                          consumer_secret=os.getenv('GOOGLE_CONS_SECRET'), 
+                          consumer_key=os.getenv('GOOGLE_CONS_KEY'),
+                          consumer_secret=os.getenv('GOOGLE_CONS_SECRET'),
                           request_token_params={'scope': 'email'},
                           base_url='https://www.googleapis.com/oauth2/v1/',
                           request_token_url=None,
@@ -71,7 +71,7 @@ def oauth_logout():
 
 @app.route('/signup')
 def signup():
-#This is temporary code to distinguish between current and new users. 
+#This is temporary code to distinguish between current and new users.
 #Should be removed and replaced with database stuff when that is implemented
     session['newuser'] = True
     return render_template('signup.html')
