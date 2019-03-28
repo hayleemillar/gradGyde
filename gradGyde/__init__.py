@@ -1,8 +1,9 @@
 # pylint: disable=invalid-name
-from flask import Flask
 import os
-from . import main
+from flask import Flask
+
 
 app = Flask("gradGyde")
-app.config.from_pyfile('config.py')
-secret_key = app.config['SECRET_KEY'] #os.getenv('SECRET_KEY')
+app.secret_key = os.getenv('SECRET_KEY')
+
+from . import main

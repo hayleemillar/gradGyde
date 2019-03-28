@@ -1,3 +1,4 @@
+import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
@@ -6,14 +7,14 @@ from gradGyde import app
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
-                            consumer_key=app.config['GOOGLE_CONS_KEY'], #os.getenv('GOOGLE_CONS_KEY'), 
-                            consumer_secret=app.config['GOOGLE_CONS_SECRET'], #os.getenv('GOOGLE_CONS_SECRET'), 
-                            request_token_params={'scope': 'email'},
-                            base_url='https://www.googleapis.com/oauth2/v1/',
-                            request_token_url=None,
-                            access_token_method='POST',
-                            access_token_url='https://accounts.google.com/o/oauth2/token',
-                        authorize_url='https://accounts.google.com/o/oauth2/auth')
+                          consumer_key=os.getenv('GOOGLE_CONS_KEY'), 
+                          consumer_secret=os.getenv('GOOGLE_CONS_SECRET'), 
+                          request_token_params={'scope': 'email'},
+                          base_url='https://www.googleapis.com/oauth2/v1/',
+                          request_token_url=None,
+                          access_token_method='POST',
+                          access_token_url='https://accounts.google.com/o/oauth2/token',
+                          authorize_url='https://accounts.google.com/o/oauth2/auth')
 
 
 @GOOGLE.tokengetter
@@ -31,8 +32,8 @@ def test():
 
 @app.route('/oauth_google')
 def oauth_google():
-    return GOOGLE.authorize(callback=url_for('oauth_google_authorized', 
-                                         _external=True))
+    return GOOGLE.authorize(callback=url_for('oauth_google_authorized',
+                                             _external=True))
 
 
 @app.route('/authorized/')
@@ -41,13 +42,13 @@ def oauth_google_authorized():
     if resp is None:
         print('You denied the request to sign in.')
         return 'Google denied access. Reason: %s \n Error: %s' %(
-        request.args['error_reason'],
-        request.args['error_description'])
+            request.args['error_reason'],
+            request.args['error_description'])
     session['google_token'] = (resp['access_token'], '')
     user_info = GOOGLE.get('userinfo').data
     print(user_info)
-    session['googleuser'] = user_info
-    session['username'] = session['google_user']['email']
+    session['google_user'] = user_info
+    session['user_name'] = session['google_user']['email']
     print('You were signed in as %s' % session['user_name'])
     if session['newuser']:
         return redirect('/signup_form')
@@ -70,8 +71,8 @@ def oauth_logout():
 
 @app.route('/signup')
 def signup():
-    #This is temporary code to distinguish between current and new users. 
-    #Should be removed and replaced with database stuff when that is implemented
+#This is temporary code to distinguish between current and new users. 
+#Should be removed and replaced with database stuff when that is implemented
     session['newuser'] = True
     return render_template('signup.html')
 
@@ -81,4 +82,4 @@ def signup_form():
 
 @app.route('/student_dashboard')
 def dash_stud():
-	return render_template('dash_stud.html')
+    return render_template('dash_stud.html')
