@@ -3,6 +3,7 @@ from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 
 
+
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                             consumer_key=app.config['GOOGLE_CONS_KEY'], #os.getenv('GOOGLE_CONS_KEY'), 
@@ -13,6 +14,7 @@ GOOGLE = OAUTH.remote_app('google',
                             access_token_method='POST',
                             access_token_url='https://accounts.google.com/o/oauth2/token',
                         authorize_url='https://accounts.google.com/o/oauth2/auth')
+
 
 @GOOGLE.tokengetter
 def get_google_token():
@@ -31,6 +33,7 @@ def test():
 def oauth_google():
     return GOOGLE.authorize(callback=url_for('oauth_google_authorized', 
                                          _external=True))
+
 
 @app.route('/authorized/')
 def oauth_google_authorized():
@@ -78,4 +81,4 @@ def signup_form():
 
 @app.route('/student_dashboard')
 def dash_stud():
-    return render_template('dash_stud.html')
+	return render_template('dash_stud.html')
