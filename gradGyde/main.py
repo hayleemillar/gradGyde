@@ -60,13 +60,11 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/login_success')
-def oauth_sucess():
-    return "%s Successfully logged in! Yaaaay!" % session['user_name']
-
 @app.route('/logout')
 def oauth_logout():
     session.pop('google_token', None)
+    session['google_user'] = None
+    session['user_name'] = None
     return redirect('/login')
 
 @app.route('/signup')
@@ -78,8 +76,12 @@ def signup():
 
 @app.route('/signup_form')
 def signup_form():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
     return render_template('signup_form.html')
 
 @app.route('/student_dashboard')
 def dash_stud():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
     return render_template('dash_stud.html')
