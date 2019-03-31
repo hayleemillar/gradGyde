@@ -40,16 +40,13 @@ def oauth_google():
 def oauth_google_authorized():
     resp = GOOGLE.authorized_response()
     if resp is None:
-        print('You denied the request to sign in.')
         return 'Google denied access. Reason: %s \n Error: %s' %(
             request.args['error_reason'],
             request.args['error_description'])
     session['google_token'] = (resp['access_token'], '')
     user_info = GOOGLE.get('userinfo').data
-    print(user_info)
     session['google_user'] = user_info
     session['user_name'] = session['google_user']['email']
-    print('You were signed in as %s' % session['user_name'])
     if session['newuser']:
         return redirect('/signup_form')
     return redirect('/student_dashboard')
