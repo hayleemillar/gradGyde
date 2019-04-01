@@ -1,0 +1,84 @@
+body {
+    background-color: #222222;
+    font-family: "Verdana", Geneva, sans-serif;
+    color: white;
+    font-size: 20px;
+
+}
+
+button {
+  background-color: #aeb4b7;
+  border: none;
+  padding: 5px 10px;
+  font-family: "Verdana", Geneva, sans-serif;
+  color: black;
+}
+
+
+
+
+/***********
+ * NAV BAR *
+ ***********/
+.nav-link {
+  font-family: "Verdana", Geneva, sans-serif;
+  color: white;
+}
+
+.nav-link:hover {
+  background-color: #aeb4b7;
+  color: white;
+}
+
+
+
+
+/********
+ * MAIN *
+ ********/
+.main {
+    margin-left: 300px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.display-countworth {
+    background: #d4d4dc;
+    color: #1d1e22;
+    text-align: center;
+}
+
+.chart {
+    background-color: white;
+    width: 75%;
+}
+
+
+
+
+
+/**********************
+ * SIDEBAR NAVIGATION *
+ **********************/
+.sidenav {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 58px;
+    left: 7px;
+    background-color: #003482;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <title>gradGyde Sign Up</title>
+
+  <link rel='shortcut icon' href='../static/favicon.ico'>
+
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+  <link rel="stylesheet" type="text/css" href="../static/style.css" />
+</head>
+
+<body>
+  <h1>Please fill in the following to complete your sign up for gradGyde.</h1>
+  <br/><br/>
+
+  <form action="{{ url_for('signup_form') }}" method="post">
+      <div class="form-group">
+      <label for="inputName">Preferred Name</label>
+      <input name='name'btype="text" class="form-control" id="inputName" placeholder="Enter your preferred name">
+      </div>
+      
+      <div class="col-md-12">
+
+        <label for="inputSelectAOC">Select all AOCs you currently plan on completing.</label><br/>
+        <select name='AOC' class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+          <option value="" disabled selected>Choose your country</option>
+          <option value="1">Computer Science</option>
+          <option value="2">Biology</option>
+          <option value="3">Applied Mathematics</option>
+          <option value="4">Psychology</option>
+          <option value="5">Philosophy</option>
+        </select>
+        <br/><br/>
+
+        <label for="inputSelectSlashes">Select all slashes you currently plan on completing.</label><br/>
+        <select name='slash' class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+          <option value="" disabled selected>Choose your country</option>
+          <option value="1">Computer Science</option>
+          <option value="2">Biology</option>
+          <option value="3">Applied Mathematics</option>
+          <option value="4">Psychology</option>
+          <option value="5">Philosophy</option>
+        </select>
+
+    </div>
+
+    <br/>
+
+      <!-- The commented out button code below is correct, the redirect one is only for demonstration purposes and should be removed when we have form actions set up. -->
+      <!-- <button type="submit" class="btn btn-primary">Sign up</button> -->
+      <button onclick="location.href='/student_dashboard';"type="button" class="btn btn-primary">Sign up</button>
+  </form>
+</body>
+
+</html> 
