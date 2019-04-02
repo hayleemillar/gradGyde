@@ -2,7 +2,6 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .models import dbtest
 
 
 
