@@ -1,9 +1,11 @@
 import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
-from gradGyde import app
+from gradGyde import app, db
+from .models import dbtest
 
 
+dbtest()
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',

@@ -1,3 +1,5 @@
 flask
 authlib
 flask-oauthlib
+flask-sqlalchemy
+sqlalchemy
