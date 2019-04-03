@@ -1,6 +1,7 @@
-from .enums import SemesterTypeEnum, UserTypeEnum
-from gradGyde import app, db
 from flask_sqlalchemy import SQLAlchemy
+from gradGyde import app, db
+from .enums import SemesterTypeEnum, UserTypeEnum
+
 
 
 class Aocs(db.Model):
@@ -8,10 +9,8 @@ class Aocs(db.Model):
     aoc_name = db.Column(db.String, nullable=False)
     aoc_type = db.Column(db.String, nullable=False)
     aoc_year = db.Column(db.Integer, nullable=False)
-
     requirements = db.relationship('Requirements',
                                    backref=db.backref('Aocs', uselist=False))
-    
 
     def __repr__(self):
         return '<AOC: %r>' %self.aoc_name
@@ -28,11 +27,10 @@ class Users(db.Model):
                             nullable=True)
     year_started = db.Column(db.Integer, nullable=False)
     user_type = db.Column(db.Enum(UserTypeEnum), nullable=False)
-
     aoc = db.relationship('Aocs', foreign_keys=[pref_aoc])
     slash = db.relationship('Aocs', foreign_keys=[pref_slash])
     double = db.relationship('Aocs', foreign_keys=[pref_double])
-    classes_taken = db.relationship('Classes_taken', 
+    classes_taken = db.relationship('Classes_taken',
                                     backref=db.backref('Users', uselist=False))
 
     def __repr__(self):
@@ -48,7 +46,7 @@ class Classes(db.Model):
 
     class_tags = db.relationship('Class_tags',
                                  backref=db.backref('Classes', uselist=False))
-    classes_taken = db.relationship('Classes_taken', 
+    classes_taken = db.relationship('Classes_taken',
                                     backref=db.backref('Classes', uselist=False))
 
     def __repr__(self):
@@ -87,7 +85,6 @@ class Prereqs(db.Model):
                               nullable=False)
     chosen_tag_id = db.Column(db.Integer, db.ForeignKey(Tags.tag_id),
                               nullable=False)
-    
     prereq = db.relationship("Tags", foreign_keys=[prereq_tag_id])
     chosen = db.relationship("Tags", foreign_keys=[chosen_tag_id])
 
@@ -103,4 +100,3 @@ class Requirements(db.Model):
 
 def init_database():
     db.create_all()
-
