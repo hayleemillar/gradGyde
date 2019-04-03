@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from gradGyde import app, db
+from gradGyde import db
 from .enums import SemesterTypeEnum, UserTypeEnum
 
 
