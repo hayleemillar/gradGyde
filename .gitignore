@@ -4,4 +4,4 @@ __pycache__/
 .vscode/
 *.db
 gradGyde/config.py
-gradGyde/models.py
+gradGyde/gradGyde.db
