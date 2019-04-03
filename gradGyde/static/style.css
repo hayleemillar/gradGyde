@@ -1,9 +1,8 @@
 body {
-    background-color: #222222;
-    font-family: "Verdana", Geneva, sans-serif;
-    color: white;
-    font-size: 20px;
-
+  background-color: #222222;
+  font-family: "Verdana", Geneva, sans-serif;
+  color: white;
+  font-size: 20px;
 }
 
 button {
@@ -12,6 +11,12 @@ button {
   padding: 5px 10px;
   font-family: "Verdana", Geneva, sans-serif;
   color: black;
+}
+
+div.signup {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -37,25 +42,25 @@ button {
  * MAIN *
  ********/
 .main {
-    margin-left: 300px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
-    padding: 0px 10px;
+  margin-left: 300px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }
 
 .display-countworth {
-    background: #d4d4dc;
-    color: #1d1e22;
-    text-align: center;
+  background: #d4d4dc;
+  color: #1d1e22;
+  text-align: center;
 }
 
 .chart {
-    background-color: white;
-    width: 75%;
+  background-color: white;
+  width: 75%;
 }
 
 
@@ -66,15 +71,15 @@ button {
  * SIDEBAR NAVIGATION *
  **********************/
 .sidenav {
-    height: 100%;
-    width: 300px;
-    position: fixed;
-    z-index: 1;
-    top: 58px;
-    left: 7px;
-    background-color: #003482;
-    overflow-x: hidden;
-    padding-top: 20px;
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 58px;
+  left: 7px;
+  background-color: #003482;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
 
 .sidenav {
