@@ -30,7 +30,7 @@ class Users(db.Model):
     aoc = db.relationship('Aocs', foreign_keys=[pref_aoc])
     slash = db.relationship('Aocs', foreign_keys=[pref_slash])
     double = db.relationship('Aocs', foreign_keys=[pref_double])
-    classestaken = db.relationship('Classestaken',
+    class_taken = db.relationship('ClassTaken',
                                     backref=db.backref('Users', uselist=False))
 
     def __repr__(self):
@@ -44,15 +44,15 @@ class Classes(db.Model):
     class_year = db.Column(db.Integer, nullable=False)
     credit_type = db.Column(db.Float, nullable=False)
 
-    classtags = db.relationship('Classtags',
+    class_tags = db.relationship('ClassTags',
                                  backref=db.backref('Classes', uselist=False))
-    classestaken = db.relationship('Classestaken',
+    class_taken = db.relationship('ClassTaken',
                                     backref=db.backref('Classes', uselist=False))
 
     def __repr__(self):
         return '<Class %r>' %self.class_name
 
-class Classestaken(db.Model):
+class ClassTaken(db.Model):
     class_taken_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey(Users.user_id),
                            nullable=False)
@@ -64,7 +64,7 @@ class Tags(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String, nullable=False)
 
-    classtags = db.relationship('Classtags',
+    class_tags = db.relationship('ClassTags',
                                  backref=db.backref('Tags', uselist=False))
     requirements = db.relationship('Requirements',
                                    backref=db.backref('Tags', uselist=False))
@@ -72,7 +72,7 @@ class Tags(db.Model):
     def __repr__(self):
         return '<Tag: %r>' %self.tag_name
 
-class Classtags(db.Model):
+class ClassTags(db.Model):
     class_tag_id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey(Classes.class_id),
                          nullable=False)
