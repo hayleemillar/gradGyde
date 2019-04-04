@@ -1,8 +1,17 @@
 # pylint: disable=too-few-public-methods
+import enum
 from gradGyde import db
-from .enums import SemesterTypeEnum, UserTypeEnum
 
+class SemesterType(enum.Enum):
+    SPRING = "spring"
+    SUMMER = "summer"
+    FALL = "fall"
+    ISP = "isp"
 
+class UserType(enum.Enum):
+    STUDENT = "student"
+    PROFESSOR = "professor"
+    ADMIN = "administrator"
 
 class Aocs(db.Model):
     aoc_id = db.Column(db.Integer, primary_key=True)
@@ -26,7 +35,7 @@ class Users(db.Model):
     pref_double = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id),
                             nullable=True)
     year_started = db.Column(db.Integer, nullable=False)
-    user_type = db.Column(db.Enum(UserTypeEnum), nullable=False)
+    user_type = db.Column(db.Enum(UserType), nullable=False)
     aoc = db.relationship('Aocs', foreign_keys=[pref_aoc])
     slash = db.relationship('Aocs', foreign_keys=[pref_slash])
     double = db.relationship('Aocs', foreign_keys=[pref_double])
@@ -39,7 +48,7 @@ class Users(db.Model):
 class Classes(db.Model):
     class_id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String, nullable=False)
-    class_semester = db.Column(db.Enum(SemesterTypeEnum),
+    class_semester = db.Column(db.Enum(SemesterType),
                                nullable=False)
     class_year = db.Column(db.Integer, nullable=False)
     credit_type = db.Column(db.Float, nullable=False)
