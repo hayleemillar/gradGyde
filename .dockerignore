@@ -1,0 +1,9 @@
+.dockerignore
+.git
+.gitignore
+.travis.yml
+.venv
+__pycache__
+*.db
+Dockerfile
+docker-compose.test.yml
