@@ -1,5 +1,4 @@
 # pylint: disable=too-few-public-methods
-from flask_sqlalchemy import SQLAlchemy
 from gradGyde import db
 from .enums import SemesterTypeEnum, UserTypeEnum
 
@@ -31,7 +30,7 @@ class Users(db.Model):
     aoc = db.relationship('Aocs', foreign_keys=[pref_aoc])
     slash = db.relationship('Aocs', foreign_keys=[pref_slash])
     double = db.relationship('Aocs', foreign_keys=[pref_double])
-    classes_taken = db.relationship('Classes_taken',
+    classestaken = db.relationship('Classestaken',
                                     backref=db.backref('Users', uselist=False))
 
     def __repr__(self):
@@ -45,15 +44,15 @@ class Classes(db.Model):
     class_year = db.Column(db.Integer, nullable=False)
     credit_type = db.Column(db.Float, nullable=False)
 
-    class_tags = db.relationship('Class_tags',
+    classtags = db.relationship('Classtags',
                                  backref=db.backref('Classes', uselist=False))
-    classes_taken = db.relationship('Classes_taken',
+    classestaken = db.relationship('Classestaken',
                                     backref=db.backref('Classes', uselist=False))
 
     def __repr__(self):
         return '<Class %r>' %self.class_name
 
-class Classes_taken(db.Model):
+class Classestaken(db.Model):
     class_taken_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey(Users.user_id),
                            nullable=False)
@@ -65,7 +64,7 @@ class Tags(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String, nullable=False)
 
-    class_tags = db.relationship('Class_tags',
+    classtags = db.relationship('Classtags',
                                  backref=db.backref('Tags', uselist=False))
     requirements = db.relationship('Requirements',
                                    backref=db.backref('Tags', uselist=False))
@@ -73,7 +72,7 @@ class Tags(db.Model):
     def __repr__(self):
         return '<Tag: %r>' %self.tag_name
 
-class Class_tags(db.Model):
+class Classtags(db.Model):
     class_tag_id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey(Classes.class_id),
                          nullable=False)
