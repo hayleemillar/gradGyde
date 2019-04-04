@@ -9,10 +9,12 @@ RUN groupadd -r gradgyde &&\
 
 VOLUME /run/wsgi
 
-COPY --chown=gradgyde:gradgyde . .
+COPY --chown=gradgyde:gradgyde requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir uwsgi
+
+COPY --chown=gradgyde:gradgyde . .
 
 USER gradgyde
 

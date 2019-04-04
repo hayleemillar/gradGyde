@@ -1,0 +1,7 @@
+sut:
+  build: .
+  entrypoint: ./test.sh
+  environment:
+    GOOGLE_CONS_KEY: TEST
+    GOOGLE_CONS_SECRET: TEST
+    SECRET_KEY: TEST

@@ -1,3 +1,4 @@
+.dockerignore
 .git
 .gitignore
 .travis.yml
@@ -5,3 +6,4 @@
 __pycache__
 *.db
 Dockerfile
+docker-compose.test.yml
