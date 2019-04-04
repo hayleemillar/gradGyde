@@ -1,3 +1,4 @@
+# pylint: disable=too-few-public-methods
 from flask_sqlalchemy import SQLAlchemy
 from gradGyde import db
 from .enums import SemesterTypeEnum, UserTypeEnum
