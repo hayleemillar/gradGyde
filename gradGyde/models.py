@@ -31,7 +31,7 @@ class Users(db.Model):
     slash = db.relationship('Aocs', foreign_keys=[pref_slash])
     double = db.relationship('Aocs', foreign_keys=[pref_double])
     class_taken = db.relationship('ClassTaken',
-                                    backref=db.backref('Users', uselist=False))
+                                  backref=db.backref('Users', uselist=False))
 
     def __repr__(self):
         return '<User: %r>' %self.user_name
@@ -47,7 +47,7 @@ class Classes(db.Model):
     class_tags = db.relationship('ClassTags',
                                  backref=db.backref('Classes', uselist=False))
     class_taken = db.relationship('ClassTaken',
-                                    backref=db.backref('Classes', uselist=False))
+                                  backref=db.backref('Classes', uselist=False))
 
     def __repr__(self):
         return '<Class %r>' %self.class_name
