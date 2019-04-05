@@ -75,7 +75,19 @@ def signup():
 def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
+    
     return render_template('signup_form.html')
+
+
+@app.route('/signup_form/post', methods=['POST'])
+def signup_form_submit():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
+    name=request.form['name']
+    aoc=request.form['AOC']
+    slash=request.form['slash']
+    print(" "+name+" , "+aoc+" , "+slash)
+    return redirect('/student_dashboard')
 
 @app.route('/student_dashboard')
 def dash_stud():
