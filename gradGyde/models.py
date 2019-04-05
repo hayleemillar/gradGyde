@@ -18,6 +18,8 @@ class Aocs(db.Model):
     aoc_name = db.Column(db.String, nullable=False)
     aoc_type = db.Column(db.String, nullable=False)
     aoc_year = db.Column(db.Integer, nullable=False)
+    pref_aoc = db.relationship('PrefferedAocs',
+                               backref=db.backref('Aocs'), uselist=False)
     requirements = db.relationship('Requirements',
                                    backref=db.backref('Aocs', uselist=False))
 
@@ -28,22 +30,20 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     user_email = db.Column(db.String, unique=True, nullable=False)
     user_name = db.Column(db.String, nullable=False)
-    pref_aoc = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id),
-                         nullable=False)
-    pref_slash = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id),
-                           nullable=True)
-    pref_double = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id),
-                            nullable=True)
     year_started = db.Column(db.Integer, nullable=False)
     user_type = db.Column(db.Enum(UserType), nullable=False)
-    aoc = db.relationship('Aocs', foreign_keys=[pref_aoc])
-    slash = db.relationship('Aocs', foreign_keys=[pref_slash])
-    double = db.relationship('Aocs', foreign_keys=[pref_double])
     class_taken = db.relationship('ClassTaken',
                                   backref=db.backref('Users', uselist=False))
+    pref_aoc = db.relationship('PrefferedAocs',
+                               backref=db.backref('Users'), uselist=False)
 
     def __repr__(self):
         return '<User: %r>' %self.user_name
+
+class PrefferedAocs(db.Model):
+    pref_aoc_id = db.Column(db.Integer, primary_key=True)
+    aoc_id = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(Users.user_id), nullable=False)
 
 class Classes(db.Model):
     class_id = db.Column(db.Integer, primary_key=True)

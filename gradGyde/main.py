@@ -1,3 +1,4 @@
+import json
 import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
@@ -75,8 +76,12 @@ def signup():
 def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    
-    return render_template('signup_form.html')
+    #Change these to pull from the database
+    aoc = ['Wizardry', 'Computer Science', 'General Studies', 'Underwater Basket Weaving', 'Biology']
+    slash = aoc
+    return render_template('signup_form.html',
+                           aocs=aoc,
+                           slashs=slash)
 
 
 @app.route('/signup_form/post', methods=['POST'])
