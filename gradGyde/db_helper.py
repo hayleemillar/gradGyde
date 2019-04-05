@@ -1,7 +1,9 @@
+import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlite3 import Connection as SQLite3Connection
 from gradGyde import db
+from models import*
 
 class DatabaseHelper():
     def MakeAoc(self, name, passed_type, year):
@@ -89,4 +91,43 @@ class DatabaseHelper():
             self.AssignTag(created_class.class_id, fulfilled.tag_id)
 
     def CreateAoc(self, name, passed_type, year, tags, amounts):
-        pass
+        #Tags and Amounts are lists
+        try:
+            self.MakeAoc(name, passed_type, year)
+            aoc = self.GetAoc(name)
+            for i in range(len(tags))
+                self.MakeTag(tags[i])
+                temp_tag = self.GetTag(i)
+                self.MakeRequirement(aoc, temp_tag, amounts[i])
+        except Exception as error:
+            raise Exception("Could not create AOC! "+str(error))
+
+    def GetUser(self, email):
+        user_query = Users.query.filter_by(user_email=email).first()
+        return user_query
+
+    def GetAoc(self, name, type, year=datetime.date.today.year()):
+        aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).filter(aoc_year<=year).first()
+        return aoc_query
+
+    def GetAocById(self, id, type):
+        aoc_query = Aocs.query.filter_by(aoc_id=id).filter_by(aoc_type=type).first()
+        return aoc_query
+
+    def GetAocs(self, name, type):
+        aocs_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).all()
+        return aocs_query
+
+    def GetPrefferedAocs(self, user, type):
+        pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
+        pref_aocs = []
+        for item in pref_aocs_query:
+            aoc = self.GetAocById(item.aoc_id, type)
+            if aoc is not None:
+                pref_aocs.append(aoc)
+        return pref_aocs
+
+
+
+        
+
