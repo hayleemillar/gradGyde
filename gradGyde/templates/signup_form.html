@@ -15,6 +15,7 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
+  <script type="text/javascript" src="../static/signupform.js"></script>
 </head>
 
 <body>
@@ -32,25 +33,47 @@
           <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
         </div>
 
-          <label for="inputSelectAOC">Select all AOCs you currently plan on completing.</label><br/>
-          <select name='AOC' class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
-            <option value="" disabled selected>Choose your country</option>
+          <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+          <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+          <!-- DUMMY OPTIONS -->
+          <!--             
+            <option value="" disabled selected>Choose your AOC</option>
             <option value="1">Computer Science</option>
             <option value="2">Biology</option>
             <option value="3">Applied Mathematics</option>
             <option value="4">Psychology</option>
-            <option value="5">Philosophy</option>
+            <option value="5">Philosophy</option> 
+-->
           </select>
+
           <br/><br/>
 
-          <label for="inputSelectSlashes">Select all slashes you currently plan on completing.</label><br/>
+          <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+          <select name='AOC_double' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
+          <!-- DUMMY OPTIONS -->
+          <!--             
+            <option value="" disabled selected>Choose your AOC</option>
+            <option value="1">Computer Science</option>
+            <option value="2">Biology</option>
+            <option value="3">Applied Mathematics</option>
+            <option value="4">Psychology</option>
+            <option value="5">Philosophy</option> 
+-->
+          </select>
+
+          <br/><br/>
+
+          <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
             <select name='slash' class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-              <option value="" disabled selected>Choose your country</option>
+              <!-- DUMMY OPTIONS -->
+              <!-- 
+              <option value="" disabled selected>Choose your slash</option>
               <option value="1">Computer Science</option>
               <option value="2">Biology</option>
               <option value="3">Applied Mathematics</option>
               <option value="4">Psychology</option>
-              <option value="5">Philosophy</option>
+              <option value="5">Philosophy</option> 
+              -->
             </select>
 
         <br/><br/>
@@ -66,7 +89,7 @@
 
           <!-- The commented out button code below is correct, the redirect one is only for demonstration purposes and should be removed when we have form actions set up. -->
           <!-- <button type="submit" class="btn btn-primary">Sign up</button> -->
-          <button onclick="post('/signup_form/post')";"type="button" class="btn btn-primary">Sign up</button>
+          <button onclick="post('/signup_form/post')" type="button" class="btn btn-primary">Sign up</button>
       </form>
     </div>
 </body>
