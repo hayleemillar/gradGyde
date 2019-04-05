@@ -1,0 +1,92 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlite3 import Connection as SQLite3Connection
+from gradGyde import db
+
+class DatabaseHelper():
+    def MakeAoc(self, name, passed_type, year):
+        try:
+            new_aoc = Aocs(aoc_name = name, aoc_type=passed_type, aoc_year=year)
+            db.session.add(new_aoc)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not create AOC! " + str(error))
+
+    def MakeClass(self, name, semester, year, credit):
+        try:
+            new_class = Classes(class_name = name, class_semester=semester, class_year=year, credit_type=credit)
+            db.session.add(new_class)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not create Class! " + str(error))
+
+    def MakeUser(self, email, name, year, u_type):
+        try:
+            new_user = Users(user_email = email, user_name=name, year_started=year, user_type=u_type)
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not create User! " + str(error))
+
+    def MakeTag(self, name):
+        try:
+            new_tag = Aocs(aoc_name = name, aoc_type=passed_type, aoc_year=year)
+            db.session.add(new_tag)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not create Tag! " + str(error))
+
+    def MakeRequirement(self, aoc, tag, required):
+        try:
+            new_req = Requirements(aoc_id = aoc, tag_id=tag, num_req=required)
+            db.session.add(new_req)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not create Requirement! " + str(error))
+
+    def AssignPrereqs(self, prereq, chosen):
+        try:
+            new_prereq = Prereqs(prereq_tag_id = prereq, chosen_tag_id=chosen)
+            db.session.add(new_prereq)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not assign Prereq! " + str(error))
+
+    def AssignTag(self, class_assigned, tag):
+        try:
+            new_type = ClassTags(class_id = class_assigned, tag_id=tag)
+            db.session.add(new_type)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not assign Tag! " + str(error))
+
+    def AssignAoc(self, aoc, user):
+        try:
+            new_major = PrefferedAocs(aoc_id = aoc, user_id=user)
+            db.session.add(new_major)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not assign AOC! " + str(error))
+
+    def TakeClass(self, class_taken, student):
+        try:
+            new_pass = ClassTaken(student_id = class_taken, class_id=student)
+            db.session.add(new_pass)
+            db.session.commit()
+        except Exception as error:
+            raise Exception("Could not take Class! " + str(error))
+
+    def CreateClass(self, name, semester, year, credit, tags):
+        self.MakeClass(name,semester,year,credit)
+        created_class = Classes.query.filter_by(class_name = name
+            ).filter_by(class_semester=semester
+            ).filter_by(class_year=year
+            ).filter_by(credit_type=credit
+            ).first()
+        for tag in tags:
+            fulfilled = Tags.query.filter_by(tag_name=tag
+                ).first()
+            self.AssignTag(created_class.class_id, fulfilled.tag_id)
+
+    def CreateAoc(self, name, passed_type, year, tags, amounts):
+        pass
