@@ -101,19 +101,22 @@ class DatabaseHelper():
             raise Exception("Could not create AOC! "+str(error))
 
     def GetUser(self, email):
-        user_query = Users.query.filter_by(user_email=email).first()
+        user_query = Users.query.filter_by(user_email=email
+            ).first()
         return user_query
 
     def GetAoc(self, name, type, year=datetime.date.today().year):
         aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).filter(year<=year).first()
         return aoc_query
 
-    def GetAocById(self, id, type):
-        aoc_query = Aocs.query.filter_by(aoc_id=id).filter_by(aoc_type=type).first()
+    def GetAocById(self, id):
+        aoc_query = Aocs.query.filter_by(aoc_id=id
+            ).first()
         return aoc_query
 
-    def GetAocs(self, name, type):
-        aocs_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).all()
+    def GetAocByType(self, passed_type):
+        aocs_query = Aocs.query.filter_by(aoc_type=passed_type
+            ).all()
         return aocs_query
 
     def GetAocsByType(self, type):
@@ -123,18 +126,21 @@ class DatabaseHelper():
     def GetPrefferedAocs(self, user, type):
         pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
         pref_aocs = []
+        #add check for size and pass general studies if there are no prefered aocs
         for item in pref_aocs_query:
-            aoc = self.GetAocById(item.aoc_id, type)
+            aoc = self.GetAocById(item.aoc_id)
             if aoc is not None:
                 pref_aocs.append(aoc)
         return pref_aocs
 
-    def GetClassById(self, id):
-        class_query = Classes.query.filter_by(class_id=id).first()
+    def GetClassById(self, c_id):
+        class_query = Classes.query.filter_by(class_id=c_id
+            ).first()
         return class_query
 
     def GetClassesTaken(self, user):
-        class_taken_query = ClassTaken.query.filter_by(student_id=user.user_id).all()
+        class_taken_query = ClassTaken.query.filter_by(student_id=user.user_id
+            ).all()
         classes_taken = []
         for class_taken in class_taken_query:
             da_class = self.GetClassById(class_taken.class_id)
@@ -144,11 +150,13 @@ class DatabaseHelper():
 
 
     def GetTag(self, text):
-        tag_query = Tags.query.filter_by(tag_name=text).first()
+        tag_query = Tags.query.filter_by(tag_name=text
+            ).first()
         return tag_query
 
-    def GetTagById(self, id):
-        tag_query = Tags.query.filter_by(tag_id=id).first()
+    def GetTagById(self, t_id):
+        tag_query = Tags.query.filter_by(tag_id=t_id
+            ).first()
         return tag_query
 
 
@@ -188,5 +196,3 @@ class DatabaseHelper():
         self.CreateAoc("Computer Science (Regular)", "Divisonal", 2018, tags, amounts)
         print(self.GetAoc("Computer Science (Regular)", "Divisonal"))
         print(self.GetAocsByType("Divisonal"))
-        
-
