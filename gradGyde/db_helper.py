@@ -127,6 +127,29 @@ class DatabaseHelper():
                 pref_aocs.append(aoc)
         return pref_aocs
 
+    def GetClassById(self, id):
+        class_query = Classes.query.filter_by(class_id=id).first()
+        return class_query
+
+    def GetClassesTaken(self, user):
+        class_taken_query = ClassTaken.query.filter_by(student_id=user.user_id).all()
+        classes_taken = []
+        for class_taken in class_taken_query:
+            da_class = self.GetClassById(class_taken.class_id)
+            if da_class is not None:
+                classes_taken.append(da_class)
+        return classes_taken
+
+
+
+    def GetTag(self, text):
+        tag_query = Tags.query.filter_by(tag_name=text).first()
+        return tag_query
+
+    def GetTagById(self, id):
+        tag_query = Tags.query.filter_by(tag_id=id).first()
+        return tag_query
+
 
 
         
