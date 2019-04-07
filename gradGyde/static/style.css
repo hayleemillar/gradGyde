@@ -43,9 +43,9 @@ div.loginsignup {
  * MAIN *
  ********/
 .main {
-  margin-left: 300px; /* Same as the width of the sidenav */
+  margin-left: 310px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
-  padding: 0px 10px;
+  padding: 10px 10px;
 }
 
 @media screen and (max-height: 450px) {
@@ -92,6 +92,15 @@ div.loginsignup {
 .grad-progress {
   border-radius: 5px;
   background: #aeb4b7;
+  color: black;
+  padding: 10px;
+}
+
+
+
+
+.summary {
+  background: white;
   color: black;
   padding: 10px;
 }
