@@ -15,7 +15,6 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-  <script type="text/javascript" src="../static/signupform.js"></script>
 </head>
 
 <body>
@@ -35,50 +34,27 @@
 
           <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
           <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
-          <!-- DUMMY OPTIONS -->
-          <!--             
-            <option value="" disabled selected>Choose your AOC</option>
-            <option value="1">Computer Science</option>
-            <option value="2">Biology</option>
-            <option value="3">Applied Mathematics</option>
-            <option value="4">Psychology</option>
-            <option value="5">Philosophy</option> 
--->
+          <!-- options populated by js -->
           </select>
 
           <br/><br/>
 
           <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC_double' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-          <!-- DUMMY OPTIONS -->
-          <!--             
-            <option value="" disabled selected>Choose your AOC</option>
-            <option value="1">Computer Science</option>
-            <option value="2">Biology</option>
-            <option value="3">Applied Mathematics</option>
-            <option value="4">Psychology</option>
-            <option value="5">Philosophy</option> 
--->
+          <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
+            <!-- options populated by js -->
           </select>
 
           <br/><br/>
 
           <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-            <select name='slash' class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-              <!-- DUMMY OPTIONS -->
-              <!-- 
-              <option value="" disabled selected>Choose your slash</option>
-              <option value="1">Computer Science</option>
-              <option value="2">Biology</option>
-              <option value="3">Applied Mathematics</option>
-              <option value="4">Psychology</option>
-              <option value="5">Philosophy</option> 
-              -->
+            <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+              <!-- options populated by js -->
             </select>
 
         <br/><br/>
 
-        By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records.<br/>
+        By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records.
+        <br/>
         <div class="form-check">
           <input type="checkbox" class="form-check-input" id="waiverCheck" required="true">
           <label class="form-check-label" for="waiverCheck">I agree to allow gradGyde to save the education records I provide.</label>
@@ -87,10 +63,43 @@
         <br/>
         <br/>
 
-          <!-- The commented out button code below is correct, the redirect one is only for demonstration purposes and should be removed when we have form actions set up. -->
-          <!-- <button type="submit" class="btn btn-primary">Sign up</button> -->
-          <button onclick="post('/signup_form/post')" type="button" class="btn btn-primary">Sign up</button>
+        <button onclick="post('/signup_form/post')" type="button" class="btn btn-primary">Sign up</button>
       </form>
     </div>
 </body>
+
+<script>
+  // get all possible AOCs, slashes, and doubles
+  var aocs = {{ aocs|safe }};
+  console.log(aocs);
+  var slashes = {{ slashs|safe }};
+  console.log(slashes);
+  var doubles = {{ doubles|safe }};
+  console.log(doubles);
+
+  /** 
+   * Populates a given select element using a given array.
+   * @param {string} selectID
+   * @param {Array} options
+   */
+  function populateSelect(selectID, options) {
+    var select = document.getElementById(selectID);
+
+    for (var i = 0; i < options.length; i++) {
+      var opt = options[i];
+      var el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      select.appendChild(el);
+    }
+
+  }
+
+  // populate AOCs, slashes, and doubles selects
+  populateSelect("select_AOC", aocs);
+  populateSelect("select_double", doubles);
+  populateSelect("select_slash", slashes);
+
+</script>
+
 </html> 
