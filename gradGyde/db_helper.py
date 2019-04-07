@@ -2,16 +2,16 @@ import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (SemesterType,
-                    UserType,
-                    Aocs,
-                    Users,
-                    PrefferedAocs,
-                    Classes,
-                    ClassTaken,
-                    Tags,
-                    ClassTags,
-                    Prereqs,
-                    Requirements)
+                     UserType,
+                     Aocs,
+                     Users,
+                     PrefferedAocs,
+                     Classes,
+                     ClassTaken,
+                     Tags,
+                     ClassTags,
+                     Prereqs,
+                     Requirements)
 
 
 ENGINE = create_engine('sqlite:///gradGyde.db')
@@ -120,10 +120,10 @@ class DatabaseHelper():
     def create_class(cls, name, semester, year, credit, tags):
         cls.__make_class(name, semester, year, credit)
         created_class = Classes.query.filter_by(class_name=name
-            ).filter_by(class_semester=semester
-            ).filter_by(class_year=year
-            ).filter_by(credit_type=credit
-            ).first()
+                                                ).filter_by(class_semester=semester
+                                                ).filter_by(class_year=year
+                                                ).filter_by(credit_type=credit
+                                                ).first()
         for tag in tags:
             da_tag = cls.get_tag(tag)
             if da_tag is not None:
