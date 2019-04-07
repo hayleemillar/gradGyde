@@ -119,15 +119,15 @@ class DatabaseHelper():
     @classmethod
     def create_class(cls, name, semester, year, credit, tags):
         cls.__make_class(name, semester, year, credit)
-        created_class = Classes.query.filter_by(class_name=name
-                                                ).filter_by(class_semester=semester
-                                                            ).filter_by(class_year=year
-                                                            ).filter_by(credit_type=credit
-                                                            ).first()
+        new_class = Classes.query.filter_by(class_name=name
+                                            ).filter_by(class_semester=semester
+                                                        ).filter_by(class_year=year
+                                                                    ).filter_by(credit_type=credit
+                                                                                ).first()
         for tag in tags:
             da_tag = cls.get_tag(tag)
             if da_tag is not None:
-                cls.__assign_tags(created_class, da_tag)
+                cls.__assign_tags(new_class, da_tag)
 
     @classmethod
     def create_aoc(cls, name, passed_type, year, tags, amounts):
@@ -152,8 +152,8 @@ class DatabaseHelper():
     def get_aoc(cls, name, passed_type, year=datetime.date.today().year):
         aoc_query = Aocs.query.filter_by(aoc_name=name
                                         ).filter_by(aoc_type=passed_type
-                                        ).filter(Aocs.aoc_year <= year
-                                        ).first()
+                                                    ).filter(Aocs.aoc_year <= year
+                                                            ).first()
         return aoc_query
 
     @classmethod
@@ -249,7 +249,7 @@ class DatabaseHelper():
             print(self.get_tag(tag))
         #Test class
         self.create_class("Introduction to Programming With Python",
-                         SemesterType.FALL, 2018, 1, [tags[0]])
+                          SemesterType.FALL, 2018, 1, [tags[0]])
         da_class = self.get_class("Introduction to Programming With Python")
         print(da_class)
         #Test user
