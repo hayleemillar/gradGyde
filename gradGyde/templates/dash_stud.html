@@ -3,44 +3,71 @@
 
 
 <head>
-    <title>gradGyde Dashboard</title>
+  <title>gradGyde Dashboard</title>
 
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
-    <link rel="stylesheet" type="text/css" href="../static/style.css" />
-    <link rel='shortcut icon' href='../static/favicon.ico'>
+  <link rel="stylesheet" type="text/css" href="../static/style.css" />
+  <link rel='shortcut icon' href='../static/favicon.ico'>
 </head>
 
 <body>
-    <!-- NAV BAR -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
-        <li class="nav-item">
-            <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="lac-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
-        </li>
-        <ul class="nav nav-tabs ml-auto">
-            <a href="stub.html" class="img-link">
-                <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
-            </a>
-            <button type="button" onclick="location.href='/logout';">Logout</button>
-        </ul>
+  <!-- NAV BAR -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <img src="../static/img/ncf-whitelogo.png" Alt="New College of Florida" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+    <li class="nav-item">
+      <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="lac-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
+    </li>
+
+    <ul class="nav nav-tabs ml-auto">
+      <a href="stub.html" class="img-link">
+        <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
+      </a>
+      <button type="button" onclick="location.href='/logout';">Logout</button>
     </ul>
+  </ul>
 
 
 
-
-    <div class="sidenav">
-        <h2>Welcome, {{name}}.</h2>
-        <h4 id="user-aoc">AOCS: STUB-JS GET FROM DB</h4>
-        <h4 id="user-slash">Slashes: STUB-JS GET FROM DB</h4>
-
+  <!-- SIDEBAR -->
+  <div class="sidenav">
+    <h2><b>Welcome, {{name}}.</b></h2>
+    <br>
+    <h5 id="user-aoc"><b>AOCs:</b> stubAOC</h5>
+    <h5 id="user-double"><b>Doubles:</b> stubDouble</h5>
+    <h5 id="user-slash"><b>Slashes:</b> stubSlash</h5>
+    <br>
+    <div class="grad-progress">
+      <h5><b>StubAOC</b> : 6/10</h5>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 60%;background-color:#222222" aria-valuenow="6" aria-valuemin="0" aria-valuemax="10"></div>
+      </div>
     </div>
+
+    <br/>
+
+    <div class="grad-progress">
+      <h5><b>StubDouble</b> : 8/10</h5>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 80%;background-color:#222222" aria-valuenow="8" aria-valuemin="0" aria-valuemax="10"></div>
+      </div>
+    </div>
+
+    <br/>
+    
+    <div class="grad-progress">
+      <h5><b>StubSlash</b> : 4/10</h5>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 40%;background-color:#222222" aria-valuenow="4" aria-valuemin="0" aria-valuemax="10"></div>
+      </div>
+    </div>
+  </div>
 
 
 
