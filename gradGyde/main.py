@@ -6,6 +6,9 @@ from gradGyde import app
 from .db_helper import DatabaseHelper
 
 
+DBHelper = DatabaseHelper()
+DBHelper.db_helper_test()
+
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -77,7 +80,8 @@ def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
     #Change these to pull from the database
-    aoc = ['Wizardry', 'Computer Science', 'General Studies', 'Underwater Basket Weaving', 'Biology']
+    aoc = ['Wizardry', 'Computer Science', 'General Studies',
+           'Underwater Basket Weaving', 'Biology']
     slash = aoc
     double = aoc
     return render_template('signup_form.html',
@@ -90,9 +94,9 @@ def signup_form():
 def signup_form_submit():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    name=request.form['name']
-    aoc=request.form.getlist('AOC')
-    slash=request.form.getlist('slash')
+    name = request.form['name']
+    aoc = request.form.getlist('AOC')
+    slash = request.form.getlist('slash')
     print(name)
     print(aoc)
     print(slash)
