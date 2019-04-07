@@ -5,9 +5,6 @@ from gradGyde import app
 from .db_helper import DatabaseHelper
 
 
-DBHelper = DatabaseHelper()
-DBHelper.DBHelperTest()
-
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
