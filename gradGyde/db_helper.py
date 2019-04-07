@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlite3 import Connection as SQLite3Connection
 from gradGyde import db
-from models import*
+from .models import*
 
 class DatabaseHelper():
     def MakeAoc(self, name, passed_type, year):
@@ -32,7 +32,7 @@ class DatabaseHelper():
 
     def MakeTag(self, name):
         try:
-            new_tag = Aocs(aoc_name = name, aoc_type=passed_type, aoc_year=year)
+            new_tag = Tags(tag_name=name)
             db.session.add(new_tag)
             db.session.commit()
         except Exception as error:
@@ -86,19 +86,17 @@ class DatabaseHelper():
             ).filter_by(credit_type=credit
             ).first()
         for tag in tags:
-            fulfilled = Tags.query.filter_by(tag_name=tag
-                ).first()
-            self.AssignTag(created_class.class_id, fulfilled.tag_id)
+            self.AssignTag(created_class.class_id, self.GetTag(tag).tag_id)
 
     def CreateAoc(self, name, passed_type, year, tags, amounts):
         #Tags and Amounts are lists
         try:
             self.MakeAoc(name, passed_type, year)
-            aoc = self.GetAoc(name)
-            for i in range(len(tags))
+            aoc = self.GetAoc(name, passed_type)
+            for i in range(len(tags)):
                 self.MakeTag(tags[i])
                 temp_tag = self.GetTag(i)
-                self.MakeRequirement(aoc, temp_tag, amounts[i])
+                # self.MakeRequirement(aoc, temp_tag, amounts[i])
         except Exception as error:
             raise Exception("Could not create AOC! "+str(error))
 
@@ -106,8 +104,8 @@ class DatabaseHelper():
         user_query = Users.query.filter_by(user_email=email).first()
         return user_query
 
-    def GetAoc(self, name, type, year=datetime.date.today.year()):
-        aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).filter(aoc_year<=year).first()
+    def GetAoc(self, name, type, year=datetime.date.today().year):
+        aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).filter(year<=year).first()
         return aoc_query
 
     def GetAocById(self, id, type):
@@ -116,6 +114,10 @@ class DatabaseHelper():
 
     def GetAocs(self, name, type):
         aocs_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=type).all()
+        return aocs_query
+
+    def GetAocsByType(self, type):
+        aocs_query = Aocs.query.filter_by(aoc_type=type).all()
         return aocs_query
 
     def GetPrefferedAocs(self, user, type):
@@ -141,7 +143,6 @@ class DatabaseHelper():
         return classes_taken
 
 
-
     def GetTag(self, text):
         tag_query = Tags.query.filter_by(tag_name=text).first()
         return tag_query
@@ -151,6 +152,41 @@ class DatabaseHelper():
         return tag_query
 
 
-
+    def DBHelperTest(self):
+        #MakeTag list
+        tags = []
+        amounts = []
+        tags.append("CS Introductory Course")
+        amounts.append(1)
+        tags.append("Object Oriented Programming With Java")
+        amounts.append(1)
+        tags.append("Object Oriented Design In Java")
+        amounts.append(1)
+        tags.append("Software Engineering")
+        amounts.append(1)
+        tags.append("Discrete Mathematics")
+        amounts.append(1)
+        tags.append("Data Structures in Java")
+        amounts.append(1)
+        tags.append("Algorithms")
+        amounts.append(1)
+        tags.append("Programming Languages")
+        amounts.append(1)
+        tags.append("Systems")
+        amounts.append(2)
+        tags.append("Theory")
+        amounts.append(1)
+        tags.append("AI")
+        amounts.append(1)
+        tags.append("Applications")
+        amounts.append(2)
+        tags.append("Math")
+        amounts.append(2)
+        print(tags)
+        print(amounts)
+        #Create the AOC
+        self.CreateAoc("Computer Science (Regular)", "Divisonal", 2018, tags, amounts)
+        print(self.GetAoc("Computer Science (Regular)", "Divisonal"))
+        print(self.GetAocsByType("Divisonal"))
         
 
