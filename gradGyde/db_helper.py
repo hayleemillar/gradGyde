@@ -1,7 +1,7 @@
 import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from .models import SemesterType,Aocs,Users,PrefferedAocs,Classes,ClassTaken,Tags,ClassTags,Prereqs,Requirements
+from .models import SemesterType, UserType, Aocs, Users, PrefferedAocs, Classes, ClassTaken, Tags, ClassTags, Prereqs, Requirements
 
 
 engine = create_engine('sqlite:///gradGyde.db')
