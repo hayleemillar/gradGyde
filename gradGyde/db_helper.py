@@ -117,24 +117,23 @@ class DatabaseHelper():
             raise Exception("Could not take Class! " + str(error))
 
     @classmethod
-    def create_class(cls, name, semester, year, credit, tags):
-        cls.__make_class(name, semester, year, credit)
-        new_class = Classes.query.filter_by(class_name=name
-                                            ).filter_by(class_semester=semester
-                                                        ).filter_by(class_year=year
-                                                                    ).filter_by(credit_type=credit
-                                                                                ).first()
+    def create_class(cls, class_info, tags):
+        cls.__make_class(class_info[0], class_info[1], class_info[2], class_info[3])
+        new_class = Classes.query.filter_by(class_name=class_info[0]
+                                            ).filter_by(class_semester=class_info[1]
+                                                        ).filter_by(class_year=class_info[2]
+                                                                    ).first()
         for tag in tags:
             da_tag = cls.get_tag(tag)
             if da_tag is not None:
                 cls.__assign_tags(new_class, da_tag)
 
     @classmethod
-    def create_aoc(cls, name, passed_type, year, tags, amounts):
+    def create_aoc(cls, aoc_info, tags, amounts):
         #Tags and Amounts are lists
         try:
-            cls.__make_aoc(name, passed_type, year)
-            aoc = cls.get_aoc(name, passed_type)
+            cls.__make_aoc(aoc_info[0], aoc_info[1], aoc_info[2])
+            aoc = cls.get_aoc(aoc_info[0], aoc_info[1])
             for tag in tags:
                 cls.__make_tag(tag)
                 da_tag = cls.get_tag(tag)
@@ -241,15 +240,16 @@ class DatabaseHelper():
         print(tags)
         print(amounts)
         #create the AOC
-        self.create_aoc("Computer Science (Regular)", "Divisonal", 2018, tags, amounts)
+        aoc_info = ["Computer Science (Regular)", "Divisonal", 2018]
+        self.create_aoc(aoc_info, tags, amounts)
         comp_sci = self.get_aoc("Computer Science (Regular)", "Divisonal")
         print(comp_sci)
         print(self.get_aocs_by_type("Divisonal"))
         for tag in tags:
             print(self.get_tag(tag))
         #Test class
-        self.create_class("Introduction to Programming With Python",
-                          SemesterType.FALL, 2018, 1, [tags[0]])
+        class_info = ["Introduction to Programming With Python", SemesterType.FALL, 2018, 1]
+        self.create_class(class_info, [tags[0]])
         da_class = self.get_class("Introduction to Programming With Python")
         print(da_class)
         #Test user
