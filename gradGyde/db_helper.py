@@ -3,7 +3,7 @@ from gradGyde import db
 from .models import*
 
 class DatabaseHelper():
-    def make_aoc(name, passed_type, year):
+    def make_aoc(self, name, passed_type, year):
         try:
             new_aoc = Aocs(aoc_name=name,
                            aoc_type=passed_type,
@@ -13,7 +13,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not create AOC! " + str(error))
 
-    def make_class(name, semester, year, credit):
+    def make_class(self, name, semester, year, credit):
         try:
             new_class = Classes(class_name=name,
                                 class_semester=semester,
@@ -24,13 +24,13 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not create Class! " + str(error))
 
-    def make_user(email, name, year, u_type):
+    def make_user(self, email, name, year, u_type):
         try:
-            if DatabaseHelper.get_user(email) is None:
+            if self.get_user(email) is None:
                 new_user = Users(user_email=email,
-                               user_name=name,
-                               year_started=year,
-                               user_type=u_type)
+                                 user_name=name,
+                                 year_started=year,
+                                 user_type=u_type)
                 db.session.add(new_user)
                 db.session.commit()
         except Exception as error:
@@ -44,7 +44,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not create Tag! " + str(error))
 
-    def make_requirement(aoc, tag, required):
+    def make_requirement(self, aoc, tag, required):
         try:
             new_req = Requirements(aoc_id=aoc.aoc_id,
                                    tag_id=tag.tag_id,
@@ -54,7 +54,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not create Requirement! " + str(error))
 
-    def assign_prereqs(prereq, chosen):
+    def assign_prereqs(self, prereq, chosen):
         try:
             new_prereq = Prereqs(prereq_tag_id=prereq.tag_id,
                                  chosen_tag_id=chosen.tag_id)
@@ -63,7 +63,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not assign Prereq! " + str(error))
 
-    def assign_tags(class_assigned, tag):
+    def assign_tags(self, class_assigned, tag):
         try:
             new_type = ClassTags(class_id=class_assigned.class_id,
                                  tag_id=tag.tag_id)
@@ -72,7 +72,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not assign Tag! " + str(error))
 
-    def assign_aoc(aoc, user):
+    def assign_aoc(self, aoc, user):
         try:
             new_major = PrefferedAocs(aoc_id=aoc.aoc_id,
                                       user_id=user.user_id)
@@ -81,7 +81,7 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not assign AOC! " + str(error))
 
-    def take_class(class_taken, student):
+    def take_class(self, class_taken, student):
         try:
             new_pass = ClassTaken(student_id=student.user_id,
                                   class_id=class_taken.class_id)
@@ -90,89 +90,89 @@ class DatabaseHelper():
         except Exception as error:
             raise Exception("Could not take Class! " + str(error))
 
-    def create_class(self, name, semester, year, credit, tags):
-        DatabaseHelper.make_class(name, semester, year, credit)
+    def create_class(self, self, name, semester, year, credit, tags):
+        self.make_class(name, semester, year, credit)
         created_class = Classes.query.filter_by(class_name=name
                                                 ).filter_by(class_semester=semester
                                                 ).filter_by(class_year=year
                                                 ).filter_by(credit_type=credit
                                                 ).first()
         for tag in tags:
-            da_tag = DatabaseHelper.get_tag(tag)
+            da_tag = self.get_tag(tag)
             if da_tag is not None:
-                DatabaseHelper.assign_tags(created_class, da_tag)
+                self.assign_tags(created_class, da_tag)
 
-    def create_aoc(self, name, passed_type, year, tags, amounts):
+    def create_aoc(self, self, name, passed_type, year, tags, amounts):
         #Tags and Amounts are lists
         try:
-            DatabaseHelper.make_aoc(name, passed_type, year)
-            aoc = DatabaseHelper.get_aoc(name, passed_type)
+            self.make_aoc(name, passed_type, year)
+            aoc = self.get_aoc(name, passed_type)
             for i in range(len(tags)):
                 self.make_tag(tags[i])
-                da_tag = DatabaseHelper.get_tag(tags[i])
-                DatabaseHelper.make_requirement(aoc, da_tag, amounts[i])
+                da_tag = self.get_tag(tags[i])
+                self.make_requirement(aoc, da_tag, amounts[i])
 
         except Exception as error:
             raise Exception("Could not create AOC! "+str(error))
 
-    def get_user(email):
+    def get_user(self, email):
         user_query = Users.query.filter_by(user_email=email
                                            ).first()
         return user_query
 
-    def get_aoc(name, passed_type, year=datetime.date.today().year):
+    def get_aoc(self, name, passed_type, year=datetime.date.today().year):
         aoc_query = Aocs.query.filter_by(aoc_name=name
                                          ).filter_by(aoc_type=passed_type
-                                         ).filter(Aocs.aoc_year<=year
+                                         ).filter(Aocs.aoc_year <= year
                                          ).first()
         return aoc_query
 
-    def get_aoc_by_id(a_id):
+    def get_aoc_by_id(self, a_id):
         aoc_query = Aocs.query.filter_by(aoc_id=a_id
                                          ).first()
         return aoc_query
 
-    def get_aocs_by_type(pref_type):
+    def get_aocs_by_type(self, pref_type):
         aocs_query = Aocs.query.filter_by(aoc_type=pref_type).all()
         return aocs_query
 
-    def get_preffered_aocs(user, pref_type):
+    def get_preffered_aocs(self, user, pref_type):
         pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
         pref_aocs = []
         #add check for size and pass general studies if there are no prefered aocs
         for item in pref_aocs_query:
-            aoc = DatabaseHelper.get_aoc_by_id(item.aoc_id)
-            if aoc is not None and aoc.aoc_type==pref_type:
+            aoc = self.get_aoc_by_id(item.aoc_id)
+            if aoc is not None and aoc.aoc_type == pref_type:
                 pref_aocs.append(aoc)
         return pref_aocs
 
-    def get_class(c_name):
+    def get_class(self, c_name):
         class_query = Classes.query.filter_by(class_name=c_name
                                               ).first()
         return class_query
 
-    def get_class_by_id(c_id):
+    def get_class_by_id(self, c_id):
         class_query = Classes.query.filter_by(class_id=c_id
                                               ).first()
         return class_query
 
-    def get_classes_taken(user):
+    def get_classes_taken(self, user):
         class_taken_query = ClassTaken.query.filter_by(student_id=user.user_id
                                                      ).all()
         classes_taken = []
         for class_taken in class_taken_query:
-            da_class = DatabaseHelper.get_class_by_id(class_taken.class_id)
+            da_class = self.get_class_by_id(class_taken.class_id)
             if da_class is not None:
                 classes_taken.append(da_class)
         return classes_taken
 
 
-    def get_tag(text):
+    def get_tag(self, text):
         tag_query = Tags.query.filter_by(tag_name=text
                                        ).first()
         return tag_query
 
-    def get_tag_by_id(t_id):
+    def get_tag_by_id(self, t_id):
         tag_query = Tags.query.filter_by(tag_id=t_id
                                        ).first()
         return tag_query
@@ -212,23 +212,26 @@ class DatabaseHelper():
         print(amounts)
         #create the AOC
         self.create_aoc("Computer Science (Regular)", "Divisonal", 2018, tags, amounts)
-        comp_sci = DatabaseHelper.get_aoc("Computer Science (Regular)", "Divisonal")
+        comp_sci = self.get_aoc("Computer Science (Regular)", "Divisonal")
         print(comp_sci)
-        print(DatabaseHelper.get_aocs_by_type("Divisonal"))
+        print(self.get_aocs_by_type("Divisonal"))
         for tag in tags:
-            print(DatabaseHelper.get_tag(tag))
+            print(self.get_tag(tag))
         #Test class
         self.create_class("Introduction to Programming With Python",
-                         SemesterType.FALL, 2018, 1, [tags[0]])
-        da_class = DatabaseHelper.get_class("Introduction to Programming With Python")
+                          SemesterType.FALL, 2018, 1, [tags[0]])
+        da_class = self.get_class("Introduction to Programming With Python")
         print(da_class)
         #Test user
-        DatabaseHelper.make_user("harry.potter97@ncf.edu", "Harry", 1997, UserType.STUDENT)
-        student = DatabaseHelper.get_user("harry.potter97@ncf.edu")
+        self.make_user("harry.potter97@ncf.edu", "Harry", 1997, UserType.STUDENT)
+        student = self.get_user("harry.potter97@ncf.edu")
         print(student)
         #set preferred AOCS
-        DatabaseHelper.assign_aoc(comp_sci, student)
-        print(DatabaseHelper.get_preffered_aocs(student, "Divisonal"))
+        self.assign_aoc(comp_sci, student)
+        print(self.get_preffered_aocs(student, "Divisonal"))
         #set taken class
-        DatabaseHelper.take_class(da_class, student)
-        print(DatabaseHelper.get_classes_taken(student))
+        self.take_class(da_class, student)
+        print(self.get_classes_taken(student))
+
+DBHelper = DatabaseHelper()
+DBHelper.db_helper_test()
