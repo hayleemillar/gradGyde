@@ -1,7 +1,4 @@
 import datetime
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlite3 import Connection as SQLite3Connection
 from gradGyde import db
 from .models import*
 
