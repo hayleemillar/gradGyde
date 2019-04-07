@@ -76,11 +76,11 @@ def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
     #Change these to pull from the database
-    aoc = ['Wizardry', 
-            'Computer Science', 
-            'General Studies', 
-            'Underwater Basket Weaving', 
-            'Biology']
+    aoc = ['Wizardry',
+          'Computer Science',
+          'General Studies',
+          'Underwater Basket Weaving',
+          'Biology']
     return render_template('signup_form.html',
                            aocs=aoc,
                            slashs=aoc,
