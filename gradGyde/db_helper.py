@@ -121,9 +121,9 @@ class DatabaseHelper():
         cls.__make_class(name, semester, year, credit)
         created_class = Classes.query.filter_by(class_name=name
                                                 ).filter_by(class_semester=semester
-                                                ).filter_by(class_year=year
-                                                ).filter_by(credit_type=credit
-                                                ).first()
+                                                            ).filter_by(class_year=year
+                                                            ).filter_by(credit_type=credit
+                                                            ).first()
         for tag in tags:
             da_tag = cls.get_tag(tag)
             if da_tag is not None:
@@ -150,7 +150,10 @@ class DatabaseHelper():
 
     @classmethod
     def get_aoc(cls, name, passed_type, year=datetime.date.today().year):
-        aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=passed_type).filter(Aocs.aoc_year <= year).first()
+        aoc_query = Aocs.query.filter_by(aoc_name=name
+                                        ).filter_by(aoc_type=passed_type
+                                        ).filter(Aocs.aoc_year <= year
+                                        ).first()
         return aoc_query
 
     @classmethod
@@ -245,7 +248,8 @@ class DatabaseHelper():
         for tag in tags:
             print(self.get_tag(tag))
         #Test class
-        self.create_class("Introduction to Programming With Python", SemesterType.FALL, 2018, 1, [tags[0]])
+        self.create_class("Introduction to Programming With Python",
+                         SemesterType.FALL, 2018, 1, [tags[0]])
         da_class = self.get_class("Introduction to Programming With Python")
         print(da_class)
         #Test user
