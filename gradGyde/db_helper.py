@@ -24,9 +24,10 @@ class DatabaseHelper():
 
     def MakeUser(self, email, name, year, u_type):
         try:
-            new_user = Users(user_email = email, user_name=name, year_started=year, user_type=u_type)
-            db.session.add(new_user)
-            db.session.commit()
+            if self.GetUser(email) is None:
+                new_user = Users(user_email = email, user_name=name, year_started=year, user_type=u_type)
+                db.session.add(new_user)
+                db.session.commit()
         except Exception as error:
             raise Exception("Could not create User! " + str(error))
 
@@ -40,7 +41,7 @@ class DatabaseHelper():
 
     def MakeRequirement(self, aoc, tag, required):
         try:
-            new_req = Requirements(aoc_id = aoc, tag_id=tag, num_req=required)
+            new_req = Requirements(aoc_id = aoc.aoc_id, tag_id=tag.tag_id, num_req=required)
             db.session.add(new_req)
             db.session.commit()
         except Exception as error:
@@ -48,7 +49,7 @@ class DatabaseHelper():
 
     def AssignPrereqs(self, prereq, chosen):
         try:
-            new_prereq = Prereqs(prereq_tag_id = prereq, chosen_tag_id=chosen)
+            new_prereq = Prereqs(prereq_tag_id = prereq.tag_id, chosen_tag_id=chosen.tag_id)
             db.session.add(new_prereq)
             db.session.commit()
         except Exception as error:
@@ -56,7 +57,7 @@ class DatabaseHelper():
 
     def AssignTag(self, class_assigned, tag):
         try:
-            new_type = ClassTags(class_id = class_assigned, tag_id=tag)
+            new_type = ClassTags(class_id = class_assigned.class_id, tag_id=tag.tag_id)
             db.session.add(new_type)
             db.session.commit()
         except Exception as error:
@@ -64,7 +65,7 @@ class DatabaseHelper():
 
     def AssignAoc(self, aoc, user):
         try:
-            new_major = PrefferedAocs(aoc_id = aoc, user_id=user)
+            new_major = PrefferedAocs(aoc_id = aoc.aoc_id, user_id=user.user_id)
             db.session.add(new_major)
             db.session.commit()
         except Exception as error:
@@ -72,7 +73,7 @@ class DatabaseHelper():
 
     def TakeClass(self, class_taken, student):
         try:
-            new_pass = ClassTaken(student_id = class_taken, class_id=student)
+            new_pass = ClassTaken(student_id = student.user_id, class_id=class_taken.class_id)
             db.session.add(new_pass)
             db.session.commit()
         except Exception as error:
@@ -86,17 +87,19 @@ class DatabaseHelper():
             ).filter_by(credit_type=credit
             ).first()
         for tag in tags:
-            self.AssignTag(created_class.class_id, self.GetTag(tag).tag_id)
+            da_tag = self.GetTag(tag)
+            if da_tag is not None:
+                self.AssignTag(created_class, da_tag)
 
     def CreateAoc(self, name, passed_type, year, tags, amounts):
         #Tags and Amounts are lists
         try:
             self.MakeAoc(name, passed_type, year)
             aoc = self.GetAoc(name, passed_type)
-            for i in range(len(tags))
+            for i in range(len(tags)):
                 self.MakeTag(tags[i])
-                temp_tag = self.GetTag(i)
-                self.MakeRequirement(aoc.aoc_id, temp_tag.tag_id, amounts[i])
+                temp_tag = self.GetTag(tags[i])
+                self.MakeRequirement(aoc, temp_tag, amounts[i])
 
         except Exception as error:
             raise Exception("Could not create AOC! "+str(error))
@@ -107,9 +110,7 @@ class DatabaseHelper():
         return user_query
 
     def GetAoc(self, name, passed_type, year=datetime.date.today().year):
-        aoc_query = Aocs.query.filter_by(aoc_name=name
-            ).filter_by(aoc_type=passed_type
-            ).filter(aoc_year<=year
+        aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=passed_type).filter(Aocs.aoc_year<=year
             ).first()
         return aoc_query
 
@@ -131,6 +132,11 @@ class DatabaseHelper():
             if aoc is not None:
                 pref_aocs.append(aoc)
         return pref_aocs
+
+    def GetClass(self, c_name):
+        class_query = Classes.query.filter_by(class_name=c_name
+            ).first()
+        return class_query
 
     def GetClassById(self, c_id):
         class_query = Classes.query.filter_by(class_id=c_id
@@ -193,7 +199,27 @@ class DatabaseHelper():
         print(amounts)
         #Create the AOC
         self.CreateAoc("Computer Science (Regular)", "Divisonal", 2018, tags, amounts)
-        print(self.GetAoc("Computer Science (Regular)", "Divisonal"))
+        comp_sci = self.GetAoc("Computer Science (Regular)", "Divisonal")
+        print(comp_sci)
         print(self.GetAocsByType("Divisonal"))
+        for tag in tags:
+            print(self.GetTag(tag))
+        #Test class
+        self.CreateClass("Introduction to Programming With Python", SemesterType.FALL, 2018, 1, [tags[0]])
+        da_class = self.GetClass("Introduction to Programming With Python")
+        print(da_class)
+        #Test user
+        self.MakeUser("harry.potter97@ncf.edu", "Harry", 1997, UserType.STUDENT)
+        student = self.GetUser("harry.potter97@ncf.edu")
+        print(student)
+        #set preferred AOCS
+        self.AssignAoc(comp_sci.aoc_id, student.user_id)
+        print(self.GetPrefferedAocs(student, "Divisonal"))
+        #set taken class
+        self.TakeClass(da_class, student)
+        print(self.GetClassesTaken(student))
+
+
+
         
 
