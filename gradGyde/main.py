@@ -74,14 +74,15 @@ def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
     #Change these to pull from the database
-    aoc = ['Wizardry', 'Computer Science', 'General Studies',
-           'Underwater Basket Weaving', 'Biology']
-    slash = aoc
-    double = aoc
+    aoc = ['Wizardry',
+           'Computer Science',
+           'General Studies',
+           'Underwater Basket Weaving',
+           'Biology']
     return render_template('signup_form.html',
                            aocs=aoc,
-                           slashs=slash,
-                           doubles=double)
+                           slashs=aoc,
+                           doubles=aoc)
 
 
 @app.route('/signup_form/post', methods=['POST'])
