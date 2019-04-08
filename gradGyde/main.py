@@ -2,7 +2,10 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
+from .db_helper import DatabaseHelper
+from .models import UserType
 
+DBHELPER = DatabaseHelper()
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -45,13 +48,13 @@ def oauth_google_authorized():
     user_info = GOOGLE.get('userinfo').data
     session['google_user'] = user_info
     session['user_name'] = session['google_user']['email']
-    if session['newuser']:
-        return redirect('/signup_form')
+    session['user'] = DBHELPER.get_user(session['user_name'])
+    if session['user'] is None:
+        return redirect('/signup_form')   
     return redirect('/student_dashboard')
 
 @app.route('/login')
 def login():
-    session['newuser'] = False
     return render_template('login.html')
 
 
@@ -62,12 +65,6 @@ def oauth_logout():
     session['user_name'] = None
     return redirect('/login')
 
-@app.route('/signup')
-def signup():
-#This is temporary code to distinguish between current and new users.
-#Should be removed and replaced with database stuff when that is implemented
-    session['newuser'] = True
-    return render_template('signup.html')
 
 @app.route('/signup_form')
 def signup_form():
@@ -92,9 +89,9 @@ def signup_form_submit():
     name = request.form['name']
     aoc = request.form.getlist('AOC')
     slash = request.form.getlist('slash')
-    print(name)
-    print(aoc)
-    print(slash)
+    da_year = request.form['year']
+    DBHELPER.make_user(session['user_name'], name, da_year, UserType.STUDENT)
+    session['user'] = DBHELPER.get_user(session['user_name'])
     return redirect('/student_dashboard')
 
 @app.route('/student_dashboard')

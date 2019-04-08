@@ -1,4 +1,4 @@
-import datetime
+import datetime, os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (SemesterType,
@@ -14,12 +14,11 @@ from .models import (SemesterType,
                      Requirements)
 
 
-ENGINE = create_engine('sqlite:///gradGyde.db')
+ENGINE = create_engine('sqlite:///gradGyde\\gradGyde.db')
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
 class DatabaseHelper():
-
     @classmethod
     def __make_aoc(cls, name, passed_type, year):
         try:
@@ -263,5 +262,5 @@ class DatabaseHelper():
         self.take_class(da_class, student)
         print(self.get_classes_taken(student))
 
-DBHELPER = DatabaseHelper()
-DBHELPER.db_helper_test()
+# DBHELPER = DatabaseHelper()
+# DBHELPER.db_helper_test()

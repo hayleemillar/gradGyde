@@ -32,6 +32,12 @@
           <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
         </div>
 
+        <div class="form-group">
+
+          <label for="inputYear">Year you started</label>
+          <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
+
+        </div>
           <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
           <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
           <!-- options populated by js -->
@@ -43,6 +49,8 @@
           <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
             <!-- options populated by js -->
           </select>
+
+          
 
           <br/><br/>
 
@@ -63,7 +71,7 @@
         <br/>
         <br/>
 
-        <button onclick="post('/signup_form/post')" type="button" class="btn btn-primary">Sign up</button>
+        <button onclick="post('/signup_form/post')";type="button" class="btn btn-primary">Sign up</button>
       </form>
     </div>
 </body>
