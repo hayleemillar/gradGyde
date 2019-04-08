@@ -47,10 +47,13 @@ def oauth_google_authorized():
     session['google_token'] = (resp['access_token'], '')
     user_info = GOOGLE.get('userinfo').data
     session['google_user'] = user_info
-    session['user_name'] = session['google_user']['email']
-    session['user'] = DBHELPER.get_user(session['user_name'])
-    if session['user'] is None:
-        return redirect('/signup_form')   
+    session['user_email'] = session['google_user']['email']
+    user = DBHELPER.get_user(session['user_email'])
+    if user is None:
+        return redirect('/signup_form')
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
+    session['user_type'] = str(user.user_type)  
     return redirect('/student_dashboard')
 
 @app.route('/login')
@@ -62,7 +65,7 @@ def login():
 def oauth_logout():
     session.pop('google_token', None)
     session['google_user'] = None
-    session['user_name'] = None
+    session['user_email'] = None
     return redirect('/login')
 
 
@@ -90,8 +93,11 @@ def signup_form_submit():
     aoc = request.form.getlist('AOC')
     slash = request.form.getlist('slash')
     da_year = request.form['year']
-    DBHELPER.make_user(session['user_name'], name, da_year, UserType.STUDENT)
-    session['user'] = DBHELPER.get_user(session['user_name'])
+    DBHELPER.make_user(session['user_email'], name, da_year, UserType.STUDENT)
+    user = DBHELPER.get_user(session['user_email'])
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
+    session['user_type'] = str(user.user_type)  
     return redirect('/student_dashboard')
 
 @app.route('/student_dashboard')

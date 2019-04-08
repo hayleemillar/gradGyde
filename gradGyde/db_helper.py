@@ -13,8 +13,9 @@ from .models import (SemesterType,
                      Prereqs,
                      Requirements)
 
-
-ENGINE = create_engine('sqlite:///gradGyde\\gradGyde.db')
+dir_path = os.path.abspath(__file__)
+engine_path = 'sqlite:///'+dir_path[:len(dir_path)-12]+'gradGyde.db'
+ENGINE = create_engine(engine_path)
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
