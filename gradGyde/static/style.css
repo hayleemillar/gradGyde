@@ -13,7 +13,7 @@ button {
   color: black;
 }
 
-div.loginsignup {
+.loginsignup, .settings {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
