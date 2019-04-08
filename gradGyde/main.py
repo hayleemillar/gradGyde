@@ -104,4 +104,17 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    return render_template('dash_stud.html')
+    return render_template('dash_stud.html',
+                           name=session['user_name'])
+
+@app.route('/student_dashboard/lacs')
+def lacs():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
+    return render_template('lac.html')
+
+@app.route('/student_dashboard/settings')
+def settings():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
+    return render_template('settings.html')
