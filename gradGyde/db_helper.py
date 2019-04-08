@@ -263,5 +263,6 @@ class DatabaseHelper():
         self.take_class(da_class, student)
         print(self.get_classes_taken(student))
 
-DBHELPER = DatabaseHelper()
-DBHELPER.db_helper_test()
+if __name__ == "__main__":
+    DBHELPER = DatabaseHelper()
+    DBHELPER.db_helper_test()
