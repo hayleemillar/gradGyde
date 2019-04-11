@@ -1,4 +1,9 @@
-import datetime, os
+# pylint: disable=C0103
+#This test was disabled because dir_path and engine_path are
+#not our variable names, they belong to a package.
+#Travis does not like that they do not conform to UPPER_CASE
+import datetime
+import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (SemesterType,
@@ -262,8 +267,7 @@ class DatabaseHelper():
         #set taken class
         self.take_class(da_class, student)
         print(self.get_classes_taken(student))
-
+        
 if __name__ == "__main__":
     DBHELPER = DatabaseHelper()
     DBHELPER.db_helper_test()
-

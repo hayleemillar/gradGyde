@@ -53,7 +53,7 @@ def oauth_google_authorized():
         return redirect('/signup_form')
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)  
+    session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
 
 @app.route('/login')
@@ -90,14 +90,14 @@ def signup_form_submit():
     if 'google_token' not in session:
         return "Log in to see this page!"
     name = request.form['name']
-    aoc = request.form.getlist('AOC')
-    slash = request.form.getlist('slash')
+    #aoc = request.form.getlist('AOC')
+    #slash = request.form.getlist('slash')
     da_year = request.form['year']
     DBHELPER.make_user(session['user_email'], name, da_year, UserType.STUDENT)
     user = DBHELPER.get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)  
+    session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
 
 @app.route('/student_dashboard')
