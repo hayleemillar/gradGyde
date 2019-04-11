@@ -2,7 +2,7 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import (get_user, 
+from .db_helper import (get_user,
                         make_user)
 from .models import UserType
 
