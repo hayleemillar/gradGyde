@@ -2,10 +2,10 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import DatabaseHelper
+from .db_helper import (get_user, 
+                        make_user)
 from .models import UserType
 
-DBHELPER = DatabaseHelper()
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -48,7 +48,7 @@ def oauth_google_authorized():
     user_info = GOOGLE.get('userinfo').data
     session['google_user'] = user_info
     session['user_email'] = session['google_user']['email']
-    user = DBHELPER.get_user(session['user_email'])
+    user = get_user(session['user_email'])
     if user is None:
         return redirect('/signup_form')
     session['user_name'] = user.user_name
@@ -93,8 +93,8 @@ def signup_form_submit():
     #aoc = request.form.getlist('AOC')
     #slash = request.form.getlist('slash')
     da_year = request.form['year']
-    DBHELPER.make_user(session['user_email'], name, da_year, UserType.STUDENT)
-    user = DBHELPER.get_user(session['user_email'])
+    make_user(session['user_email'], name, da_year, UserType.STUDENT)
+    user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
     session['user_type'] = str(user.user_type)
