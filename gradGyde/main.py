@@ -24,12 +24,7 @@ def get_google_token():
 
 @app.route('/')
 def index():
-    return "hello world"
-
-
-@app.route('/test')
-def test():
-    return "test"
+    return redirect('/student_dashboard')
 
 
 @app.route('/oauth_google')
