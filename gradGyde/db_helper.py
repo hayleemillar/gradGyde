@@ -16,12 +16,14 @@ ENGINE = create_engine('sqlite:///gradGyde.db')
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
+
 def __make_aoc(name, passed_type, year):
     new_aoc = Aocs(aoc_name=name,
                    aoc_type=passed_type,
                    aoc_year=year)
     SESSION.add(new_aoc)
     SESSION.commit()
+
 
 def __make_class(name, semester, year, credit):
     new_class = Classes(class_name=name,
@@ -30,6 +32,7 @@ def __make_class(name, semester, year, credit):
                         credit_type=credit)
     SESSION.add(new_class)
     SESSION.commit()
+
 
 def make_user(email, name, year, u_type):
     if get_user(email) is None:
@@ -40,10 +43,12 @@ def make_user(email, name, year, u_type):
         SESSION.add(new_user)
         SESSION.commit()
 
+
 def __make_tag(name):
     new_tag = Tags(tag_name=name)
     SESSION.add(new_tag)
     SESSION.commit()
+
 
 def __make_requirement(aoc, tag, required):
     new_req = Requirements(aoc_id=aoc.aoc_id,
@@ -52,11 +57,13 @@ def __make_requirement(aoc, tag, required):
     SESSION.add(new_req)
     SESSION.commit()
 
+
 def __assign_prereqs(prereq, chosen):
     new_prereq = Prereqs(prereq_tag_id=prereq.tag_id,
                          chosen_tag_id=chosen.tag_id)
     SESSION.add(new_prereq)
     SESSION.commit()
+
 
 def __assign_tags(class_assigned, tag):
     new_type = ClassTags(class_id=class_assigned.class_id,
@@ -71,15 +78,18 @@ def assign_aoc(aoc, user):
     SESSION.add(new_major)
     SESSION.commit()
 
+
 def take_class(class_taken, student):
     new_pass = ClassTaken(student_id=student.user_id,
                           class_id=class_taken.class_id)
     SESSION.add(new_pass)
     SESSION.commit()
 
+
 def create_class(class_info, tags):
     __make_class(class_info[0], class_info[1], class_info[2], class_info[3])
-    new_class = Classes.query.filter_by(class_name=class_info[0]).filter_by(class_semester=class_info[1]).filter_by(class_year=class_info[2]).first()
+    new_class = Classes.query.filter_by(class_name=class_info[0]).filter_by(
+        class_semester=class_info[1]).filter_by(class_year=class_info[2]).first()
     for tag in tags:
         da_tag = get_tag(tag)
         if da_tag is not None:
@@ -87,7 +97,7 @@ def create_class(class_info, tags):
 
 
 def create_aoc(aoc_info, tags, amounts):
-    #Tags and Amounts are lists
+    # Tags and Amounts are lists
     try:
         __make_aoc(aoc_info[0], aoc_info[1], aoc_info[2])
         aoc = get_aoc(aoc_info[0], aoc_info[1])
@@ -106,7 +116,8 @@ def get_user(email):
 
 
 def get_aoc(name, passed_type, year=datetime.date.today().year):
-    aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(aoc_type=passed_type).filter(Aocs.aoc_year <= year).first()
+    aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(
+        aoc_type=passed_type).filter(Aocs.aoc_year <= year).first()
     return aoc_query
 
 
@@ -123,7 +134,7 @@ def get_aocs_by_type(pref_type):
 def get_preffered_aocs(user, pref_type):
     pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
     pref_aocs = []
-    #add check for size and pass general studies if there are no prefered aocs
+    # add check for size and pass general studies if there are no prefered aocs
     for item in pref_aocs_query:
         aoc = __get_aoc_by_id(item.aoc_id)
         if aoc is not None and aoc.aoc_type == pref_type:
@@ -142,7 +153,8 @@ def __get_class_by_id(c_id):
 
 
 def get_classes_taken(user):
-    class_taken_query = ClassTaken.query.filter_by(student_id=user.user_id).all()
+    class_taken_query = ClassTaken.query.filter_by(
+        student_id=user.user_id).all()
     classes_taken = []
     for class_taken in class_taken_query:
         da_class = __get_class_by_id(class_taken.class_id)
