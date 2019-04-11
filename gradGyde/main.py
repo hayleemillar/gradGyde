@@ -2,6 +2,8 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
+from .db_helper import get_user, make_user
+from .models import UserType
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
@@ -46,15 +48,18 @@ def oauth_google_authorized():
     session['google_token'] = (resp['access_token'], '')
     user_info = GOOGLE.get('userinfo').data
     session['google_user'] = user_info
-    session['user_name'] = session['google_user']['email']
-    if session['newuser']:
+    session['user_email'] = session['google_user']['email']
+    user = get_user(session['user_email'])
+    if user is None:
         return redirect('/signup_form')
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
+    session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
 
 
 @app.route('/login')
 def login():
-    session['newuser'] = False
     return render_template('login.html')
 
 
@@ -62,7 +67,7 @@ def login():
 def oauth_logout():
     session.pop('google_token', None)
     session['google_user'] = None
-    session['user_name'] = None
+    session['user_email'] = None
     return redirect('/login')
 
 
@@ -95,11 +100,14 @@ def signup_form_submit():
     if 'google_token' not in session:
         return "Log in to see this page!"
     name = request.form['name']
-    aoc = request.form.getlist('AOC')
-    slash = request.form.getlist('slash')
-    print(name)
-    print(aoc)
-    print(slash)
+    #aoc = request.form.getlist('AOC')
+    #slash = request.form.getlist('slash')
+    da_year = request.form['year']
+    make_user(session['user_email'], name, da_year, UserType.STUDENT)
+    user = get_user(session['user_email'])
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
+    session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
 
 
@@ -107,4 +115,19 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    return render_template('dash_stud.html')
+    return render_template('dash_stud.html',
+                           name=session['user_name'])
+
+
+@app.route('/student_dashboard/lacs')
+def lacs():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
+    return render_template('lac.html')
+
+
+@app.route('/student_dashboard/settings')
+def settings():
+    if 'google_token' not in session:
+        return "Log in to see this page!"
+    return render_template('settings.html')
