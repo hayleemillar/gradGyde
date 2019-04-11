@@ -76,8 +76,6 @@ def signup_form():
     #Change these to pull from the database
     aoc = ['Wizardry', 'Computer Science', 'General Studies',
            'Underwater Basket Weaving', 'Biology']
-    slash = aoc
-    double = aoc
     return render_template('signup_form.html',
                            aocs=aoc,
                            slashs=aoc,
