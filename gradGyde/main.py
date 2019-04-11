@@ -24,9 +24,11 @@ def get_google_token():
 def index():
     return "hello world"
 
+
 @app.route('/test')
 def test():
     return "test"
+
 
 @app.route('/oauth_google')
 def oauth_google():
@@ -38,7 +40,7 @@ def oauth_google():
 def oauth_google_authorized():
     resp = GOOGLE.authorized_response()
     if resp is None:
-        return 'Google denied access. Reason: %s \n Error: %s' %(
+        return 'Google denied access. Reason: %s \n Error: %s' % (
             request.args['error_reason'],
             request.args['error_description'])
     session['google_token'] = (resp['access_token'], '')
@@ -48,6 +50,7 @@ def oauth_google_authorized():
     if session['newuser']:
         return redirect('/signup_form')
     return redirect('/student_dashboard')
+
 
 @app.route('/login')
 def login():
@@ -62,20 +65,25 @@ def oauth_logout():
     session['user_name'] = None
     return redirect('/login')
 
+
 @app.route('/signup')
 def signup():
-#This is temporary code to distinguish between current and new users.
-#Should be removed and replaced with database stuff when that is implemented
+    # This is temporary code to distinguish between current and new users.
+    # Should be removed and replaced with database stuff when that is implemented
     session['newuser'] = True
     return render_template('signup.html')
+
 
 @app.route('/signup_form')
 def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    #Change these to pull from the database
-    aoc = ['Wizardry', 'Computer Science', 'General Studies',
-           'Underwater Basket Weaving', 'Biology']
+    # Change these to pull from the database
+    aoc = ['Wizardry',
+           'Computer Science',
+           'General Studies',
+           'Underwater Basket Weaving',
+           'Biology']
     return render_template('signup_form.html',
                            aocs=aoc,
                            slashs=aoc,
@@ -93,6 +101,7 @@ def signup_form_submit():
     print(aoc)
     print(slash)
     return redirect('/student_dashboard')
+
 
 @app.route('/student_dashboard')
 def dash_stud():
