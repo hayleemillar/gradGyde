@@ -71,6 +71,14 @@ def oauth_logout():
     return redirect('/login')
 
 
+@app.route('/signup')
+def signup():
+    # This is temporary code to distinguish between current and new users.
+    # Should be removed and replaced with database stuff when that is implemented
+    session['newuser'] = True
+    return render_template('signup.html')
+
+
 @app.route('/signup_form')
 def signup_form():
     if 'google_token' not in session:
