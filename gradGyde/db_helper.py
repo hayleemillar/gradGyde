@@ -172,5 +172,3 @@ def get_tag_by_id(t_id):
     return tag_query
 
 
-
-

@@ -59,3 +59,4 @@ def db_helper_test():
     #set taken class
     take_class(da_class, student)
     print(get_classes_taken(student))
+    
