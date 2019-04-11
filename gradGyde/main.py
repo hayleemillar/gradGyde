@@ -2,8 +2,7 @@ import os
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import (get_user,
-                        make_user)
+from .db_helper import get_user, make_user
 from .models import UserType
 
 OAUTH = OAuth()
@@ -27,9 +26,11 @@ def get_google_token():
 def index():
     return "hello world"
 
+
 @app.route('/test')
 def test():
     return "test"
+
 
 @app.route('/oauth_google')
 def oauth_google():
@@ -41,7 +42,7 @@ def oauth_google():
 def oauth_google_authorized():
     resp = GOOGLE.authorized_response()
     if resp is None:
-        return 'Google denied access. Reason: %s \n Error: %s' %(
+        return 'Google denied access. Reason: %s \n Error: %s' % (
             request.args['error_reason'],
             request.args['error_description'])
     session['google_token'] = (resp['access_token'], '')
@@ -55,6 +56,7 @@ def oauth_google_authorized():
     session['user_year'] = user.year_started
     session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
+
 
 @app.route('/login')
 def login():
@@ -73,7 +75,7 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return "Log in to see this page!"
-    #Change these to pull from the database
+    # Change these to pull from the database
     aoc = ['Wizardry',
            'Computer Science',
            'General Studies',
@@ -100,6 +102,7 @@ def signup_form_submit():
     session['user_type'] = str(user.user_type)
     return redirect('/student_dashboard')
 
+
 @app.route('/student_dashboard')
 def dash_stud():
     if 'google_token' not in session:
@@ -107,11 +110,13 @@ def dash_stud():
     return render_template('dash_stud.html',
                            name=session['user_name'])
 
+
 @app.route('/student_dashboard/lacs')
 def lacs():
     if 'google_token' not in session:
         return "Log in to see this page!"
     return render_template('lac.html')
+
 
 @app.route('/student_dashboard/settings')
 def settings():
