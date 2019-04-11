@@ -76,6 +76,7 @@ class ClassTaken(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey(Classes.class_id),
                          nullable=False)
 
+
 class Tags(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String, nullable=False)
@@ -105,6 +106,7 @@ class Prereqs(db.Model):
                               nullable=False)
     prereq = db.relationship("Tags", foreign_keys=[prereq_tag_id])
     chosen = db.relationship("Tags", foreign_keys=[chosen_tag_id])
+
 
 class Requirements(db.Model):
     req_id = db.Column(db.Integer, primary_key=True)
