@@ -55,6 +55,8 @@ def oauth_google_authorized():
 
 @app.route('/login')
 def login():
+    if 'google_token' in session:
+        return redirect('/student_dashboard')
     return render_template('login.html')
 
 
@@ -66,18 +68,10 @@ def oauth_logout():
     return redirect('/login')
 
 
-@app.route('/signup')
-def signup():
-    # This is temporary code to distinguish between current and new users.
-    # Should be removed and replaced with database stuff when that is implemented
-    session['newuser'] = True
-    return render_template('signup.html')
-
-
 @app.route('/signup_form')
 def signup_form():
     if 'google_token' not in session:
-        return "Log in to see this page!"
+        return redirect('/login')
     # Change these to pull from the database
     aoc = ['Wizardry',
            'Computer Science',
@@ -93,7 +87,7 @@ def signup_form():
 @app.route('/signup_form/post', methods=['POST'])
 def signup_form_submit():
     if 'google_token' not in session:
-        return "Log in to see this page!"
+        return redirect('/login')
     name = request.form['name']
     #aoc = request.form.getlist('AOC')
     #slash = request.form.getlist('slash')
@@ -109,7 +103,7 @@ def signup_form_submit():
 @app.route('/student_dashboard')
 def dash_stud():
     if 'google_token' not in session:
-        return "Log in to see this page!"
+        return redirect('/login')
     return render_template('dash_stud.html',
                            name=session['user_name'])
 
@@ -117,12 +111,12 @@ def dash_stud():
 @app.route('/student_dashboard/lacs')
 def lacs():
     if 'google_token' not in session:
-        return "Log in to see this page!"
+        return redirect('/login')
     return render_template('lac.html')
 
 
 @app.route('/student_dashboard/settings')
 def settings():
     if 'google_token' not in session:
-        return "Log in to see this page!"
+        return redirect('/login')
     return render_template('settings.html')
