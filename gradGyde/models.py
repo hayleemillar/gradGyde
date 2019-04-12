@@ -2,16 +2,19 @@
 import enum
 from gradGyde import db
 
+
 class SemesterType(enum.Enum):
     SPRING = "spring"
     SUMMER = "summer"
     FALL = "fall"
     ISP = "isp"
 
+
 class UserType(enum.Enum):
     STUDENT = "student"
     PROFESSOR = "professor"
     ADMIN = "administrator"
+
 
 class Aocs(db.Model):
     aoc_id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +27,8 @@ class Aocs(db.Model):
                                    backref=db.backref('Aocs', uselist=False))
 
     def __repr__(self):
-        return '<AOC: %r>' %self.aoc_name
+        return '<AOC: %r>' % self.aoc_name
+
 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -38,12 +42,15 @@ class Users(db.Model):
                                backref=db.backref('Users'), uselist=False)
 
     def __repr__(self):
-        return '<User: %r>' %self.user_name
+        return '<User: %r>' % self.user_name
+
 
 class PrefferedAocs(db.Model):
     pref_aoc_id = db.Column(db.Integer, primary_key=True)
     aoc_id = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey(Users.user_id), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        Users.user_id), nullable=False)
+
 
 class Classes(db.Model):
     class_id = db.Column(db.Integer, primary_key=True)
@@ -59,7 +66,8 @@ class Classes(db.Model):
                                   backref=db.backref('Classes', uselist=False))
 
     def __repr__(self):
-        return '<Class %r>' %self.class_name
+        return '<Class %r>' % self.class_name
+
 
 class ClassTaken(db.Model):
     class_taken_id = db.Column(db.Integer, primary_key=True)
@@ -67,6 +75,7 @@ class ClassTaken(db.Model):
                            nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey(Classes.class_id),
                          nullable=False)
+
 
 class Tags(db.Model):
     tag_id = db.Column(db.Integer, primary_key=True)
@@ -78,7 +87,8 @@ class Tags(db.Model):
                                    backref=db.backref('Tags', uselist=False))
 
     def __repr__(self):
-        return '<Tag: %r>' %self.tag_name
+        return '<Tag: %r>' % self.tag_name
+
 
 class ClassTags(db.Model):
     class_tag_id = db.Column(db.Integer, primary_key=True)
@@ -86,6 +96,7 @@ class ClassTags(db.Model):
                          nullable=False)
     tag_id = db.Column(db.Integer, db.ForeignKey(Tags.tag_id),
                        nullable=False)
+
 
 class Prereqs(db.Model):
     prereq_id = db.Column(db.Integer, primary_key=True)
@@ -96,6 +107,7 @@ class Prereqs(db.Model):
     prereq = db.relationship("Tags", foreign_keys=[prereq_tag_id])
     chosen = db.relationship("Tags", foreign_keys=[chosen_tag_id])
 
+
 class Requirements(db.Model):
     req_id = db.Column(db.Integer, primary_key=True)
     aoc_id = db.Column(db.Integer, db.ForeignKey(Aocs.aoc_id),
@@ -103,6 +115,7 @@ class Requirements(db.Model):
     tag_id = db.Column(db.Integer, db.ForeignKey(Tags.tag_id),
                        nullable=False)
     num_req = db.Column(db.Integer, nullable=False)
+
 
 def init_database():
     db.create_all()
