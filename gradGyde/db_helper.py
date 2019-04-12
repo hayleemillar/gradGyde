@@ -1,10 +1,7 @@
 import datetime
-import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from .models import (SemesterType,
-                     UserType,
-                     Aocs,
+from .models import (Aocs,
                      Users,
                      PrefferedAocs,
                      Classes,
@@ -14,11 +11,11 @@ from .models import (SemesterType,
                      Prereqs,
                      Requirements)
 
-DIRPATH = os.path.abspath(__file__)
-ENGINEPATH = 'sqlite:///'+DIRPATH[:len(DIRPATH)-12]+'gradGyde.db'
-ENGINE = create_engine(ENGINEPATH)
+
+ENGINE = create_engine('sqlite:///gradGyde.db')
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
+
 
 def make_aoc(name, passed_type, year):
     new_aoc = Aocs(aoc_name=name,
@@ -170,5 +167,3 @@ def get_tag(text):
 def get_tag_by_id(t_id):
     tag_query = Tags.query.filter_by(tag_id=t_id).first()
     return tag_query
-
-
