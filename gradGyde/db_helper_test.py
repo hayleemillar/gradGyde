@@ -1,8 +1,17 @@
-from .db_helper import (create_class,
+from .db_helper import (assign_aoc,
+                        create_class,
                         create_aoc,
-                        make_tag,
+                        get_aoc,
+                        get_aocs_by_type,
+                        get_class,
+                        get_classes_taken,
+                        get_preffered_aocs,
+                        get_tag,
+                        get_user,
                         make_user,
                         take_class)
+from .models import (SemesterType,
+                     UserType)
 
 def db_helper_test():
     #make_tag list
@@ -59,4 +68,3 @@ def db_helper_test():
     #set taken class
     take_class(da_class, student)
     print(get_classes_taken(student))
-    
