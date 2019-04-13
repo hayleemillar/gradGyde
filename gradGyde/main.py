@@ -4,6 +4,9 @@ from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import get_user, make_user
 from .models import UserType
+from .db_helper_test import db_helper_test
+
+db_helper_test()
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',

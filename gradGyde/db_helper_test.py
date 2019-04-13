@@ -5,6 +5,7 @@ from .db_helper import (assign_aoc,
                         get_aocs_by_type,
                         get_class,
                         get_classes_taken,
+                        get_class_tags,
                         get_preffered_aocs,
                         get_tag,
                         get_user,
@@ -55,7 +56,7 @@ def db_helper_test():
         print(get_tag(tag))
     #Test class
     class_info = ["Introduction to Programming With Python", SemesterType.FALL, 2018, 1]
-    create_class(class_info, [tags[0]])
+    create_class(class_info, tags)
     da_class = get_class("Introduction to Programming With Python")
     print(da_class)
     #Test user
@@ -68,3 +69,5 @@ def db_helper_test():
     #set taken class
     take_class(da_class, student)
     print(get_classes_taken(student))
+    da_class_tags = get_class_tags(da_class.class_id)
+    print(da_class_tags)

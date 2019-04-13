@@ -1,4 +1,5 @@
 import datetime
+import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (Aocs,
@@ -12,7 +13,9 @@ from .models import (Aocs,
                      Requirements)
 
 
-ENGINE = create_engine('sqlite:///gradGyde.db')
+DIRPATH = os.path.abspath(__file__)
+ENGINEPATH = 'sqlite:///'+DIRPATH[:len(DIRPATH)-12]+'gradGyde.db'
+ENGINE = create_engine(ENGINEPATH)
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
@@ -177,6 +180,17 @@ def get_tag_by_id(t_id):
 #Associated tag and year. Year >= Student's start year
 
 #3: Get a list of all tags associated with a course
+def get_class_tags(da_class_id):
+    #This function takes a class_id from the database as input
+    #And outputs a list of course tag names
+    #Get a Query object with class_tags joined on tags where class_id=da_class_id
+    class_tags = SESSION.query(ClassTags, Tags
+                                  ).filter_by(class_id=da_class_id
+                                  ).join(Tags).all()
+    class_tag_list = []
+    for class_tag in class_tags:
+        class_tag_list.append(class_tag.Tags.tag_name)
+    return class_tag_list
 
 #4: Given a prereq and year, get all the classes that fulfill the prereq 
 
