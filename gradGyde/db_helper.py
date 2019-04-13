@@ -167,3 +167,28 @@ def get_tag(text):
 def get_tag_by_id(t_id):
     tag_query = Tags.query.filter_by(tag_id=t_id).first()
     return tag_query
+
+#1.0 Tasks:
+
+#1: Get a list of courses taken by a student that is filterable
+#By semester, year, tag, and name
+
+#2: Get a list of potential courses a student could take, based on
+#Associated tag and year. Year >= Student's start year
+
+#3: Get a list of all tags associated with a course
+
+#4: Given a prereq and year, get all the classes that fulfill the prereq 
+
+#5: Get the requirments for an AOC
+
+#6: Get the potential courses a student could take that fulfill those reqs
+
+#7: Of the potential courses above, get the ones a student has taken
+
+#8: Stuff all this into a json
+
+#9: Get all this for a student's preffered AOC of all 3 types
+
+#10: Get a list of all courses or course names for Haylee to display.
+#Should this be limited to ones the student could have taken?
