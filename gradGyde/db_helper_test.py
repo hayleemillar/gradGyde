@@ -133,7 +133,7 @@ def db_helper_test():
 
     #Testing potential courses
     print("Getting potential classes...")
-    print(get_potential_classes_by_tag(get_tag(tags[0]).tag_id, 2014))
+    print(get_potential_classes(get_tag(tags[0]).tag_id, 2014))
 
 
 
