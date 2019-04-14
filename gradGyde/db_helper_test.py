@@ -8,6 +8,7 @@ from .db_helper import (assign_aoc,
                         get_class,
                         get_classes_taken,
                         get_class_tags,
+                        get_potential_classes,
                         get_preffered_aocs,
                         get_tag,
                         get_user,
@@ -51,6 +52,7 @@ def db_helper_test():
     print(tags)
     print("Printing tag amounts...")
     print(amounts)
+
     #create the AOC
     print("Creating aoc")
     aoc_info = ["Computer Science (Regular)", "Divisonal", 2018]
@@ -63,6 +65,7 @@ def db_helper_test():
     print("Getting tags...")
     for tag in tags:
         print(get_tag(tag))
+
     #Test class
     print("Creating a class...")
     class_info = ["Introduction to Programming With Python", SemesterType.FALL, 2018, 1]
@@ -70,21 +73,25 @@ def db_helper_test():
     print("Getting the class I made...")
     da_class = get_class("Introduction to Programming With Python")
     print(da_class)
+
     #Test user
     print("Making user...")
     make_user("harry.potter97@ncf.edu", "Harry", 1997, UserType.STUDENT)
     print("Getting user...")
     student = get_user("harry.potter97@ncf.edu")
     print(student)
+
     #set preferred AOCS
     print("Setting preffered aoc...")
     assign_aoc(comp_sci, student)
     print("Getting preffered aoc...")
     print(get_preffered_aocs(student, "Divisonal"))
+
     #test getting class tags
     print("Getting class tags...")
     da_class_tags = get_class_tags(da_class.class_id)
     print(da_class_tags)
+
     #set taken class
     print("Creating classes for testing get_classes_taken...")
     take_class(da_class, student)
@@ -104,7 +111,6 @@ def db_helper_test():
     take_class(da_class, student)
     print("Testing get_classes_taken without params...")
     print(get_classes_taken(student))
-    #get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name=None
     print("Testing get_classes_taken with Semester...")
     print(get_classes_taken(student, semester=SemesterType.FALL))
     print("Testing get_classes_taken with Year...")
@@ -125,6 +131,9 @@ def db_helper_test():
     print("Testing get_all_classes_by_year... All test should not be present...")
     print(get_all_classes_by_year(2017))
 
+    #Testing potential courses
+    print("Getting potential classes...")
+    print(get_potential_classes_by_tag(get_tag(tags[0]).tag_id, 2014))
 
 
 

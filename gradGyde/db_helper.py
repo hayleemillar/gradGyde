@@ -198,6 +198,19 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
 
 #2: Get a list of potential courses a student could take, based on
 #Associated tag and year. Year >= Student's start year
+def get_potential_classes(da_tag_id, da_year):
+    #Takes in a tag_id and a year as input
+    #Outputs a list of class objects that fit the req.
+    class_query = SESSION.query(Classes, ClassTags
+                                ).filter(Classes.class_year >= da_year
+                                ).join(ClassTags
+                                ).filter(ClassTags.tag_id == da_tag_id
+                                ).all()
+    potential_courses = []
+    for course in class_query:
+        potential_courses.append(course.Classes)
+    return potential_courses
+
 
 #3: Get a list of all tags associated with a course
 def get_class_tags(da_class_id):
@@ -213,6 +226,8 @@ def get_class_tags(da_class_id):
     return class_tag_list
 
 #4: Given a prereq and year, get all the classes that fulfill the prereq 
+
+
 
 #5: Get the requirments for an AOC
 
