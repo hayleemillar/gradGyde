@@ -225,4 +225,17 @@ def get_class_tags(da_class_id):
 #9: Get all this for a student's preffered AOC of all 3 types
 
 #10: Get a list of all courses or course names for Haylee to display.
-#Should this be limited to ones the student could have taken?
+#One that has all, one that filters by year>=student's start year
+def get_all_classes():
+    class_query = Classes.query.all()
+    classes = []
+    for da_class in class_query:
+        classes.append(da_class.class_name)
+    return classes
+
+def get_all_classes_by_year(da_year):
+    class_query = Classes.query.filter(Classes.class_year >= da_year).all()
+    classes = []
+    for da_class in class_query:
+        classes.append(da_class.class_name)
+    return classes

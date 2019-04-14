@@ -1,6 +1,8 @@
 from .db_helper import (assign_aoc,
                         create_class,
                         create_aoc,
+                        get_all_classes,
+                        get_all_classes_by_year,
                         get_aoc,
                         get_aocs_by_type,
                         get_class,
@@ -116,6 +118,13 @@ def db_helper_test():
                             da_year=2018, 
                             da_tag_id=get_tag(tags[1]).tag_id,
                             da_name="Test 3"))
+    print("Testing get_all_classes...")
+    class_info = ["All test", SemesterType.FALL, 2014, 1]
+    create_class(class_info, [tags[0], tags[3]])
+    print(get_all_classes())
+    print("Testing get_all_classes_by_year... All test should not be present...")
+    print(get_all_classes_by_year(2017))
+
 
 
 
