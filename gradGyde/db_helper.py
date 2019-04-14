@@ -150,18 +150,6 @@ def get_class_by_id(c_id):
     class_query = Classes.query.filter_by(class_id=c_id).first()
     return class_query
 
-
-def get_classes_taken(user):
-    class_taken_query = ClassTaken.query.filter_by(
-        student_id=user.user_id).all()
-    classes_taken = []
-    for class_taken in class_taken_query:
-        da_class = get_class_by_id(class_taken.class_id)
-        if da_class is not None:
-            classes_taken.append(da_class)
-    return classes_taken
-
-
 def get_tag(text):
     tag_query = Tags.query.filter_by(tag_name=text).first()
     return tag_query
@@ -175,6 +163,38 @@ def get_tag_by_id(t_id):
 
 #1: Get a list of courses taken by a student that is filterable
 #By semester, year, tag, and name
+def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name=None):
+    #Old version of query:
+    #class_taken_query = ClassTaken.query.filter_by(
+    #student_id=user.user_id).all()
+    filters = []
+    #filters is the list of all filters we want to have
+    if semester is not None:
+        filters.append(Classes.class_semester == semester)
+    if da_year is not None:
+        filters.append(Classes.class_year >= da_year)
+    if da_name is not None:
+        filters.append(Classes.class_name == da_name)
+    if da_tag_id is not None:
+        class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags
+                                          ).filter_by(student_id=user.user_id
+                                          ).join(Classes
+                                          ).filter(*filters
+                                          ).join(ClassTags
+                                          ).filter(ClassTags.tag_id == da_tag_id
+                                          ).all()
+    else:
+        class_taken_query = SESSION.query(ClassTaken, Classes,
+                                          ).filter_by(student_id=user.user_id
+                                          ).join(Classes
+                                          ).filter(*filters
+                                          ).all()
+    classes_taken = []
+    for class_taken in class_taken_query:
+        da_class = get_class_by_id(class_taken.Classes.class_id)
+        if da_class is not None:
+            classes_taken.append(da_class)
+    return classes_taken
 
 #2: Get a list of potential courses a student could take, based on
 #Associated tag and year. Year >= Student's start year
