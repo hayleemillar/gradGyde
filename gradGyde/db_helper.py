@@ -62,6 +62,7 @@ def make_requirement(aoc, tag, required):
 
 
 def assign_prereqs(prereq, chosen):
+    #Chosen is the tag with a prereq
     new_prereq = Prereqs(prereq_tag_id=prereq.tag_id,
                          chosen_tag_id=chosen.tag_id)
     SESSION.add(new_prereq)
@@ -226,8 +227,13 @@ def get_class_tags(da_class_id):
     return class_tag_list
 
 #4: Given a prereq and year, get all the classes that fulfill the prereq 
-
-
+#Step 1: Get prereqs
+def get_prereqs(chosen_id):
+    #Takes the chosen tag's id as an input
+    #and outputs a list of associated prereq objects
+    return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
+#step 2: Get potential courses that fulfill the prereq
+#This is basically get potential classes, we'll just use the prereq id. 
 
 #5: Get the requirments for an AOC
 

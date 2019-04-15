@@ -1,4 +1,5 @@
 from .db_helper import (assign_aoc,
+                        assign_prereqs,
                         create_class,
                         create_aoc,
                         get_all_classes,
@@ -10,7 +11,9 @@ from .db_helper import (assign_aoc,
                         get_class_tags,
                         get_potential_classes,
                         get_preffered_aocs,
+                        get_prereqs,
                         get_tag,
+                        get_tag_by_id,
                         get_user,
                         make_user,
                         take_class)
@@ -134,6 +137,11 @@ def db_helper_test():
     #Testing potential courses
     print("Getting potential classes...")
     print(get_potential_classes(get_tag(tags[0]).tag_id, 2014))
+
+    #Testing prereqs
+    print("Making prereq...")
+    assign_prereqs(get_tag(tags[0]), get_tag(tags[1]))
+    print(get_tag_by_id(get_prereqs(get_tag(tags[1]).tag_id)[0].prereq_tag_id))
 
 
 
