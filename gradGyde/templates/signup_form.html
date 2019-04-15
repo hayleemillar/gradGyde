@@ -26,41 +26,42 @@
       <h1>Please fill in the following to complete your sign up for gradGyde.</h1>
       <br/><br/>
 
+      <!-- sign up form -->
       <form action="/signup_form/post" method="post">
-        <div class="form-group">
-          <label for="inputName">Preferred Name</label>
-          <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
-        </div>
 
-        <div class="form-group">
+        <!-- preferrend name -->
+        <label for="inputName">Preferred Name</label>
+        <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
 
-          <label for="inputYear">Year you started</label>
-          <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
+        <!-- year started at NCF -->
+        <label for="inputYear">Year you started at NCF</label>
+        <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
 
-        </div>
-          <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+        <!-- primary aoc -->
+        <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
           <!-- options populated by js -->
-          </select>
-
-          <br/><br/>
-
-          <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-            <!-- options populated by js -->
-          </select>
-
-          
-
-          <br/><br/>
-
-          <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-            <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-              <!-- options populated by js -->
-            </select>
+        </select>
 
         <br/><br/>
 
+        <!-- double aoc -->
+        <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
+          <!-- options populated by js -->
+        </select>
+
+        <br/><br/>
+
+        <!-- slashes -->
+        <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+          <!-- options populated by js -->
+        </select>
+
+        <br/><br/>
+
+        <!-- ferpa agreement -->
         By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records.
         <br/>
         <div class="form-check">
