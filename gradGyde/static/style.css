@@ -43,7 +43,7 @@ button {
  * MAIN *
  ********/
 .main {
-  margin-left: 310px; /* Same as the width of the sidenav */
+  margin-left: 21%; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 10px 10px;
 }
@@ -73,7 +73,7 @@ button {
  **********************/
 .sidenav {
   height: 100%;
-  width: 300px;
+  width: 20%;
   position: fixed;
   z-index: 1;
   top: 58px;

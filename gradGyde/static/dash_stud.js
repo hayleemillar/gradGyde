@@ -92,7 +92,6 @@ function addProgressBars(aois, elementID) {
       numFufilled.toString() + "/" + reqCount.toString());
     titleText.appendChild(text);
     title.appendChild(titleText);
-    console.log(title);
 
     progressBar.appendChild(title);
 
