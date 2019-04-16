@@ -127,8 +127,8 @@ function addProgressBars(aois, elementID) {
  */
 function populateAOIList(aois, elementID) {
 
-  var aoiArray = []
-  var aoiList = ""
+  var aoiArray = [];
+  var aoiList = "";
 
   // for each area of interest (aoi)
   for (aoi in aois) {
@@ -139,18 +139,36 @@ function populateAOIList(aois, elementID) {
   // for each aoi name
   for (var i = 0; i < aoiArray.length; i++) {
 
+    // if there is only one aoi
     if (i == 0 && i == aoiArray.length - 1) {
       aoiList = aoiArray[i];
+    // if there is more than one aoi
     } else if (i < aoiArray.length) {
       aoiList = aoiList + aoiArray[i] + ", ";
+    // if there is more than one aoi, but the ith aoi is the last in array
     } else if (i == aoiArray.length - 1) {
       aoiList = aoiList + aoiArray[i];
     }
   }
 
+  // create text node and append to element specified by elementID
   text = document.createTextNode(aoiList);
   element = document.getElementById(elementID);
   element.appendChild(text);
+}
+
+
+/**
+ * For each area of interest (aoi) in aois, create a tab element of its name
+ *  and append it to tabElementID. A form of checkbox requirements will be
+ *  associated with the tab and should be displayed when the tab is clicked.
+ * @param aois
+ * @param tabElementID
+ * @param bodyElementID
+ */
+function populateAOIRequirements(aois, tabElementID, bodyElementID) {
+
+
 }
 
 populateAOIList(aocs, "user-aoc");
