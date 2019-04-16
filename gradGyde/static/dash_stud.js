@@ -41,11 +41,10 @@ aocs = {
 };
 
 /**
- * @param aoi some areas of interest, whether that be an AOC, double, or slash
- * @param 
- * 
  * Takes in a json and produces a progress bar within a 
  * specified element
+ * @param aois some areas of interest, whether that be an AOC, double, or slash
+ * @param elementID the ID of the element the progress bars should be appended to
  */
 function addProgressBars(aois, elementID) {
   
@@ -78,8 +77,6 @@ function addProgressBars(aois, elementID) {
         numFulfilled++;
       }
     }
-
-    console.log(numFulfilled);
 
     // PROGRESS BAR
     element.appendChild(document.createElement("br"));
@@ -119,6 +116,42 @@ function addProgressBars(aois, elementID) {
     element.appendChild(progressBar);
   }
 
-} 
+}
 
+
+/**
+ * Creates a (string) list of areas of interest and appends it to element 
+ * specified by elementID.
+ * @param aois some areas of interest, whether that be an AOC, double, or slash
+ * @param elementID the element ID to populate
+ */
+function populateAOIList(aois, elementID) {
+
+  var aoiArray = []
+  var aoiList = ""
+
+  // for each area of interest (aoi)
+  for (aoi in aois) {
+    // get name of aoi
+    aoiArray.push(aois[aoi]["Name"]);
+  }
+
+  // for each aoi name
+  for (var i = 0; i < aoiArray.length; i++) {
+
+    if (i == 0 && i == aoiArray.length - 1) {
+      aoiList = aoiArray[i];
+    } else if (i < aoiArray.length) {
+      aoiList = aoiList + aoiArray[i] + ", ";
+    } else if (i == aoiArray.length - 1) {
+      aoiList = aoiList + aoiArray[i];
+    }
+  }
+
+  text = document.createTextNode(aoiList);
+  element = document.getElementById(elementID);
+  element.appendChild(text);
+}
+
+populateAOIList(aocs, "user-aoc");
 addProgressBars(aocs, "progress-bars");
