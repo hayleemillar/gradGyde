@@ -1,45 +1,3 @@
-aocs = {
-  "AOC1" : {
-    "Name" : "Computer Science 2018",
-    "Requirements" : {
-      "Req1" : {
-        "Name" :  "CS Introductory Course",
-        "Amount" : 1,
-        "Fulfilled" : true,
-        "Classes" : {
-          "Class1" : {
-            "Name" : "Intro to Programming in Python",
-            "Taken" : false
-          },
-          "Class2" : {
-            "Name" : "Intro to Programming in C",
-            "Taken" : true
-          }   
-        }   
-      },
-      "Req2" : {
-        "Name" :  "Math",
-        "Amount" : 2,
-        "Fulfilled" : false,
-        "Classes" : {
-          "Class1" : {
-            "Name" : "Calculus 1",
-            "Taken" : false
-          },
-          "Class2" : {
-            "Name" : "Discrete Mathematics for Computer Science",
-            "Taken" : true
-          },
-          "Class3" : {
-            "Name" : "Dealing With Data",
-            "Taken" : false
-          }   
-        }   
-      }
-    }
-  }
-};
-
 /**
  * Takes in a json and produces a progress bar within a 
  * specified element
@@ -48,7 +6,7 @@ aocs = {
  */
 function addProgressBars(aois, elementID) {
   
-  var course;
+  var area;
   var reqs;
   var numFufilled;
 
@@ -61,7 +19,7 @@ function addProgressBars(aois, elementID) {
   // for each area of interest (aoi)
   for (aoi in aois) {
 
-    course = aois[aoi]["Name"];
+    area = aois[aoi]["Name"];
 
     reqs = aois[aoi]["Requirements"];
 
@@ -84,10 +42,10 @@ function addProgressBars(aois, elementID) {
     progressBar = document.createElement("div");
     progressBar.className = "grad-progress";
 
-    // course title
+    // area title
     title = document.createElement("h5");
     titleText = document.createElement("b");
-    text = document.createTextNode(course + " : " + 
+    text = document.createTextNode(area + " : " + 
       numFulfilled.toString() + "/" + reqCount.toString());
     titleText.appendChild(text);
     title.appendChild(titleText);
@@ -115,7 +73,6 @@ function addProgressBars(aois, elementID) {
     // append div grad-progress to element retrieved by param elementID
     element.appendChild(progressBar);
   }
-
 }
 
 
@@ -162,14 +119,127 @@ function populateAOIList(aois, elementID) {
  * For each area of interest (aoi) in aois, create a tab element of its name
  *  and append it to tabElementID. A form of checkbox requirements will be
  *  associated with the tab and should be displayed when the tab is clicked.
- * @param aois
- * @param tabElementID
- * @param bodyElementID
+ * @param aois areas of interest
+ * @param tabElementID element ID the tab will be appended to
+ * @param bodyElementID element ID the form will be appended to
+ * @returns array of element IDs that are associated with the tabs
  */
-function populateAOIRequirements(aois, tabElementID, bodyElementID) {
+function populateAOIRequirements(aois, tabElementID) {
 
+  var tabElement = document.getElementById(tabElementID);
+
+  var area;
+  var aoiList;
+
+  var index = 0;
+  var tab;
+  var button;
+  var text;
+
+  for (aoi in aois) {
+
+    // get aoi name
+    area = aois[aoi]["Name"];
+
+    /*
+    <!-- STUB TABS OF AOCS AND SLASHES -->
+    <ul class="nav nav-tabs" id="summary-tabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" id="" data-toggle="tab" role="tab" aria-controls="dashboard" aria-selected="true" style="font-size:16px" onclick="changeDivContents('summary', 'compSciTrack')" id="sum-tab-1">Computer Science</button>
+      </li>
+    </ul>
+     */
+
+    tab = document.createElement("li");
+    tab.className = "nav-item";
+
+    button = document.createElement("button");
+    button.setAttribute("id", "aoc-" + index.toString());
+    button.setAttribute("data-toggle", "tab");
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-controls", "dashboard");
+    button.setAttribute("style", "font-size:16px;");
+    button.setAttribute("onclick", "switchRequirements(this.id, 'summary')");
+
+    if (index == 0) {
+      button.className = "nav-link active";
+      button.setAttribute("aria-selected", "true");
+    } else {
+      button.className = "nav-link";
+      button.setAttribute("aria-selected", "false");
+    }
+
+    text = document.createTextNode(area);
+    button.appendChild(text);
+
+    tab.appendChild(button);
+    tabElement.appendChild(tab);
+
+    index++;
+  }
+}
+
+/**
+ * Generates HTML form of requirements based on area of interest.
+ * @param aoi
+ * @param aoiType
+ */
+function generateRequirementsHTML(aoi) {
 
 }
 
+/**
+ * Switches the form HTML according to 
+ */
+function switchRequirements(aoiID, elementID) {
+
+}
+
+
+
+
+aocs = {
+  "AOC1" : {
+    "Name" : "Computer Science 2018",
+    "Requirements" : {
+      "Req1" : {
+        "Name" :  "CS Introductory Course",
+        "Amount" : 1,
+        "Fulfilled" : true,
+        "Classes" : {
+          "Class1" : {
+            "Name" : "Intro to Programming in Python",
+            "Taken" : false
+          },
+          "Class2" : {
+            "Name" : "Intro to Programming in C",
+            "Taken" : true
+          }   
+        }   
+      },
+      "Req2" : {
+        "Name" :  "Math",
+        "Amount" : 2,
+        "Fulfilled" : false,
+        "Classes" : {
+          "Class1" : {
+            "Name" : "Calculus 1",
+            "Taken" : false
+          },
+          "Class2" : {
+            "Name" : "Discrete Mathematics for Computer Science",
+            "Taken" : true
+          },
+          "Class3" : {
+            "Name" : "Dealing With Data",
+            "Taken" : false
+          }   
+        }   
+      }
+    }
+  }
+};
+
 populateAOIList(aocs, "user-aoc");
 addProgressBars(aocs, "progress-bars");
+populateAOIRequirements(aocs, "summary-tabs");
