@@ -10,9 +10,6 @@
   <link rel="stylesheet" type="text/css" href="../static/style.css" />
   <link rel='shortcut icon' href='../static/favicon.ico'>
 
-  <!-- NOTE: the below js does not link to the page when flask app is run. -->
-  <script src="../static/dash_stud.js"></script>
- </script>
 </head>
 
 <body>
@@ -66,31 +63,19 @@
 
     <br/>
 
-    <!-- STUB PROGRESS BARS -->
-    <div class="grad-progress">
-      <h5><b>Computer Science</b> : 0/10</h5>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 0%;background-color:#222222" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
+    <div id="progress-bars">
+      <!-- STUB PROGRESS BARS -->
+      <div class="grad-progress">
+        <h5><b>Computer Science</b> : 0/10</h5>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 0%;background-color:#222222" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
+        </div>
       </div>
     </div>
 
     <br />
 
-    <div class="grad-progress">
-      <h5><b>Wizardry</b> : 8/10</h5>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 0%;background-color:#222222" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
-      </div>
-    </div>
-
-    <br />
-
-    <div class="grad-progress">
-      <h5><b>Underwater Basketweaving</b> : 4/10</h5>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 0%;background-color:#222222" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
-      </div>
-    </div>
+    
   </div>
 
 
@@ -270,5 +255,9 @@ var basket =
     }
   }
 </script>
+
+<!-- NOTE: the below js does not link to the page when flask app is run. -->
+<script src="../static/dash_stud.js"></script>
+ </script>
 
 </html> 

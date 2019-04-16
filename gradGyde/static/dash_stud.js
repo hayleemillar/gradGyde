@@ -3,33 +3,33 @@ aocs = {
     "Name" : "Computer Science 2018",
     "Requirements" : {
       "Req1" : {
-        "Name" :  "CS Introductory Course"
-        "Ammount" : 1
-        "Fullfilled" : true
+        "Name" :  "CS Introductory Course",
+        "Amount" : 1,
+        "Fullfilled" : true,
         "Classes" : {
           "Class1" : {
             "Name" : "Intro to Programming in Python",
             "Taken" : false
-          }
+          },
           "Class2" : {
             "Name" : "Intro to Programming in C",
             "Taken" : true
           }   
         }   
-      }
+      },
       "Req2" : {
-        "Name" :  "Math"
-        "Amount" : 2
-        "Fullfilled" : false
+        "Name" :  "Math",
+        "Amount" : 2,
+        "Fullfilled" : false,
         "Classes" : {
           "Class1" : {
             "Name" : "Calculus 1",
             "Taken" : false
-          }
+          },
           "Class2" : {
             "Name" : "Discrete Mathematics for Computer Science",
             "Taken" : true
-          }
+          },
           "Class3" : {
             "Name" : "Dealing With Data",
             "Taken" : false
@@ -61,12 +61,13 @@ function addProgressBars(aois, elementID) {
 
   // for each area of interest (aoi)
   for (aoi in aois) {
-    course = aoi["Name"];
 
-    reqs = aoi["Requirements"];
+    course = aois[aoi]["Name"];
+
+    reqs = aois[aoi]["Requirements"];
 
     // number of requirements
-    reqCount = reqs.length;
+    reqCount = Object.keys(reqs).length;
     // initialize count of requirements fufilled to 0
     numFufilled = 0;
 
@@ -79,6 +80,8 @@ function addProgressBars(aois, elementID) {
     }
 
     // PROGRESS BAR
+    element.appendChild(document.createElement("BR"));
+
     progressBar = document.createElement("div");
     progressBar.className = "grad-progress";
 
@@ -115,3 +118,5 @@ function addProgressBars(aois, elementID) {
   }
 
 } 
+
+addProgressBars(aocs, "progress-bars");
