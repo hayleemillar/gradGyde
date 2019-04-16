@@ -5,7 +5,7 @@ aocs = {
       "Req1" : {
         "Name" :  "CS Introductory Course",
         "Amount" : 1,
-        "Fullfilled" : true,
+        "Fulfilled" : true,
         "Classes" : {
           "Class1" : {
             "Name" : "Intro to Programming in Python",
@@ -20,7 +20,7 @@ aocs = {
       "Req2" : {
         "Name" :  "Math",
         "Amount" : 2,
-        "Fullfilled" : false,
+        "Fulfilled" : false,
         "Classes" : {
           "Class1" : {
             "Name" : "Calculus 1",
@@ -69,15 +69,17 @@ function addProgressBars(aois, elementID) {
     // number of requirements
     reqCount = Object.keys(reqs).length;
     // initialize count of requirements fufilled to 0
-    numFufilled = 0;
+    numFulfilled = 0;
 
     // for each requirement in requirements
     for (req in reqs) {
       // if the user has fufilled the requirement, increment numFufilled
-      if (req["Fufilled"] == true) {
-        numFufilled++;
+      if (reqs[req]["Fulfilled"] == true) {
+        numFulfilled++;
       }
     }
+
+    console.log(numFulfilled);
 
     // PROGRESS BAR
     element.appendChild(document.createElement("br"));
@@ -89,7 +91,7 @@ function addProgressBars(aois, elementID) {
     title = document.createElement("h5");
     titleText = document.createElement("b");
     text = document.createTextNode(course + " : " + 
-      numFufilled.toString() + "/" + reqCount.toString());
+      numFulfilled.toString() + "/" + reqCount.toString());
     titleText.appendChild(text);
     title.appendChild(titleText);
 
@@ -104,10 +106,8 @@ function addProgressBars(aois, elementID) {
     partialProgress = document.createElement("div");
     partialProgress.className = "progress-bar";
     partialProgress.setAttribute("role", "progressbar");
-    partialProgress.setAttribute("style", "width: 0%;background-color:#222222;");
-    partialProgress.setAttribute("aria-valuenow", numFufilled.toString());
-    partialProgress.setAttribute("aria-valuemin", "0");
-    partialProgress.setAttribute("aria-valuemax", reqCount.toString());
+    partialProgress.setAttribute("style", "width: " + ((numFulfilled/reqCount) 
+      * 100).toString() + "%;background-color:#222222;");
 
     // append partial filled progress bar to empty progress bar
     emptyProgress.appendChild(partialProgress);
