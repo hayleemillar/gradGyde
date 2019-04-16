@@ -80,16 +80,19 @@ function addProgressBars(aois, elementID) {
     }
 
     // PROGRESS BAR
-    element.appendChild(document.createElement("BR"));
+    element.appendChild(document.createElement("br"));
 
     progressBar = document.createElement("div");
     progressBar.className = "grad-progress";
 
     // course title
     title = document.createElement("h5");
-    titleText = document.createTextNode("<b>" + course + " : " + 
-      numFufilled.toString() + "/" + reqCount.toString() + "</b>");
+    titleText = document.createElement("b");
+    text = document.createTextNode(course + " : " + 
+      numFufilled.toString() + "/" + reqCount.toString());
+    titleText.appendChild(text);
     title.appendChild(titleText);
+    console.log(title);
 
     progressBar.appendChild(title);
 
