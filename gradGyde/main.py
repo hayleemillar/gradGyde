@@ -4,6 +4,7 @@ from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import get_user, make_user
 from .models import UserType
+import json
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
@@ -104,8 +105,54 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
+
+    aocs = {
+        "AOC1" : {
+            "Name" : "Computer Science 2018",
+            "Requirements" : {
+                "Req1" : {
+                    "Name" :  "CS Introductory Course",
+                    "Amount" : 1,
+                    "Fulfilled" : True,
+                    "Classes" : {
+                        "Class1" : {
+                            "Name" : "Intro to Programming in Python",
+                            "Taken" : False
+                        },
+                        "Class2" : {
+                            "Name" : "Intro to Programming in C",
+                            "Taken" : True
+                        }   
+                    }   
+                },
+                "Req2" : {
+                    "Name" :  "Math",
+                    "Amount" : 2,
+                    "Fulfilled" : False,
+                    "Classes" : {
+                        "Class1" : {
+                            "Name" : "Calculus 1",
+                            "Taken" : False
+                        },
+                        "Class2" : {
+                            "Name" : "Discrete Mathematics for Computer Science",
+                            "Taken" : True
+                        },
+                        "Class3" : {
+                            "Name" : "Dealing With Data",
+                            "Taken" : False
+                        }   
+                    }   
+                }
+            }
+        }
+    };
+
+    aocs = json.dumps(aocs)
+
     return render_template('dash_stud.html',
-                           name=session['user_name'])
+                           name=session['user_name'],
+                           aocs=aocs)
 
 
 @app.route('/student_dashboard/lacs')

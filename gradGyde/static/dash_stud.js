@@ -198,47 +198,47 @@ function switchRequirements(aoiID, elementID) {
 
 
 
-aocs = {
-  "AOC1" : {
-    "Name" : "Computer Science 2018",
-    "Requirements" : {
-      "Req1" : {
-        "Name" :  "CS Introductory Course",
-        "Amount" : 1,
-        "Fulfilled" : true,
-        "Classes" : {
-          "Class1" : {
-            "Name" : "Intro to Programming in Python",
-            "Taken" : false
-          },
-          "Class2" : {
-            "Name" : "Intro to Programming in C",
-            "Taken" : true
-          }   
-        }   
-      },
-      "Req2" : {
-        "Name" :  "Math",
-        "Amount" : 2,
-        "Fulfilled" : false,
-        "Classes" : {
-          "Class1" : {
-            "Name" : "Calculus 1",
-            "Taken" : false
-          },
-          "Class2" : {
-            "Name" : "Discrete Mathematics for Computer Science",
-            "Taken" : true
-          },
-          "Class3" : {
-            "Name" : "Dealing With Data",
-            "Taken" : false
-          }   
-        }   
-      }
-    }
-  }
-};
+// aocs = {
+//   "AOC1" : {
+//     "Name" : "Computer Science 2018",
+//     "Requirements" : {
+//       "Req1" : {
+//         "Name" :  "CS Introductory Course",
+//         "Amount" : 1,
+//         "Fulfilled" : true,
+//         "Classes" : {
+//           "Class1" : {
+//             "Name" : "Intro to Programming in Python",
+//             "Taken" : false
+//           },
+//           "Class2" : {
+//             "Name" : "Intro to Programming in C",
+//             "Taken" : true
+//           }   
+//         }   
+//       },
+//       "Req2" : {
+//         "Name" :  "Math",
+//         "Amount" : 2,
+//         "Fulfilled" : false,
+//         "Classes" : {
+//           "Class1" : {
+//             "Name" : "Calculus 1",
+//             "Taken" : false
+//           },
+//           "Class2" : {
+//             "Name" : "Discrete Mathematics for Computer Science",
+//             "Taken" : true
+//           },
+//           "Class3" : {
+//             "Name" : "Dealing With Data",
+//             "Taken" : false
+//           }   
+//         }   
+//       }
+//     }
+//   }
+// };
 
 populateAOIList(aocs, "user-aoc");
 addProgressBars(aocs, "progress-bars");
