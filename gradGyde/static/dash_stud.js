@@ -124,8 +124,9 @@ function populateAOIList(aois, elementID) {
  * @param bodyElementID element ID the form will be appended to
  * @returns array of element IDs that are associated with the tabs
  */
-function populateAOIRequirements(aois, tabElementID) {
+function populateAoiTabs(aois, tabElementID) {
 
+  // get element the tab will be appended to
   var tabElement = document.getElementById(tabElementID);
 
   var area;
@@ -136,20 +137,13 @@ function populateAOIRequirements(aois, tabElementID) {
   var button;
   var text;
 
+  // for each area of interest
   for (aoi in aois) {
 
     // get aoi name
     area = aois[aoi]["Name"];
 
-    /*
-    <!-- STUB TABS OF AOCS AND SLASHES -->
-    <ul class="nav nav-tabs" id="summary-tabs" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active" id="" data-toggle="tab" role="tab" aria-controls="dashboard" aria-selected="true" style="font-size:16px" onclick="changeDivContents('summary', 'compSciTrack')" id="sum-tab-1">Computer Science</button>
-      </li>
-    </ul>
-     */
-
+    // create tab using bootstrap stuff
     tab = document.createElement("li");
     tab.className = "nav-item";
 
@@ -161,85 +155,109 @@ function populateAOIRequirements(aois, tabElementID) {
     button.setAttribute("style", "font-size:16px;");
     button.setAttribute("onclick", "switchRequirements(this.id, 'summary')");
 
+    // if the tab is the first one made, make it active by default
     if (index == 0) {
       button.className = "nav-link active";
       button.setAttribute("aria-selected", "true");
+    // if the tab is not the first one, do not make active
     } else {
       button.className = "nav-link";
       button.setAttribute("aria-selected", "false");
     }
 
+    // append elements together to create tab
     text = document.createTextNode(area);
     button.appendChild(text);
 
     tab.appendChild(button);
     tabElement.appendChild(tab);
 
+    // increment
     index++;
   }
 }
 
+
 /**
  * Generates HTML form of requirements based on area of interest.
  * @param aoi
- * @param aoiType
  */
-function generateRequirementsHTML(aoi) {
+function generateRequirementsHTML(aoiName, aois) {
+  var html = "";
 
+  html += "Requirements for " + aoiName;
+
+  for (aoi in aois) {
+    if (aois[aoi]["Name"] == aoiName) {
+      var reqs = aois[aoi]["Requirements"];
+
+      var name;
+      var fulfilled;
+
+      for (req in reqs) {
+        html += "<br/>";
+
+        name = reqs[req]["Name"];
+        fulfilled = reqs[req]["Fulfilled"];
+
+        if (fulfilled == true) {
+          html += "Fulfilled: " + name;
+        } else {
+          html += "Not Fulfilled: " + name;
+        }
+
+        if (reqs[req].hasOwnProperty("Classes")) {
+
+          var courses = reqs[req]["Classes"];
+          var taken;
+
+          for (course in courses) {
+            html += "<br/>";
+
+            name = courses[course]["Name"];
+            taken = courses[course]["Taken"];
+
+            if (taken == true) {
+              html += "Taken: " + name;
+            } else {
+              html += "Not Taken: " + name;
+            }
+          } 
+        }
+      }
+
+      return html;
+    }
+  }
+  return "No requirements could be found";
 }
+
 
 /**
  * Switches the form HTML according to 
  */
-function switchRequirements(aoiID, elementID) {
+function switchRequirements(aois, aoiID, elementID) {
 
+  element = document.getElementById(elementID);
+  aoi = document.getElementById(aoiID).innerHTML;
+  console.log(aoi);
+  console.log(aois);
+
+  element.innerHTML = generateRequirementsHTML(aoi, aois);
 }
 
 
 
 
-// aocs = {
-//   "AOC1" : {
-//     "Name" : "Computer Science 2018",
-//     "Requirements" : {
-//       "Req1" : {
-//         "Name" :  "CS Introductory Course",
-//         "Amount" : 1,
-//         "Fulfilled" : true,
-//         "Classes" : {
-//           "Class1" : {
-//             "Name" : "Intro to Programming in Python",
-//             "Taken" : false
-//           },
-//           "Class2" : {
-//             "Name" : "Intro to Programming in C",
-//             "Taken" : true
-//           }   
-//         }   
-//       },
-//       "Req2" : {
-//         "Name" :  "Math",
-//         "Amount" : 2,
-//         "Fulfilled" : false,
-//         "Classes" : {
-//           "Class1" : {
-//             "Name" : "Calculus 1",
-//             "Taken" : false
-//           },
-//           "Class2" : {
-//             "Name" : "Discrete Mathematics for Computer Science",
-//             "Taken" : true
-//           },
-//           "Class3" : {
-//             "Name" : "Dealing With Data",
-//             "Taken" : false
-//           }   
-//         }   
-//       }
-//     }
-//   }
-// };
+reqs = {};
 
-populateAOIList(aocs, "user-aoc");
-addProgressBars(aocs, "progress-bars");
-populateAOIRequirements(aocs, "summary-tabs");
+aois = $.extend(aocs, doubles);
+aois = $.extend(aois, slashes);
+
+// var aocs is declared in dash_stud.html
+// this is because it is data from the DB and is received by the HTML
+
+populateAOIList(aois, "user-aoc");
+addProgressBars(aois, "progress-bars");
+populateAoiTabs(aois, "summary-tabs");
+switchRequirements(aois, "aoc-0", "summary");
