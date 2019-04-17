@@ -53,9 +53,9 @@ def make_tag(name):
     SESSION.commit()
 
 
-def make_requirement(aoc, tag, required):
-    new_req = Requirements(aoc_id=aoc.aoc_id,
-                           tag_id=tag.tag_id,
+def make_requirement(da_aoc_id, da_tag_id, required):
+    new_req = Requirements(aoc_id=da_aoc_id,
+                           tag_id=da_tag_id,
                            num_req=required)
     SESSION.add(new_req)
     SESSION.commit()
@@ -107,7 +107,7 @@ def create_aoc(aoc_info, tags, amounts):
     for tag in tags:
         make_tag(tag)
         da_tag = get_tag(tag)
-        make_requirement(aoc, da_tag, amounts[tags.index(tag)])
+        make_requirement(aoc.aoc_id, da_tag.tag_id, amounts[tags.index(tag)])
 
 
 def get_user(email):
@@ -236,11 +236,37 @@ def get_prereqs(chosen_id):
 #This is basically get potential classes, we'll just use the prereq id. 
 
 #5: Get the requirments for an AOC
+def get_requirements(da_aoc_id):
+    #Takes an aoc id as input, outputs a list of requirement objects that match it
+    req_query = Requirements.query.filter_by(aoc_id=da_aoc_id).all()
+    return req_query
 
+def get_requirements_with_tag(da_aoc_id):
+    #Same as above, but returns a list of result objects with requirements joined to their tag
+    req_query = SESSION.query(Requirements, Tags).filter_by(aoc_id=da_aoc_id).join(Tags).all()
+    return req_query
 
 #6: Get the potential courses a student could take that fulfill those reqs
+#Just use get potential courses
 
 #7: Of the potential courses above, get the ones a student has taken
+def check_classes_taken(user_id, class_list):
+    #Takes a list of classes as inputs
+    #outputs a list of classes a student has taken
+    class_id_list = []
+    for each_class in class_list:
+        class_id_list.append(each_class.class_id)
+    class_taken_query = SESSION.query(ClassTaken, Classes,
+                                          ).filter_by(student_id=user_id
+                                          ).filter(ClassTaken.class_id.in_(class_id_list)
+                                          ).join(Classes
+                                          ).all()
+    classes_taken = []
+    for class_taken in class_taken_query:
+        da_class = get_class_by_id(class_taken.Classes.class_id)
+        if da_class is not None:
+            classes_taken.append(da_class)
+    return classes_taken
 
 #8: Stuff all this into a json
 

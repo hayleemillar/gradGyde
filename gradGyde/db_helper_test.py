@@ -1,5 +1,6 @@
 from .db_helper import (assign_aoc,
                         assign_prereqs,
+                        check_classes_taken,
                         create_class,
                         create_aoc,
                         get_all_classes,
@@ -12,9 +13,12 @@ from .db_helper import (assign_aoc,
                         get_potential_classes,
                         get_preffered_aocs,
                         get_prereqs,
+                        get_requirements,
+                        get_requirements_with_tag,
                         get_tag,
                         get_tag_by_id,
                         get_user,
+                        make_requirement,
                         make_user,
                         take_class)
 from .models import (SemesterType,
@@ -143,5 +147,12 @@ def db_helper_test():
     assign_prereqs(get_tag(tags[0]), get_tag(tags[1]))
     print(get_tag_by_id(get_prereqs(get_tag(tags[1]).tag_id)[0].prereq_tag_id))
 
+    #Testing requirements
+    print("Making requirement...")
+    make_requirement(comp_sci.aoc_id, get_tag(tags[0]).tag_id, amounts[1])
+    print(get_requirements(comp_sci.aoc_id))
+    print(get_requirements_with_tag(comp_sci.aoc_id))
 
-
+    #Testing get classes tgae are taken
+    print("Checking classes taken that fulfill requirement")
+    print(check_classes_taken(student.user_id, get_potential_classes(get_tag(tags[1]).tag_id, 2014)))
