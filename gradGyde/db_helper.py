@@ -177,7 +177,7 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter_by(
                                           student_id=user.user_id).join(Classes).filter(
                                           *filters).join(ClassTags).filter(
-                                          ClassTags.tag_id == da_tag_id.all()
+                                          ClassTags.tag_id == da_tag_id).all()
     else:
         class_taken_query = SESSION.query(ClassTaken, Classes,
                                           ).filter_by(student_id=user.user_id
@@ -387,4 +387,3 @@ def delete_aoc(aoc):
     for req in reqs:
         merge_and_delete(req)
     merge_and_delete(aoc)
-

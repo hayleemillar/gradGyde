@@ -1,4 +1,4 @@
-import json
+#pylint: disable=R0915
 from .db_helper import (assign_aoc,
                         assign_prereqs,
                         check_class_taken,
@@ -139,7 +139,7 @@ def db_helper_test():
     print(get_classes_taken(student, da_tag_id=get_tag(tags[1]).tag_id))
     print("Testing with all 4 params")
     print(get_classes_taken(student, semester=SemesterType.SPRING,
-                            da_year=2018, 
+                            da_year=2018,
                             da_tag_id=get_tag(tags[1]).tag_id,
                             da_name="Test 3"))
     print("Testing get_all_classes...")
@@ -175,14 +175,14 @@ def db_helper_test():
 
     #Testing get classes tgae are taken
     print("Checking classes taken that fulfill requirement")
-    print(check_classes_taken(student.user_id, get_potential_classes(get_tag(tags[1]).tag_id, 2014)))
+    print(check_classes_taken(student.user_id, 
+                              get_potential_classes(get_tag(tags[1]).tag_id, 2014)))
 
     #Testing get_aoc_json
     print("Getting the aoc json...")
     print(get_aoc_json(student, "Divisonal"))
 
     #Testing delete
-
     print("Testing delete class taken. Test 3 should be gone...")
     delete_class_taken(student.user_id, class3.class_id)
     print(get_classes_taken(student))
