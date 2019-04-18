@@ -1,6 +1,5 @@
 import datetime
 import json
-import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (Aocs,
@@ -13,9 +12,7 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-DIRPATH = os.path.abspath(__file__)
-ENGINEPATH = 'sqlite:///'+DIRPATH[:len(DIRPATH)-12]+'gradGyde.db'
-ENGINE = create_engine(ENGINEPATH)
+ENGINE = create_engine('sqlite:///gradGyde.db')
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
@@ -178,18 +175,15 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
         filters.append(Classes.class_name == da_name)
     if da_tag_id is not None:
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter_by(
-            student_id=user.user_id
-                                          ).join(Classes
-                                          ).filter(*filters
-                                          ).join(ClassTags
-                                          ).filter(ClassTags.tag_id == da_tag_id
-                                          ).all()
+            student_id=user.user_id).join(
+            Classes).filter(
+            *filters).join(
+            ClassTags).filter(
+            ClassTags.tag_id == da_tag_id).all()
     else:
-        class_taken_query = SESSION.query(ClassTaken, Classes,
-                                          ).filter_by(student_id=user.user_id
-                                          ).join(Classes
-                                          ).filter(*filters
-                                          ).all()
+        class_taken_query = SESSION.query(ClassTaken, Classes,).filter_by(
+            student_id=user.user_id).join(
+            Classes).filter(*filters).all()
     classes_taken = []
     for class_taken in class_taken_query:
         da_class = get_class_by_id(class_taken.Classes.class_id)
@@ -202,11 +196,9 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
 def get_potential_classes(da_tag_id, da_year):
     #Takes in a tag_id and a year as input
     #Outputs a list of class objects that fit the req.
-    class_query = SESSION.query(ClassTags, Classes
-                                ).filter(ClassTags.tag_id == da_tag_id
-                                ).join(Classes
-                                ).filter(Classes.class_year >= da_year
-                                ).all()
+    class_query = SESSION.query(ClassTags, Classes).filter(
+        ClassTags.tag_id == da_tag_id).join(
+        Classes).filter(Classes.class_year >= da_year).all()
     potential_courses = []
     for course in class_query:
         potential_courses.append(course.Classes)
@@ -218,22 +210,21 @@ def get_class_tags(da_class_id):
     #This function takes a class_id from the database as input
     #And outputs a list of class tags
     #Get a Query object with class_tags joined on tags where class_id=da_class_id
-    class_tags = SESSION.query(ClassTags, Tags
-                                  ).filter_by(class_id=da_class_id
-                                  ).join(Tags).all()
+    class_tags = SESSION.query(ClassTags, Tags).filter_by(
+        class_id=da_class_id).join(Tags).all()
     class_tag_list = []
     for class_tag in class_tags:
         class_tag_list.append(class_tag.Tags)
     return class_tag_list
 
-#4: Given a prereq and year, get all the classes that fulfill the prereq 
+#4: Given a prereq and year, get all the classes that fulfill the prereq
 #Step 1: Get prereqs
 def get_prereqs(chosen_id):
     #Takes the chosen tag's id as an input
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
 #step 2: Get potential courses that fulfill the prereq
-#This is basically get potential classes, we'll just use the prereq id. 
+#This is basically get potential classes, we'll just use the prereq id.
 
 #5: Get the requirments for an AOC
 def get_requirements(da_aoc_id):
@@ -256,11 +247,9 @@ def check_classes_taken(user_id, class_list):
     class_id_list = []
     for each_class in class_list:
         class_id_list.append(each_class.class_id)
-    class_taken_query = SESSION.query(ClassTaken, Classes,
-                                          ).filter_by(student_id=user_id
-                                          ).filter(ClassTaken.class_id.in_(class_id_list)
-                                          ).join(Classes
-                                          ).all()
+    class_taken_query = SESSION.query(ClassTaken, Classes,).filter_by(
+        student_id=user_id).filter(
+        ClassTaken.class_id.in_(class_id_list)).join(Classes).all()
     classes_taken = []
     for class_taken in class_taken_query:
         da_class = get_class_by_id(class_taken.Classes.class_id)
@@ -303,7 +292,7 @@ def get_requirements_json(requirements, user):
             fullfilled = True
         req_info['fullfilled'] = fullfilled
         #Now, for classes
-        classes = get_classes_json(classes_fulfilling, user)  
+        classes = get_classes_json(classes_fulfilling, user)
         req_index = req_index+1
         req_info['Classes'] = classes
         reqs[json_req_key] = req_info
