@@ -186,13 +186,11 @@ def settings_form_submit():
     # SAVE USER CHANGES TO DB #
     ###########################
 
-    '''
-    form ids:
+    '''form ids:
      * name
      * year
      * AOC
      * AOC_double
-     * slash
-    '''
+     * slash'''
 
     return redirect('/student_dashboard/settings')
