@@ -176,14 +176,14 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
     if da_tag_id is not None:
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter_by(
             student_id=user.user_id).join(
-            Classes).filter(
-            *filters).join(
-            ClassTags).filter(
-            ClassTags.tag_id == da_tag_id).all()
+                Classes).filter(
+                *filters).join(
+                ClassTags).filter(
+                ClassTags.tag_id == da_tag_id).all()
     else:
         class_taken_query = SESSION.query(ClassTaken, Classes,).filter_by(
             student_id=user.user_id).join(
-            Classes).filter(*filters).all()
+                Classes).filter(*filters).all()
     classes_taken = []
     for class_taken in class_taken_query:
         da_class = get_class_by_id(class_taken.Classes.class_id)
@@ -198,7 +198,7 @@ def get_potential_classes(da_tag_id, da_year):
     #Outputs a list of class objects that fit the req.
     class_query = SESSION.query(ClassTags, Classes).filter(
         ClassTags.tag_id == da_tag_id).join(
-        Classes).filter(Classes.class_year >= da_year).all()
+        Classlasses).filter(Classes.class_year >= da_year).all()
     potential_courses = []
     for course in class_query:
         potential_courses.append(course.Classes)
@@ -249,7 +249,7 @@ def check_classes_taken(user_id, class_list):
         class_id_list.append(each_class.class_id)
     class_taken_query = SESSION.query(ClassTaken, Classes,).filter_by(
         student_id=user_id).filter(
-        ClassTaken.class_id.in_(class_id_list)).join(Classes).all()
+            ClassTaken.class_id.in_(class_id_list)).join(Classes).all()
     classes_taken = []
     for class_taken in class_taken_query:
         da_class = get_class_by_id(class_taken.Classes.class_id)
@@ -275,7 +275,7 @@ def get_classes_json(classes_fulfilling, user):
         class_info['Taken'] = taken
         class_index = class_index+1
         classes[class_key] = class_info
-    return classes  
+    return classes
 
 def get_requirements_json(requirements, user):
     req_index = 0
