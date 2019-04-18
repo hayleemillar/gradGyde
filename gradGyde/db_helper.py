@@ -1,6 +1,5 @@
 import datetime
 import json
-import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (Aocs,
@@ -13,7 +12,7 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-ENGINE = create_engine(ENGINEPATH)
+ENGINE = create_engine('sqlite:///gradGyde.db')
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
@@ -175,13 +174,10 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
     if da_name is not None:
         filters.append(Classes.class_name == da_name)
     if da_tag_id is not None:
-        class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags
-                                          ).filter_by(student_id=user.user_id
-                                          ).join(Classes
-                                          ).filter(*filters
-                                          ).join(ClassTags
-                                          ).filter(ClassTags.tag_id == da_tag_id
-                                          ).all()
+        class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter_by(
+                                          student_id=user.user_id).join(Classes).filter(
+                                          *filters).join(ClassTags).filter(
+                                          ClassTags.tag_id == da_tag_id.all()
     else:
         class_taken_query = SESSION.query(ClassTaken, Classes,
                                           ).filter_by(student_id=user.user_id
