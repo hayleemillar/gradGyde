@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -268,7 +269,54 @@ def check_classes_taken(user_id, class_list):
             classes_taken.append(da_class)
     return classes_taken
 
-#8: Stuff all this into a json
+def check_class_taken(user_id, da_class_id):
+    query = ClassTaken.query.filter_by(student_id=user_id).filter_by(class_id=da_class_id).all()
+    if len(query) > 0:
+        return True
+    return False
+
+#8: Stuff all this into a json:
+def get_aoc_json(user, aoc_type):
+    #First, get the list of aocs
+    json_base = {}
+    aoc_list = get_preffered_aocs(user, aoc_type)
+    aoc_index = 0
+    for aoc in aoc_list:
+        json_aoc_key = "AOC"+str(aoc_index)
+        aoc_info = {'ID' : aoc.aoc_id,
+                    'Name' : aoc.aoc_name}
+        requirements = get_requirements_with_tag(aoc.aoc_id)
+        req_index = 0
+        reqs = {}
+        for req in requirements:
+            json_req_key = "Req"+str(req_index)
+            req_info = {'ID' : req.Requirements.req_id,
+                        'Name' : req.Tags.tag_name,
+                        'Amount' : req.Requirements.num_req}
+            classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
+            classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
+            fullfilled = False
+            if len(classes_taken) >= req.Requirements.num_req:
+                fullfilled = True
+            req_info['fullfilled'] = fullfilled
+            #Now, for classes
+            classes = {}
+            class_index = 0
+            for course in classes_fulfilling:
+                class_key = 'Class'+str(class_index)
+                class_info = {'ID' : course.class_id,
+                              'Name' : course.class_name}
+                taken = check_class_taken(user.user_id, course.class_id)
+                class_info['Taken'] = taken
+                class_index=class_index+1
+                classes[class_key] = class_info    
+            req_index=req_index+1
+            req_info['Classes'] = classes
+            reqs[json_req_key] = req_info
+        aoc_index=aoc_index+1
+        aoc_info['Requirements'] = reqs
+        json_base[json_aoc_key] = aoc_info
+    return json.dumps(json_base)
 
 #9: Get all this for a student's preffered AOC of all 3 types
 

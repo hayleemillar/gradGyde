@@ -1,11 +1,14 @@
+import json
 from .db_helper import (assign_aoc,
                         assign_prereqs,
+                        check_class_taken,
                         check_classes_taken,
                         create_class,
                         create_aoc,
                         get_all_classes,
                         get_all_classes_by_year,
                         get_aoc,
+                        get_aoc_json,
                         get_aocs_by_type,
                         get_class,
                         get_classes_taken,
@@ -153,6 +156,19 @@ def db_helper_test():
     print(get_requirements(comp_sci.aoc_id))
     print(get_requirements_with_tag(comp_sci.aoc_id))
 
+    #testing check class taken
+    print("Checking check_classes_taken... This should be true")
+    print(check_class_taken(student.user_id, class3.class_id))
+    print("This should be false")
+    class_info = ["Taken is False", SemesterType.SUMMER, 2099, 3]
+    create_class(class_info, tags[0])
+    false_class = get_class("Taken is False")
+    print(check_class_taken(student.user_id, false_class.class_id))
+
     #Testing get classes tgae are taken
     print("Checking classes taken that fulfill requirement")
     print(check_classes_taken(student.user_id, get_potential_classes(get_tag(tags[1]).tag_id, 2014)))
+
+    #Testing get_aoc_json
+    print("Getting the aoc json...")
+    print(get_aoc_json(student, "Divisonal"))
