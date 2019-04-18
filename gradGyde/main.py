@@ -1,10 +1,10 @@
 import os
+import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import get_user, make_user
 from .models import UserType
-import json
 
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
@@ -146,7 +146,7 @@ def dash_stud():
                 }
             }
         }
-    };
+    }
 
     aocs = json.dumps(aocs)
 
@@ -181,18 +181,18 @@ def settings():
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
-    
+
     ###########################
     # SAVE USER CHANGES TO DB #
     ###########################
 
     '''
     form ids:
-     * 'name'
-     * 'year'
-     * 'AOC'
-     * 'AOC_double'
-     * 'slash'
+     * name
+     * year
+     * AOC
+     * AOC_double
+     * slash
     '''
 
     return redirect('/student_dashboard/settings')
