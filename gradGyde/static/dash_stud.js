@@ -185,7 +185,7 @@ function populateAoiTabs(aois, tabElementID) {
 function generateRequirementsHTML(aoiName, aois) {
   var html = "";
 
-  html += "Requirements for " + aoiName;
+  html += "<h3><center><b>Requirements for " + aoiName + "</b></center></h3>";
 
   for (aoi in aois) {
     if (aois[aoi]["Name"] == aoiName) {
@@ -195,15 +195,14 @@ function generateRequirementsHTML(aoiName, aois) {
       var fulfilled;
 
       for (req in reqs) {
-        html += "<br/>";
 
         name = reqs[req]["Name"];
         fulfilled = reqs[req]["Fulfilled"];
 
         if (fulfilled == true) {
-          html += "Fulfilled: " + name;
+          html += "<img src='../static/img/check-blue.png'></img>" + name;
         } else {
-          html += "Not Fulfilled: " + name;
+          html += "<img src='../static/img/x-blue.png'></img>" + name;
         }
 
         if (reqs[req].hasOwnProperty("Classes")) {
@@ -212,20 +211,18 @@ function generateRequirementsHTML(aoiName, aois) {
           var taken;
 
           for (course in courses) {
-            html += "<br/>";
 
             name = courses[course]["Name"];
             taken = courses[course]["Taken"];
 
             if (taken == true) {
-              html += "Taken: " + name;
+              html += "<p class='tab'><img src='../static/img/check-dark.png'></img>" + name + "</p>";
             } else {
-              html += "Not Taken: " + name;
+              html += "<p class='tab'><img src='../static/img/x-dark.png'></img>" + name + "</p>";
             }
           } 
         }
       }
-
       return html;
     }
   }
@@ -260,4 +257,4 @@ aois = $.extend(aois, slashes);
 populateAOIList(aois, "user-aoc");
 addProgressBars(aois, "progress-bars");
 populateAoiTabs(aois, "summary-tabs");
-switchRequirements(aois, "aoc-0", "summary");
+switchRequirements(aois, "aoc-0", "reqHTML");
