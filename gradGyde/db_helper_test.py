@@ -175,7 +175,7 @@ def db_helper_test():
 
     #Testing get classes tgae are taken
     print("Checking classes taken that fulfill requirement")
-    print(check_classes_taken(student.user_id, 
+    print(check_classes_taken(student.user_id,
                               get_potential_classes(get_tag(tags[1]).tag_id, 2014)))
 
     #Testing get_aoc_json

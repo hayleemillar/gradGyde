@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import (Aocs,
@@ -12,7 +13,9 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-ENGINE = create_engine('sqlite:///gradGyde.db')
+DIRPATH = os.path.abspath(__file__)
+ENGINEPATH = 'sqlite:///'+DIRPATH[:len(DIRPATH)-12]+'gradGyde.db'
+ENGINE = create_engine(ENGINEPATH)
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
@@ -175,9 +178,12 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
         filters.append(Classes.class_name == da_name)
     if da_tag_id is not None:
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter_by(
-                                          student_id=user.user_id).join(Classes).filter(
-                                          *filters).join(ClassTags).filter(
-                                          ClassTags.tag_id == da_tag_id).all()
+            student_id=user.user_id
+                                          ).join(Classes
+                                          ).filter(*filters
+                                          ).join(ClassTags
+                                          ).filter(ClassTags.tag_id == da_tag_id
+                                          ).all()
     else:
         class_taken_query = SESSION.query(ClassTaken, Classes,
                                           ).filter_by(student_id=user.user_id
@@ -264,11 +270,45 @@ def check_classes_taken(user_id, class_list):
 
 def check_class_taken(user_id, da_class_id):
     query = ClassTaken.query.filter_by(student_id=user_id).filter_by(class_id=da_class_id).all()
-    if len(query) > 0:
+    if query:
         return True
     return False
 
 #8: Stuff all this into a json:
+def get_classes_json(classes_fulfilling, user):
+    classes = {}
+    class_index = 0
+    for course in classes_fulfilling:
+        class_key = 'Class'+str(class_index)
+        class_info = {'ID' : course.class_id,
+                      'Name' : course.class_name}
+        taken = check_class_taken(user.user_id, course.class_id)
+        class_info['Taken'] = taken
+        class_index = class_index+1
+        classes[class_key] = class_info
+    return classes  
+
+def get_requirements_json(requirements, user):
+    req_index = 0
+    reqs = {}
+    for req in requirements:
+        json_req_key = "Req"+str(req_index)
+        req_info = {'ID' : req.Requirements.req_id,
+                    'Name' : req.Tags.tag_name,
+                    'Amount' : req.Requirements.num_req}
+        classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
+        classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
+        fullfilled = False
+        if len(classes_taken) >= req.Requirements.num_req:
+            fullfilled = True
+        req_info['fullfilled'] = fullfilled
+        #Now, for classes
+        classes = get_classes_json(classes_fulfilling, user)  
+        req_index = req_index+1
+        req_info['Classes'] = classes
+        reqs[json_req_key] = req_info
+    return reqs
+
 def get_aoc_json(user, aoc_type):
     #First, get the list of aocs
     json_base = {}
@@ -279,34 +319,8 @@ def get_aoc_json(user, aoc_type):
         aoc_info = {'ID' : aoc.aoc_id,
                     'Name' : aoc.aoc_name}
         requirements = get_requirements_with_tag(aoc.aoc_id)
-        req_index = 0
-        reqs = {}
-        for req in requirements:
-            json_req_key = "Req"+str(req_index)
-            req_info = {'ID' : req.Requirements.req_id,
-                        'Name' : req.Tags.tag_name,
-                        'Amount' : req.Requirements.num_req}
-            classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
-            classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
-            fullfilled = False
-            if len(classes_taken) >= req.Requirements.num_req:
-                fullfilled = True
-            req_info['fullfilled'] = fullfilled
-            #Now, for classes
-            classes = {}
-            class_index = 0
-            for course in classes_fulfilling:
-                class_key = 'Class'+str(class_index)
-                class_info = {'ID' : course.class_id,
-                              'Name' : course.class_name}
-                taken = check_class_taken(user.user_id, course.class_id)
-                class_info['Taken'] = taken
-                class_index=class_index+1
-                classes[class_key] = class_info    
-            req_index=req_index+1
-            req_info['Classes'] = classes
-            reqs[json_req_key] = req_info
-        aoc_index=aoc_index+1
+        reqs = get_requirements_json(requirements, user)
+        aoc_index = aoc_index+1
         aoc_info['Requirements'] = reqs
         json_base[json_aoc_key] = aoc_info
     return json.dumps(json_base)
