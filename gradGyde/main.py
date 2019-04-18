@@ -181,16 +181,4 @@ def settings():
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
-
-    ###########################
-    # SAVE USER CHANGES TO DB #
-    ###########################
-
-    '''form ids:
-     * name
-     * year
-     * AOC
-     * AOC_double
-     * slash'''
-
     return redirect('/student_dashboard/settings')
