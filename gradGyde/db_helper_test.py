@@ -5,6 +5,14 @@ from .db_helper import (assign_aoc,
                         check_classes_taken,
                         create_class,
                         create_aoc,
+                        delete_aoc,
+                        delete_class,
+                        delete_class_tag,
+                        delete_class_taken,
+                        delete_prereq,
+                        delete_requirement,
+                        delete_tag,
+                        delete_user,
                         get_all_classes,
                         get_all_classes_by_year,
                         get_aoc,
@@ -172,3 +180,37 @@ def db_helper_test():
     #Testing get_aoc_json
     print("Getting the aoc json...")
     print(get_aoc_json(student, "Divisonal"))
+
+    #Testing delete
+
+    print("Testing delete class taken. Test 3 should be gone...")
+    delete_class_taken(student.user_id, class3.class_id)
+    print(get_classes_taken(student))
+
+    print("Testing delete tag...")
+    delete_tag(get_tag(tags[3]))
+    print(get_tag(tags[3]))
+
+    print("Testing delete class...")
+    delete_class(false_class)
+    print(get_class("Taken is False"))
+
+    print("Testing delete class_tag. Test 2 should be gone...")
+    delete_class_tag(class2.class_id, get_tag(tags[0]).tag_id)
+    print(get_class_tags(class2.class_id))
+
+    print("Testing delete prereq")
+    delete_prereq(get_tag(tags[0]).tag_id, get_tag(tags[1]).tag_id)
+    print(get_prereqs(get_tag(tags[1]).tag_id))
+
+    print("Testing delete requirement... Requirement 3 should be gone")
+    delete_requirement(get_requirements(comp_sci.aoc_id)[2])
+    print(get_requirements(comp_sci.aoc_id))
+
+    print("Testing delete aoc...")
+    delete_aoc(comp_sci)
+    print(get_aoc("Computer Science (Regular)", "Divisonal"))
+
+    print("Testing delete user...")
+    delete_user(student)
+    print(get_user("harry.potter97@ncf.edu"))

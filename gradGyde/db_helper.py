@@ -13,9 +13,6 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-
-DIRPATH = os.path.abspath(__file__)
-ENGINEPATH = 'sqlite:///'+DIRPATH[:len(DIRPATH)-12]+'gradGyde.db'
 ENGINE = create_engine(ENGINEPATH)
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
@@ -203,10 +200,10 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
 def get_potential_classes(da_tag_id, da_year):
     #Takes in a tag_id and a year as input
     #Outputs a list of class objects that fit the req.
-    class_query = SESSION.query(Classes, ClassTags
-                                ).filter(Classes.class_year >= da_year
-                                ).join(ClassTags
+    class_query = SESSION.query(ClassTags, Classes
                                 ).filter(ClassTags.tag_id == da_tag_id
+                                ).join(Classes
+                                ).filter(Classes.class_year >= da_year
                                 ).all()
     potential_courses = []
     for course in class_query:
@@ -329,3 +326,69 @@ def get_all_classes():
 def get_all_classes_by_year(da_year):
     class_query = Classes.query.filter(Classes.class_year >= da_year).all()
     return class_query
+
+#Delete functions
+def merge_and_delete(to_delete):
+    item = SESSION.merge(to_delete)
+    SESSION.delete(item)
+    SESSION.commit()
+
+def delete_user(user):
+    #Delete dependencies in ClassTaken and PrefAoc
+    classes_taken = ClassTaken.query.filter_by(student_id=user.user_id).all()
+    for classes in classes_taken:
+        merge_and_delete(classes)
+    pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
+    for pref_aoc in pref_aocs_query:
+        merge_and_delete(pref_aoc)
+    merge_and_delete(user)
+
+def delete_class_taken(user_id, class_id):
+    classes_taken = ClassTaken.query.filter_by(student_id=user_id
+                                               ).filter_by(class_id=class_id).all()
+    for class_taken in classes_taken:
+        merge_and_delete(class_taken)
+
+def delete_tag(tag):
+    #Delete dependancies
+    class_tags = ClassTags.query.filter_by(tag_id=tag.tag_id).all()
+    for class_tag in class_tags:
+        merge_and_delete(class_tag)
+    reqs = Requirements.query.filter_by(tag_id=tag.tag_id).all()
+    for req in reqs:
+        merge_and_delete(req)
+    merge_and_delete(tag)
+
+def delete_class(da_class):
+    class_tags = ClassTags.query.filter_by(class_id=da_class.class_id).all()
+    for class_tag in class_tags:
+        merge_and_delete(class_tag)
+    classes_taken = ClassTaken.query.filter_by(class_id=da_class.class_id).all()
+    for class_taken in classes_taken:
+        merge_and_delete(class_taken)
+    merge_and_delete(da_class)
+
+def delete_class_tag(da_tag_id, da_class_id):
+    class_tags = ClassTags.query.filter_by(tag_id=da_tag_id
+                                           ).filter_by(class_id=da_class_id).all()
+    for class_tag in class_tags:
+        merge_and_delete(class_tag)
+
+def delete_prereq(da_prereq_id, da_chosen_id):
+    prereqs = Prereqs.query.filter_by(prereq_tag_id=da_prereq_id
+                                      ).filter_by(chosen_tag_id=da_chosen_id).all()
+    for prereq in prereqs:
+        merge_and_delete(prereq)
+
+def delete_requirement(requirement):
+    merge_and_delete(requirement)
+
+def delete_aoc(aoc):
+    pref_aocs_query = PrefferedAocs.query.filter_by(aoc_id=aoc.aoc_id).all()
+    for pref_aoc in pref_aocs_query:
+        merge_and_delete(pref_aoc)
+    reqs = Requirements.query.filter_by(aoc_id=aoc.aoc_id).all()
+    for req in reqs:
+        merge_and_delete(req)
+    merge_and_delete(aoc)
+
