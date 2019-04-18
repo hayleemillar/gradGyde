@@ -10,11 +10,6 @@
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
   <link rel="stylesheet" type="text/css" href="../static/style.css" />
-
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -77,38 +72,24 @@
     </div>
 </body>
 
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+
+<script src="../static/populate-select.js"></script>
+
 <script>
   // get all possible AOCs, slashes, and doubles
   var aocs = {{ aocs|safe }};
-  console.log(aocs);
   var slashes = {{ slashs|safe }};
-  console.log(slashes);
   var doubles = {{ doubles|safe }};
-  console.log(doubles);
-
-  /** 
-   * Populates a given select element using a given array.
-   * @param {string} selectID
-   * @param {Array} options
-   */
-  function populateSelect(selectID, options) {
-    var select = document.getElementById(selectID);
-
-    for (var i = 0; i < options.length; i++) {
-      var opt = options[i];
-      var el = document.createElement("option");
-      el.textContent = opt;
-      el.value = opt;
-      select.appendChild(el);
-    }
-
-  }
 
   // populate AOCs, slashes, and doubles selects
   populateSelect("select_AOC", aocs);
   populateSelect("select_double", doubles);
   populateSelect("select_slash", slashes);
-
 </script>
 
 </html> 

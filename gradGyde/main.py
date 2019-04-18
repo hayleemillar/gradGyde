@@ -166,4 +166,33 @@ def lacs():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    return render_template('settings.html')
+    aocs = ['Wizardry',
+           'Computer Science',
+           'General Studies',
+           'Underwater Basket Weaving',
+           'Biology']
+    return render_template('settings.html',
+                            aocs=aocs,
+                            doubles=aocs,
+                            slashes=aocs)
+
+
+@app.route('/student_dashboard/settings/post', methods=['POST'])
+def settings_form_submit():
+    if 'google_token' not in session:
+        return redirect('/login')
+    
+    ###########################
+    # SAVE USER CHANGES TO DB #
+    ###########################
+
+    '''
+    form ids:
+     * 'name'
+     * 'year'
+     * 'AOC'
+     * 'AOC_double'
+     * 'slash'
+    '''
+
+    return redirect('/student_dashboard/settings')
