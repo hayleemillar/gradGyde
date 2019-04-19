@@ -187,21 +187,30 @@ function generateRequirementsHTML(aoiName, aois) {
 
   html += "<h3><center><b>Requirements for " + aoiName + "</b></center></h3>";
 
+  // for each aoi
   for (aoi in aois) {
+    // if aoi name is the param String aoiName
     if (aois[aoi]["Name"] == aoiName) {
+      // generate HTML for it
+
       var reqs = aois[aoi]["Requirements"];
 
       var name;
       var fulfilled;
       var numCredits;
 
+      // for each requirement
       for (req in reqs) {
 
+        // get requirement name, whether it has been fulfilled, and # credits
         name = reqs[req]["Name"];
         fulfilled = reqs[req]["Fulfilled"];
         numCredits = reqs[req]["Amount"];
 
+        // if the req is fulfilled
         if (fulfilled == true) {
+          // if the req only requires a single course to be satisfied,
+          // use correct grammar
           if (numCredits == 1) {
             html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString() 
             + " course credit required" + "</p>";
@@ -219,18 +228,22 @@ function generateRequirementsHTML(aoiName, aois) {
           }
         }
 
+        // if requirement has classes
         if (reqs[req].hasOwnProperty("Classes")) {
 
           var courses = reqs[req]["Classes"];
           var taken;
 
+          // for each course
           for (course in courses) {
 
             name = courses[course]["Name"];
             taken = courses[course]["Taken"];
 
+            // if taken display text with check box
             if (taken == true) {
               html += "<p class='tab'><img src='../static/img/check-dark.png'></img>" + name + "</p>";
+            // else display text with x box
             } else {
               html += "<p class='tab'><img src='../static/img/x-dark.png'></img>" 
               + name + "</p>";
@@ -241,19 +254,18 @@ function generateRequirementsHTML(aoiName, aois) {
       return html;
     }
   }
+  // in case something goes wrong
   return "No requirements could be found";
 }
 
 
 /**
- * Switches the form HTML according to 
+ * Switches the form HTML according to aoi
  */
 function switchRequirements(aois, aoiID, elementID) {
 
   element = document.getElementById(elementID);
   aoi = document.getElementById(aoiID).innerHTML;
-  console.log(aoi);
-  console.log(aois);
 
   element.innerHTML = generateRequirementsHTML(aoi, aois);
 }
