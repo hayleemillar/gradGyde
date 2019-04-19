@@ -161,15 +161,15 @@ def lacs():
         return redirect('/login')
     lacs = {
         'LAC0' : {
-                'name' : 'Diverse Perspectives',
-                'fullfilled' : True,
-                'course' : 'Norman Conquests'
-              },
+            'name' : 'Diverse Perspectives',
+            'fullfilled' : True,
+            'course' : 'Norman Conquests'
+            },
         'LAC1' : {
-                'name' : 'Social Science',
-                'fullfilled' : False,
-                'course' : None
-               }
+            'name' : 'Social Science',
+            'fullfilled' : False,
+            'course' : None
+            }
     }
     return render_template('lac.html', lacs=lacs)
 
