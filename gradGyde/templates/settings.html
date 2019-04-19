@@ -16,16 +16,19 @@
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <!-- gradGyde image -->
     <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+
     <!-- dashboard tab -->
     <li class="nav-item">
       <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="/student_dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
     </li>
+
     <!-- lac tab -->
     <li class="nav-item">
       <a class="nav-link" id="lac-tab" data-toggle="tab" href="/student_dashboard/lacs" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
     </li>
+
     <!-- explore tab -->
-<!--     <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
     </li> -->
 
@@ -40,65 +43,73 @@
 
   <br/>
 
+  
   <div class="settings">
+    <center><h2><b>Settings</b></h2></center>
 
+    <br/>
+
+    <!-- FORM TO CHANGE USER INFORMATION -->
     <form id="" method="post" action="">
 
-      <div class="form-group">
-          <label for="inputName">Preferred Name</label>
-          <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
-        </div>
+      <!-- preferred name -->
+      <label for="inputName">Preferred Name</label>
+      <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
 
-          <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
-          <!-- options populated by js -->
-          </select>
+      <br/>
 
-          <br/><br/>
+      <!-- year started at NCF -->
+      <label for="inputYear">Year you started at NCF</label>
+      <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
 
-          <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-            <!-- options populated by js -->
-          </select>
+      <br/>
 
-          <br/><br/>
-
-          <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-            <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-              <!-- options populated by js -->
-            </select>
+      <!-- primary aoc -->
+      <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+      <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+        <!-- options populated by js -->
+      </select>
 
       <br/><br/>
 
-        <!-- The commented out button code below is correct, the redirect one is only for demonstration purposes and should be removed when we have form actions set up. -->
-        <!-- <button type="submit" class="btn btn-primary">Sign up</button> -->
-      <button onclick="location.href='/student_dashboard';"type="button" class="btn btn-primary">Sign up</button>
+      <!-- double aoc -->
+      <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+      <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
+        <!-- options populated by js -->
+      </select>
+
+      <br/><br/>
+
+      <!-- slashes -->
+      <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+      <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+        <!-- options populated by js -->
+      </select>
+
+      <br/><br/>
+
+      <center><button onclick="location.href='/student_dashboard/settings';" type="button" class="btn btn-primary">Save Changes</button></center>
 
     </form>
+
+    <br/><br/>
   </div> 
 </body>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+
+<script src="../static/populate-select.js"></script>
 
 <script>
   // get all possible AOCs, slashes, and doubles
   var aocs = {{ aocs|safe }};
-  var slashes = {{ slashs|safe }};
+  var slashes = {{ slashes|safe }};
   var doubles = {{ doubles|safe }};
 
-  /** 
-   * Populates a given select element using a given array.
-   * @param {string} selectID
-   * @param {Array} options
-   */
-  function populateSelect(selectID, options) {
-    var select = document.getElementById(selectID);
-    for (var i = 0; i < options.length; i++) {
-      var opt = options[i];
-      var el = document.createElement("option");
-      el.textContent = opt;
-      el.value = opt;
-      select.appendChild(el);
-    }
-  }
   // populate AOCs, slashes, and doubles selects
   populateSelect("select_AOC", aocs);
   populateSelect("select_double", doubles);

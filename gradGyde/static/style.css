@@ -5,6 +5,10 @@ body {
   font-size: 20px;
 }
 
+h3 {
+  font-size: 25px;
+}
+
 button {
   background-color: #aeb4b7;
   border: none;
@@ -43,8 +47,7 @@ button {
  * MAIN *
  ********/
 .main {
-  margin-left: 310px; /* Same as the width of the sidenav */
-  font-size: 28px; /* Increased text to enable scrolling */
+  margin-left: 21%; /* Same as the width of the sidenav */
   padding: 10px 10px;
 }
 
@@ -73,7 +76,7 @@ button {
  **********************/
 .sidenav {
   height: 100%;
-  width: 300px;
+  width: 20%;
   position: fixed;
   z-index: 1;
   top: 58px;
@@ -105,6 +108,9 @@ button {
   padding: 10px;
 }
 
+.summary img {
+  height: 30px;
+}
 
 .lac {
   border-radius: 5px;
@@ -114,4 +120,8 @@ button {
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.tab {
+  margin-left: 40px;
 }

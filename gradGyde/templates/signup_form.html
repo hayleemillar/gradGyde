@@ -10,11 +10,6 @@
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
   <link rel="stylesheet" type="text/css" href="../static/style.css" />
-
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -26,41 +21,42 @@
       <h1>Please fill in the following to complete your sign up for gradGyde.</h1>
       <br/><br/>
 
+      <!-- sign up form -->
       <form action="/signup_form/post" method="post">
-        <div class="form-group">
-          <label for="inputName">Preferred Name</label>
-          <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
-        </div>
 
-        <div class="form-group">
+        <!-- preferrend name -->
+        <label for="inputName">Preferred Name</label>
+        <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
 
-          <label for="inputYear">Year you started</label>
-          <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
+        <!-- year started at NCF -->
+        <label for="inputYear">Year you started at NCF</label>
+        <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
 
-        </div>
-          <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+        <!-- primary aoc -->
+        <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
           <!-- options populated by js -->
-          </select>
-
-          <br/><br/>
-
-          <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-          <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-            <!-- options populated by js -->
-          </select>
-
-          
-
-          <br/><br/>
-
-          <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-            <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-              <!-- options populated by js -->
-            </select>
+        </select>
 
         <br/><br/>
 
+        <!-- double aoc -->
+        <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
+          <!-- options populated by js -->
+        </select>
+
+        <br/><br/>
+
+        <!-- slashes -->
+        <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
+        <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+          <!-- options populated by js -->
+        </select>
+
+        <br/><br/>
+
+        <!-- ferpa agreement -->
         By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records.
         <br/>
         <div class="form-check">
@@ -76,38 +72,24 @@
     </div>
 </body>
 
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+
+<script src="../static/populate-select.js"></script>
+
 <script>
   // get all possible AOCs, slashes, and doubles
   var aocs = {{ aocs|safe }};
-  console.log(aocs);
   var slashes = {{ slashs|safe }};
-  console.log(slashes);
   var doubles = {{ doubles|safe }};
-  console.log(doubles);
-
-  /** 
-   * Populates a given select element using a given array.
-   * @param {string} selectID
-   * @param {Array} options
-   */
-  function populateSelect(selectID, options) {
-    var select = document.getElementById(selectID);
-
-    for (var i = 0; i < options.length; i++) {
-      var opt = options[i];
-      var el = document.createElement("option");
-      el.textContent = opt;
-      el.value = opt;
-      select.appendChild(el);
-    }
-
-  }
 
   // populate AOCs, slashes, and doubles selects
   populateSelect("select_AOC", aocs);
   populateSelect("select_double", doubles);
   populateSelect("select_slash", slashes);
-
 </script>
 
 </html> 

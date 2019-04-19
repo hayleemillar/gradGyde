@@ -1,4 +1,5 @@
 import os
+import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
@@ -104,19 +105,99 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
+
+    aocs = {
+        "AOC1" : {
+            "Name" : "Computer Science 2018",
+            "Requirements" : {
+                "Req1" : {
+                    "Name" :  "CS Introductory Course",
+                    "Amount" : 1,
+                    "Fulfilled" : True,
+                    "Classes" : {
+                        "Class1" : {
+                            "Name" : "Intro to Programming in Python",
+                            "Taken" : False
+                        },
+                        "Class2" : {
+                            "Name" : "Intro to Programming in C",
+                            "Taken" : True
+                        }
+                    }
+                },
+                "Req2" : {
+                    "Name" :  "Math",
+                    "Amount" : 2,
+                    "Fulfilled" : False,
+                    "Classes" : {
+                        "Class1" : {
+                            "Name" : "Calculus 1",
+                            "Taken" : False
+                        },
+                        "Class2" : {
+                            "Name" : "Discrete Mathematics for Computer Science",
+                            "Taken" : True
+                        },
+                        "Class3" : {
+                            "Name" : "Dealing With Data",
+                            "Taken" : False
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    aocs = json.dumps(aocs)
+
     return render_template('dash_stud.html',
-                           name=session['user_name'])
+                           name=session['user_name'],
+                           aocs=aocs)
 
 
 @app.route('/student_dashboard/lacs')
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-    return render_template('lac.html')
+    lac = {
+        'LAC0' : {
+            'name' : 'Diverse Perspectives',
+            'fullfilled' : True,
+            'course' : 'Norman Conquests'
+            },
+        'LAC1' : {
+            'name' : 'Social Science',
+            'fullfilled' : False,
+            'course' : None
+            }
+    }
+    return render_template('lac.html', lac=lac)
+
+
+@app.route('/student_dashboard/lacs/post', methods=['POST'])
+def lacs_form_submit():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return redirect('/student_dashboard/lacs')
 
 
 @app.route('/student_dashboard/settings')
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    return render_template('settings.html')
+    aocs = ['Wizardry',
+            'Computer Science',
+            'General Studies',
+            'Underwater Basket Weaving',
+            'Biology']
+    return render_template('settings.html',
+                           aocs=aocs,
+                           doubles=aocs,
+                           slashes=aocs)
+
+
+@app.route('/student_dashboard/settings/post', methods=['POST'])
+def settings_form_submit():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return redirect('/student_dashboard/settings')
