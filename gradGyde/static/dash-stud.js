@@ -193,16 +193,30 @@ function generateRequirementsHTML(aoiName, aois) {
 
       var name;
       var fulfilled;
+      var numCredits;
 
       for (req in reqs) {
 
         name = reqs[req]["Name"];
         fulfilled = reqs[req]["Fulfilled"];
+        numCredits = reqs[req]["Amount"];
 
         if (fulfilled == true) {
-          html += "<img src='../static/img/check-blue.png'></img>" + name;
+          if (numCredits == 1) {
+            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString() 
+            + " course credit required" + "</p>";
+          } else {
+            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString() 
+            + " course credits required" + "</p>";
+          }
         } else {
-          html += "<img src='../static/img/x-blue.png'></img>" + name;
+          if (numCredits == 1) {
+            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString()
+            + " course credit required" + "</p>";
+          } else {
+            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString()
+            + " course credits required" + "</p>";
+          }
         }
 
         if (reqs[req].hasOwnProperty("Classes")) {
@@ -218,7 +232,8 @@ function generateRequirementsHTML(aoiName, aois) {
             if (taken == true) {
               html += "<p class='tab'><img src='../static/img/check-dark.png'></img>" + name + "</p>";
             } else {
-              html += "<p class='tab'><img src='../static/img/x-dark.png'></img>" + name + "</p>";
+              html += "<p class='tab'><img src='../static/img/x-dark.png'></img>" 
+              + name + "</p>";
             }
           } 
         }
@@ -242,19 +257,3 @@ function switchRequirements(aois, aoiID, elementID) {
 
   element.innerHTML = generateRequirementsHTML(aoi, aois);
 }
-
-
-
-
-reqs = {};
-
-aois = $.extend(aocs, doubles);
-aois = $.extend(aois, slashes);
-
-// var aocs is declared in dash_stud.html
-// this is because it is data from the DB and is received by the HTML
-
-populateAOIList(aois, "user-aoc");
-addProgressBars(aois, "progress-bars");
-populateAoiTabs(aois, "summary-tabs");
-switchRequirements(aois, "aoc-0", "reqHTML");

@@ -104,11 +104,26 @@
   src="https://code.jquery.com/jquery-3.4.0.min.js"
   integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
   crossorigin="anonymous"></script>
+
+<script src="../static/dash-stud.js"></script>
+
 <script>
   var aocs = $.parseJSON({{ aocs | tojson | safe }});
   var doubles = {};
   var slashes = {};
+
+  reqs = {};
+
+  aois = $.extend(aocs, doubles);
+  aois = $.extend(aois, slashes);
+
+  // var aocs is declared in dash_stud.html
+  // this is because it is data from the DB and is received by the HTML
+
+  populateAOIList(aois, "user-aoc");
+  addProgressBars(aois, "progress-bars");
+  populateAoiTabs(aois, "summary-tabs");
+  switchRequirements(aois, "aoc-0", "reqHTML");
 </script>
-<script src="../static/dash-stud.js"></script>
 
 </html> 
