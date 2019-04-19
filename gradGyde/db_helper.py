@@ -12,12 +12,7 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-<<<<<<< HEAD
-
 ENGINE = create_engine('sqlite:///gradGyde/gradGyde.db')
-=======
-ENGINE = create_engine('sqlite:///gradGyde.db')
->>>>>>> origin/dev
 SESSION_MAKER = sessionmaker(bind=ENGINE)
 SESSION = SESSION_MAKER()
 
