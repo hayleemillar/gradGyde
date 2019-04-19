@@ -159,7 +159,7 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-    lacs = {
+    lac = {
         'LAC0' : {
             'name' : 'Diverse Perspectives',
             'fullfilled' : True,
@@ -171,7 +171,7 @@ def lacs():
             'course' : None
             }
     }
-    return render_template('lac.html', lacs=lacs)
+    return render_template('lac.html', lac=lac)
 
 
 @app.route('/student_dashboard/lacs/post', methods=['POST'])
