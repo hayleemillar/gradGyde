@@ -36,7 +36,7 @@
       <a href="/student_dashboard/settings" class="img-link">
         <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
       </a>
-      <button type="button" onclick="location.href='/logout';">Logout</button>
+      <button type="button" onclick="location.href='/student_dashboard/lac';">Logout</button>
     </ul>
   </ul>
 
@@ -52,129 +52,16 @@
     <br/>
 
     <!-- form -->
-    <form>
-      <button onclick="location.href='/student_dashboard/lacs';" type="button" class="btn btn-primary">Save Changes</button><br/><br/>
-
-      <!-- Mathematics Basic Proficiency -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="math-basic">
-        <label class="form-check-label" for="math-basic" style="font-size:24px">Meet one of the following for basic proficiency in mathematics:</label>
-        <!-- new college math course -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-1">
-          <label class="form-check-label" for="math-basic-1" style="font-size:20px">Satisfactory completion of a New College math course</label>
-        </div>
-        <!-- sat math < MAR2016 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-2">
-          <label class="form-check-label" for="math-basic-2" style="font-size:20px">SAT Math (taken prior to March 2016) minimum score of 500</label>
-        </div>
-        <!-- sat math > MAR2016 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-3">
-          <label class="form-check-label" for="math-basic-3" style="font-size:20px">SAT Math (taken starting March 2016 minimum score of 530</label>
-        </div>
-        <!-- act >= 21 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-4">
-          <label class="form-check-label" for="math-basic-4" style="font-size:20px">ACT Math minimum score of 21</label>
-        </div>
-        <!-- ap math >= 3 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-5">
-          <label class="form-check-label" for="math-basic-5" style="font-size:20px">AP Math minimum score of 3</label>
-        </div>
-        <!-- clast math section -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-6">
-          <label class="form-check-label" for="math-basic-6" style="font-size:20px">Satisfactory CLAST math section</label>
-        </div>
-        <!-- ib high level math exam >= 5 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-7">
-          <label class="form-check-label" for="math-basic-7" style="font-size:20px">IB high-level math exam minimum score of 5</label>
-        </div>
-        <!-- clep general math exame >= 500 -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-8">
-          <label class="form-check-label" for="math-basic-8" style="font-size:20px">CLEP General Math exam minimum score of 500</label>
-        </div>
-        <!-- other -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="math-basic-9">
-          <label class="form-check-label" for="math-basic-9" style="font-size:20px">Other (contact the Office of the Registrar for details.</label>
-        </div>
+    <form id="form-lac">
+      <div id="form-lac-checklist">
+        <!-- populated by JS -->
       </div>
 
       <br/>
 
-      <!-- Divisional Coursework -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="div-work">
-        <label class="form-check-label" for="div-work" style="font-size:24px">Complete one unit of LAC disciplinary breath courses from each division.</label>
-        <!-- humanities -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="div-work-1">
-          <label class="form-check-label" for="div-work-1" style="font-size:20px">Division of Humanities</label>
-        </div>
-        <!-- nat sci -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="div-work-2">
-          <label class="form-check-label" for="div-work-2" style="font-size:20px">Division of Natural Sciences</label>
-        </div>
-        <!-- soc sci -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="div-work-3">
-          <label class="form-check-label" for="div-work-3" style="font-size:20px">Division of Social Sciences</label>
-        </div>
-      </div>
+      <center><button onclick="location.href='/student_dashboard/lacs';" type="button" class="btn btn-primary">Save Changes</button></center><br/><br/>
 
       <br/>
-
-      <!-- Disciplinary Breadth -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="disc-work">
-        <label class="form-check-label" for="div-work" style="font-size:24px">Complete 7 unites of LAC disciplinary breadth courses</label>
-      </div>
-
-      <br/>
-
-      <!-- Diverse Perspectives -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="div-per">
-        <label class="form-check-label" for="div-per" style="font-size:24px">Complete at least one unit of courses that addresses issues of race, class, gender, and/or religious differences</label>
-      </div>
-
-      <br/>
-
-      <!-- 8 Liberal Arts Curriculum Courses -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="lac-courses">
-        <label class="form-check-label" for="lac-courses" style="font-size:24px">Complete at least 8 unduplicated units between Disciplinary Breadth, Diverse Perspective, and Civics Literacy courses</label>
-      </div>
-
-      <br/>
-
-      <!-- English Language Advanced Proficiency -->
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="eng-prof">
-        <label class="form-check-label" for="eng-prof" style="font-size:24px">Complete both of the following to demonstrate advanced proficience in the English language:</label>
-        <!-- thesis -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="eng-prof-1">
-          <label class="form-check-label" for="eng-prof-1" style="font-size:20px">Satisfacotry Senior Thesis or Project</label>
-        </div>
-        <!-- oral bacc exam -->
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="eng-prof-2">
-          <label class="form-check-label" for="eng-prof-2" style="font-size:20px">Baccalaureate Exam Passed</label>
-        </div>
-
-        <br/>
-      </div>
-
-      <button onclick="location.href='/student_dashboard/lacs';" type="button" class="btn btn-primary">Save Changes</button>
-
     </form>
 
   </div>
@@ -182,3 +69,40 @@
 </body>
 
 </html> 
+
+<script>
+  var lacs = {{ lacs | tojson }};
+
+  var form = document.getElementById("form-lac-checklist");
+
+  var div;
+  var input;
+  var text;
+  var label;
+
+  var index = 0;
+
+  for (lac in lacs) {
+    div = document.createElement("div");
+    div.class = "form-check";
+
+    input = document.createElement("input");
+    input.class = "form-check-input";
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("id", "lac-" + index.toString());
+
+    div.appendChild(input);
+
+    label = document.createElement("label");
+    label.class = "form-check-label";
+    label.setAttribute("for", "lac-" + index.toString());
+
+    text = document.createTextNode(lacs[lac]["name"]);
+
+    label.appendChild(text);
+    div.appendChild(label);
+    form.appendChild(div);
+
+    index++;
+  }
+</script>

@@ -159,7 +159,26 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-    return render_template('lac.html')
+    lacs = {
+        'LAC0' : {
+                'name' : 'Diverse Perspectives',
+                'fullfilled' : True,
+                'course' : 'Norman Conquests'
+              },
+        'LAC1' : {
+                'name' : 'Social Science',
+                'fullfilled' : False,
+                'course' : None
+               }
+    }
+    return render_template('lac.html', lacs=lacs)
+
+
+@app.route('/student_dashboard/lacs/post', methods=['POST'])
+def lacs_form_submit():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return redirect('/student_dashboard/lacs')
 
 
 @app.route('/student_dashboard/settings')
