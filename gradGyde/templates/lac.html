@@ -80,11 +80,13 @@
   var p;
   var text;
   var label;
+  var courses;
 
   var index = 0;
 
   for (lac in lacs) {
 
+    // create checkbox with label and input
     div = document.createElement("div");
     div.class = "form-check";
 
@@ -101,33 +103,47 @@
 
     text = document.createTextNode(lacs[lac]["name"]);
 
+    // place in form
     label.appendChild(text);
     div.appendChild(label);
     form.appendChild(div);
 
-    if (lacs[lac]["courses"] != null) {
+    courses = lacs[lac]["courses"];
+
+    // if there are courses the user has taken for an LAC, display
+    if (courses != null) {
+      // create p element, style for indentation
       p = document.createElement("p");
       p.setAttribute("style", "margin-left: 40px;font-size:18px;");
 
       var br;
 
-      for (course in lacs[lac]["courses"]) {
+      // for each course in courses
+      for (course in courses) {
 
-        text = document.createTextNode(lacs[lac]["courses"][course]);
+        // create text and line break
+        text = document.createTextNode(courses[course]);
         br = document.createElement("br");
 
+        // append to paragraph element
         p.appendChild(text);
         p.appendChild(br);
 
+        // append to form
         form.appendChild(p);
+      }
+
+      // if the LAC has been fulfilled by a NCF course, disable checkbox and set to true
+      if (lacs[lac]["fulfilled"] == true && (!(courses.includes("External Credit")) || courses.length > 1)) {
+        input.checked = true;
+        input.disabled = true;
+        // if the LAC has been fulfilled not by a NCF course, do not disable checkbox  
+      } else if (courses.includes("External Credit")) {
+        input.checked = true;
       }
     }
 
-    if (lacs[lac]["fulfilled"] == true) {
-      input.checked = true;
-      input.disabled = true;
-    }
-
+    // increment
     index++;
   }
 </script>

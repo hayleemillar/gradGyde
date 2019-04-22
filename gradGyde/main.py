@@ -163,7 +163,7 @@ def lacs():
         'LAC0' : {
             'name' : 'Diverse Perspectives',
             'fulfilled' : True,
-            'courses' : ['Norman Conquests', 'test']
+            'courses' : ['External Credit']
             },
         'LAC1' : {
             'name' : 'Social Science',
