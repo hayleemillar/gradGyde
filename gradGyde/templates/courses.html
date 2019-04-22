@@ -21,7 +21,7 @@
 
     <!-- dashboard tab -->
     <li class="nav-item">
-      <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="/student_dashboard" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
+      <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="/student_dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
     </li>
 
     <!-- lac tab -->
@@ -31,7 +31,7 @@
 
     <!-- courses tab -->
     <li class="nav-item">
-      <a class="nav-link" id="explore-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="false">Courses</a>
+      <a class="nav-link active" id="explore-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="true">Courses</a>
     </li>
     
     <!-- settings and logout buttons -->
@@ -42,5 +42,18 @@
       <button type="button" onclick="location.href='/logout';">Logout</button>
     </ul>
   </ul>
+
+  <br/>
+
+  <div class="summary" id="summary" style="margin-left:10px;margin-right:10px;">
+      <br/>
+      
+      <center><h3><b>Course History</b></h3></center>
+
+      <br/>
+
+      <!-- insert classes user has taken here -->
+
+    </div>
 </body>
 </html>
