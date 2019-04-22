@@ -202,8 +202,17 @@ def settings_form_submit():
         return redirect('/login')
     return redirect('/student_dashboard/settings')
 
+
 @app.route('/student_dashboard/courses')
 def courses():
     if 'google_token' not in session:
         return redirect('/login')
     return render_template('courses.html')
+
+
+
+@app.route('/student_dashboard/explore')
+def explore():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return render_template('explore.html')
