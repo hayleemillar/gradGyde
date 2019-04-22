@@ -162,13 +162,13 @@ def lacs():
     lac = {
         'LAC0' : {
             'name' : 'Diverse Perspectives',
-            'fullfilled' : True,
-            'course' : 'Norman Conquests'
+            'fulfilled' : True,
+            'courses' : ['Norman Conquests', 'test']
             },
         'LAC1' : {
             'name' : 'Social Science',
-            'fullfilled' : False,
-            'course' : None
+            'fulfilled' : False,
+            'courses' : None
             }
     }
     return render_template('lac.html', lac=lac)

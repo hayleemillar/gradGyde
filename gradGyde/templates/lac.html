@@ -77,12 +77,14 @@
 
   var div;
   var input;
+  var p;
   var text;
   var label;
 
   var index = 0;
 
   for (lac in lacs) {
+
     div = document.createElement("div");
     div.class = "form-check";
 
@@ -102,6 +104,29 @@
     label.appendChild(text);
     div.appendChild(label);
     form.appendChild(div);
+
+    if (lacs[lac]["courses"] != null) {
+      p = document.createElement("p");
+      p.setAttribute("style", "margin-left: 40px;font-size:18px;");
+
+      var br;
+
+      for (course in lacs[lac]["courses"]) {
+
+        text = document.createTextNode(lacs[lac]["courses"][course]);
+        br = document.createElement("br");
+
+        p.appendChild(text);
+        p.appendChild(br);
+
+        form.appendChild(p);
+      }
+    }
+
+    if (lacs[lac]["fulfilled"] == true) {
+      input.checked = true;
+      input.disabled = true;
+    }
 
     index++;
   }
