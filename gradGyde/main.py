@@ -376,7 +376,7 @@ def settings_form_submit():
 
 
 @app.route('/student_dashboard/courses')
-def courses():
+def my_courses():
     if 'google_token' not in session:
         return redirect('/login')
 
@@ -410,7 +410,7 @@ def explore():
 def remove_course():
 
     # remove from db
-    courseId = request.form['id']
-    print(courseID)
+    course = request.form['id']
+    print(course)
 
-    return courseID
+    return course
