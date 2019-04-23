@@ -171,6 +171,7 @@ def lacs():
             'courses' : None
             }
     }
+
     return render_template('lac.html', lac=lac)
 
 
@@ -207,7 +208,24 @@ def settings_form_submit():
 def courses():
     if 'google_token' not in session:
         return redirect('/login')
-    return render_template('courses.html')
+
+    courses = {
+            'COURSE0' : {
+                'name' : 'course0',
+                'year' : 2018,
+                'id' : 327678
+            },
+            'COURSE1' : {
+                'name' : 'course1',
+                'year' : 2017,
+                'id' : 345890
+            }
+        }
+
+    courses = json.dumps(courses);
+
+    return render_template('courses.html',
+                            courses=courses)
 
 
 
@@ -216,3 +234,27 @@ def explore():
     if 'google_token' not in session:
         return redirect('/login')
     return render_template('explore.html')
+
+@app.route('/removecourse', methods= ['GET', 'POST'])
+def remove_course():
+
+    # I have successfully passed the ID of the course that needs to be deleted,
+    # but I don't know exactly what to do with it. I need the courses page to 
+    # reload so that the removal is updated.
+    courseID = request.form['id']
+    print(courseID)
+
+    courses = {
+            'COURSE0' : {
+                'name' : 'course0',
+                'year' : 2018,
+                'id' : 327678
+            },
+            'COURSE1' : {
+                'name' : 'course1',
+                'year' : 2017,
+                'id' : 345890
+            }
+        }
+
+    return courseID

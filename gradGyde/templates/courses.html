@@ -31,14 +31,14 @@
 
     <!-- courses tab -->
     <li class="nav-item">
-      <a class="nav-link active" id="explore-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="true">Courses</a>
+      <a class="nav-link active" id="courses-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="true">My Courses</a>
     </li>
 
     <!-- explore tab -->
     <li class="nav-item">
       <a class="nav-link" id="explore-tab" data-toggle="tab" href="/student_dashboard/explore" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
     </li>
-    
+
     <!-- settings and logout buttons -->
     <ul class="nav nav-tabs ml-auto">
       <a href="/student_dashboard/settings" class="img-link">
@@ -51,14 +51,30 @@
   <br/>
 
   <div class="summary" id="summary" style="margin-left:10px;margin-right:10px;">
-      <br/>
-      
-      <center><h3><b>Course History</b></h3></center>
+    <br/>
+    
+    <center><h3><b>Course History</b></h3></center>
 
-      <br/>
+    <center><button style="font-size:18px;border-radius:3px;" onclick="location.href='/student_dashboard/explore';">+ Add Course</button></center>
+    <br/>
 
-      <!-- insert classes user has taken here -->
-
-    </div>
+    <!-- insert classes user has taken here -->
+  </div>
 </body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+
+<script src="../static/courses.js"></script>
+
+<script>
+  var courses = $.parseJSON({{ courses | tojson | safe }});
+
+  populateSections("summary", courses);
+  populateCourses(courses);
+
+</script>
+
 </html>
