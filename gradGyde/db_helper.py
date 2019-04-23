@@ -162,8 +162,7 @@ def tag_exists(text):
     tag_query = Tags.query.filter_by(tag_name=text).first()
     if tag_query is None:
         return False
-    else:
-        return True
+    return True
 
 
 #1.0 Tasks:
