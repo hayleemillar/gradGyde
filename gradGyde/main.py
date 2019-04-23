@@ -106,41 +106,212 @@ def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
 
+    # aocs = {
+    #     "AOC1" : {
+    #         "Name" : "Computer Science 2018",
+    #         "Requirements" : {
+    #             "Req1" : {
+    #                 "Name" :  "CS Introductory Course",
+    #                 "Amount" : 1,
+    #                 "Fulfilled" : True,
+    #                 "Classes" : {
+    #                     "Class1" : {
+    #                         "Name" : "Intro to Programming in Python",
+    #                         "Taken" : False
+    #                     },
+    #                     "Class2" : {
+    #                         "Name" : "Intro to Programming in C",
+    #                         "Taken" : True
+    #                     }
+    #                 }
+    #             },
+    #             "Req2" : {
+    #                 "Name" :  "Math",
+    #                 "Amount" : 2,
+    #                 "Fulfilled" : False,
+    #                 "Classes" : {
+    #                     "Class1" : {
+    #                         "Name" : "Calculus 1",
+    #                         "Taken" : False
+    #                     },
+    #                     "Class2" : {
+    #                         "Name" : "Discrete Mathematics for Computer Science",
+    #                         "Taken" : True
+    #                     },
+    #                     "Class3" : {
+    #                         "Name" : "Dealing With Data",
+    #                         "Taken" : False
+    #                     }
+    #                 }
+    #             }
+    #         }
+    #     }
+    # }
+
     aocs = {
-        "AOC1" : {
-            "Name" : "Computer Science 2018",
-            "Requirements" : {
-                "Req1" : {
-                    "Name" :  "CS Introductory Course",
-                    "Amount" : 1,
-                    "Fulfilled" : True,
-                    "Classes" : {
-                        "Class1" : {
-                            "Name" : "Intro to Programming in Python",
-                            "Taken" : False
+        "AOC0": {
+            "id": 1,
+            "name": "Computer Science (Regular)",
+            "requirements": {
+                "req0": {
+                    "id": 1,
+                    "name": "CS Introductory Course",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
                         },
-                        "Class2" : {
-                            "Name" : "Intro to Programming in C",
-                            "Taken" : True
+                        "class1": {
+                            "id": 2,
+                            "name": "Test 1",
+                            "taken": False
+                        },
+                        "class2": {
+                            "id": 3,
+                            "name": "Test 2",
+                            "taken": False
+                        },
+                        "class3": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
                         }
                     }
                 },
-                "Req2" : {
-                    "Name" :  "Math",
-                    "Amount" : 2,
-                    "Fulfilled" : False,
-                    "Classes" : {
-                        "Class1" : {
-                            "Name" : "Calculus 1",
-                            "Taken" : False
+                "req1": {
+                    "id": 2,
+                    "name": "Object Oriented Programming With Java",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
                         },
-                        "Class2" : {
-                            "Name" : "Discrete Mathematics for Computer Science",
-                            "Taken" : True
+                        "class1": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
+                        }
+                    }
+                },
+                "req2": {
+                    "id": 3,
+                    "name": "Object Oriented Design In Java",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req3": {
+                    "id": 4,
+                    "name": "Software Engineering",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 2,
+                            "name": "Test 1",
+                            "Taken": False
                         },
-                        "Class3" : {
-                            "Name" : "Dealing With Data",
-                            "Taken" : False
+                        "class1": {
+                            "id": 3,
+                            "name": "Test 2",
+                            "taken": False
+                        }
+                    }
+                },
+                "req4": {
+                    "id": 5,
+                    "name": "Discrete Mathematics",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req5": {
+                    "id": 6,
+                    "name": "Data Structures in Java",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req6": {
+                    "id": 7,
+                    "name": "Algorithms",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req7": {
+                    "id": 8,
+                    "name": "Programming Languages",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req8": {
+                    "id": 9,
+                    "name": "Systems",
+                    "amount": 2,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req9": {
+                    "id": 10,
+                    "name": "Theory",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req10": {
+                    "id": 11,
+                    "name": "AI",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req11": {
+                    "id": 12,
+                    "name": "Applications",
+                    "amount": 2,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req12": {
+                    "id": 13,
+                    "name": "Math",
+                    "amount": 2,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req13": {
+                    "id": 14,
+                    "name": "CS Introductory Course",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
+                        },
+                        "class1": {
+                            "id": 2,
+                            "name": "Test 1",
+                            "taken": False
+                        },
+                        "class2": {
+                            "id": 3,
+                            "name": "Test 2",
+                            "taken": False
+                        },
+                        "class3": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
                         }
                     }
                 }
@@ -162,15 +333,16 @@ def lacs():
     lac = {
         'LAC0' : {
             'name' : 'Diverse Perspectives',
-            'fullfilled' : True,
-            'course' : 'Norman Conquests'
+            'fulfilled' : True,
+            'courses' : ['External Credit']
             },
         'LAC1' : {
             'name' : 'Social Science',
-            'fullfilled' : False,
-            'course' : None
+            'fulfilled' : False,
+            'courses' : None
             }
     }
+
     return render_template('lac.html', lac=lac)
 
 
@@ -201,3 +373,44 @@ def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     return redirect('/student_dashboard/settings')
+
+
+@app.route('/student_dashboard/courses')
+def my_courses():
+    if 'google_token' not in session:
+        return redirect('/login')
+
+    courses = {
+        'COURSE0' : {
+            'name' : 'course0',
+            'year' : 2018,
+            'id' : 327678
+        },
+        'COURSE1' : {
+            'name' : 'course1',
+            'year' : 2017,
+            'id' : 345890
+        }
+    }
+
+    courses = json.dumps(courses)
+
+    return render_template('courses.html',
+                           courses=courses)
+
+
+
+@app.route('/student_dashboard/explore')
+def explore():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return render_template('explore.html')
+
+@app.route('/removecourse', methods=['GET', 'POST'])
+def remove_course():
+
+    # remove from db
+    course = request.form['id']
+    print(course)
+
+    return course
