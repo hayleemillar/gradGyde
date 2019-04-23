@@ -410,9 +410,7 @@ def explore():
 @app.route('/removecourse', methods= ['GET', 'POST'])
 def remove_course():
 
-    # I have successfully passed the ID of the course that needs to be deleted,
-    # but I don't know exactly what to do with it. I need the courses page to 
-    # reload so that the removal is updated.
+    # remove from db
     courseID = request.form['id']
     print(courseID)
 
