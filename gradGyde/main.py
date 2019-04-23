@@ -3,9 +3,16 @@ import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import get_user, make_user
+from .db_helper import (assign_aoc,
+                        get_aoc,
+                        get_aoc_json,
+                        get_aocs_by_type,
+                        get_user, 
+                        make_user)
+from .db_helper_test import db_helper_test
 from .models import UserType
 
+db_helper_test()
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -73,16 +80,25 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    # Change these to pull from the database
-    aoc = ['Wizardry',
-           'Computer Science',
-           'General Studies',
-           'Underwater Basket Weaving',
-           'Biology']
+
+    aocs_divisional = get_aocs_by_type("Divisonal")
+    aocs_divisional_names = []
+    for aoc in aocs_divisional:
+        aocs_divisional_names.append(aoc.aoc_name)
+
+    aocs_slash = get_aocs_by_type("Slash")
+    aocs_slash_names = []
+    for aoc in aocs_slash:
+        aocs_slash_names.append(aoc.aoc_name)
+
+    aocs_double = get_aocs_by_type("Double")
+    aocs_double_names = []
+    for aoc in aocs_double:
+        aocs_double_names.append(aoc.aoc_name)
     return render_template('signup_form.html',
-                           aocs=aoc,
-                           slashs=aoc,
-                           doubles=aoc)
+                           aocs=aocs_divisional_names,
+                           slashs=aocs_slash_names,
+                           doubles=aocs_double_names)
 
 
 @app.route('/signup_form/post', methods=['POST'])
@@ -98,6 +114,8 @@ def signup_form_submit():
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
     session['user_type'] = str(user.user_type)
+    comp_sci = get_aoc("Computer Science (Regular)", "Divisonal")
+    assign_aoc(comp_sci, user)
     return redirect('/student_dashboard')
 
 
@@ -105,51 +123,9 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
-
-    aocs = {
-        "AOC1" : {
-            "Name" : "Computer Science 2018",
-            "Requirements" : {
-                "Req1" : {
-                    "Name" :  "CS Introductory Course",
-                    "Amount" : 1,
-                    "Fulfilled" : True,
-                    "Classes" : {
-                        "Class1" : {
-                            "Name" : "Intro to Programming in Python",
-                            "Taken" : False
-                        },
-                        "Class2" : {
-                            "Name" : "Intro to Programming in C",
-                            "Taken" : True
-                        }
-                    }
-                },
-                "Req2" : {
-                    "Name" :  "Math",
-                    "Amount" : 2,
-                    "Fulfilled" : False,
-                    "Classes" : {
-                        "Class1" : {
-                            "Name" : "Calculus 1",
-                            "Taken" : False
-                        },
-                        "Class2" : {
-                            "Name" : "Discrete Mathematics for Computer Science",
-                            "Taken" : True
-                        },
-                        "Class3" : {
-                            "Name" : "Dealing With Data",
-                            "Taken" : False
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    aocs = json.dumps(aocs)
-
+    user = get_user(session['user_email']) 
+    aocs = get_aoc_json(user, "Divisonal")
+    print(aocs)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs)
@@ -185,15 +161,24 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    aocs = ['Wizardry',
-            'Computer Science',
-            'General Studies',
-            'Underwater Basket Weaving',
-            'Biology']
+    aocs_divisional = get_aocs_by_type("Divisonal")
+    aocs_divisional_names = []
+    for aoc in aocs_divisional:
+        aocs_divisional_names.append(aoc.aoc_name)
+    print(aocs_divisional_names)
+    aocs_slash = get_aocs_by_type("Slash")
+    aocs_slash_names = []
+    for aoc in aocs_slash:
+        aocs_slash_names.append(aoc.aoc_name)
+
+    aocs_double = get_aocs_by_type("Double")
+    aocs_double_names = []
+    for aoc in aocs_double:
+        aocs_double_names.append(aoc.aoc_name)
     return render_template('settings.html',
-                           aocs=aocs,
-                           doubles=aocs,
-                           slashes=aocs)
+                           aocs=aocs_divisional_names,
+                           doubles=aocs_double_names,
+                           slashs=aocs_slash_names)
 
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])

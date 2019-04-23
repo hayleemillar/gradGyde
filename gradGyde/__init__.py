@@ -3,7 +3,8 @@ import os
 from sqlite3 import Connection as SQLite3Connection
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import event, func
+from sqlalchemy import create_engine, event, func
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 
 
@@ -15,7 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gradGyde.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gradGyde\\gradGyde.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+SESSION = db.session
 
 @event.listens_for(Engine, "connect")
 def _set_sqlite_pragma(dbapi_connection, _):

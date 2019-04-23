@@ -1,7 +1,7 @@
 import datetime
+import os
 import json
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from . import SESSION
 from .models import (Aocs,
                      Users,
                      PrefferedAocs,
@@ -11,10 +11,6 @@ from .models import (Aocs,
                      ClassTags,
                      Prereqs,
                      Requirements)
-
-ENGINE = create_engine('sqlite:///gradGyde.db')
-SESSION_MAKER = sessionmaker(bind=ENGINE)
-SESSION = SESSION_MAKER()
 
 
 def make_aoc(name, passed_type, year):
@@ -36,10 +32,11 @@ def make_class(name, semester, year, credit):
 
 def make_user(email, name, year, u_type):
     if get_user(email) is None:
-        new_user = Users(user_email=email,
+        newuser = Users(user_email=email,
                          user_name=name,
                          year_started=year,
                          user_type=u_type)
+        new_user = SESSION.merge(newuser)
         SESSION.add(new_user)
         SESSION.commit()
 
