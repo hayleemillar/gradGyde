@@ -19,9 +19,9 @@ function addProgressBars(aois, elementID) {
   // for each area of interest (aoi)
   for (aoi in aois) {
 
-    area = aois[aoi]["Name"];
+    area = aois[aoi]["name"];
 
-    reqs = aois[aoi]["Requirements"];
+    reqs = aois[aoi]["requirements"];
 
     // number of requirements
     reqCount = Object.keys(reqs).length;
@@ -31,7 +31,7 @@ function addProgressBars(aois, elementID) {
     // for each requirement in requirements
     for (req in reqs) {
       // if the user has fufilled the requirement, increment numFufilled
-      if (reqs[req]["Fulfilled"] == true) {
+      if (reqs[req]["fulfilled"] == true) {
         numFulfilled++;
       }
     }
@@ -90,7 +90,7 @@ function populateAOIList(aois, elementID) {
   // for each area of interest (aoi)
   for (aoi in aois) {
     // get name of aoi
-    aoiArray.push(aois[aoi]["Name"]);
+    aoiArray.push(aois[aoi]["name"]);
   }
 
   // for each aoi name
@@ -141,7 +141,7 @@ function populateAoiTabs(aois, tabElementID) {
   for (aoi in aois) {
 
     // get aoi name
-    area = aois[aoi]["Name"];
+    area = aois[aoi]["name"];
 
     // create tab using bootstrap stuff
     tab = document.createElement("li");
@@ -190,10 +190,10 @@ function generateRequirementsHTML(aoiName, aois) {
   // for each aoi
   for (aoi in aois) {
     // if aoi name is the param String aoiName
-    if (aois[aoi]["Name"] == aoiName) {
+    if (aois[aoi]["name"] == aoiName) {
       // generate HTML for it
 
-      var reqs = aois[aoi]["Requirements"];
+      var reqs = aois[aoi]["requirements"];
 
       var name;
       var fulfilled;
@@ -203,42 +203,42 @@ function generateRequirementsHTML(aoiName, aois) {
       for (req in reqs) {
 
         // get requirement name, whether it has been fulfilled, and # credits
-        name = reqs[req]["Name"];
-        fulfilled = reqs[req]["Fulfilled"];
-        numCredits = reqs[req]["Amount"];
+        name = reqs[req]["name"];
+        fulfilled = reqs[req]["fulfilled"];
+        numCredits = reqs[req]["amount"];
 
         // if the req is fulfilled
         if (fulfilled == true) {
           // if the req only requires a single course to be satisfied,
           // use correct grammar
           if (numCredits == 1) {
-            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString() 
+            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString() 
             + " course credit required" + "</p>";
           } else {
-            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString() 
+            html += "<img src='../static/img/check-blue.png'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString() 
             + " course credits required" + "</p>";
           }
         } else {
           if (numCredits == 1) {
-            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString()
+            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString()
             + " course credit required" + "</p>";
           } else {
-            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["Amount"].toString()
+            html += "<img src='../static/img/x-blue.png'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString()
             + " course credits required" + "</p>";
           }
         }
 
         // if requirement has classes
-        if (reqs[req].hasOwnProperty("Classes")) {
+        if (reqs[req].hasOwnProperty("classes")) {
 
-          var courses = reqs[req]["Classes"];
+          var courses = reqs[req]["classes"];
           var taken;
 
           // for each course
           for (course in courses) {
 
-            name = courses[course]["Name"];
-            taken = courses[course]["Taken"];
+            name = courses[course]["name"];
+            taken = courses[course]["taken"];
 
             // if taken display text with check box
             if (taken == true) {
