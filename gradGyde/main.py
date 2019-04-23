@@ -173,7 +173,7 @@ def dash_stud():
                             "id": 3,
                             "name": "Test 2",
                             "taken": False
-                        }, 
+                        },
                         "class3": {
                             "id": 4,
                             "name": "Test 3",
@@ -185,7 +185,7 @@ def dash_stud():
                     "id": 2,
                     "name": "Object Oriented Programming With Java",
                     "amount": 1,
-                    "fulfilled": False, 
+                    "fulfilled": False,
                     "classes": {
                         "class0": {
                             "id": 1,
@@ -319,7 +319,6 @@ def dash_stud():
         }
     }
 
-        
     aocs = json.dumps(aocs)
 
     return render_template('dash_stud.html',
@@ -382,22 +381,22 @@ def courses():
         return redirect('/login')
 
     courses = {
-            'COURSE0' : {
-                'name' : 'course0',
-                'year' : 2018,
-                'id' : 327678
-            },
-            'COURSE1' : {
-                'name' : 'course1',
-                'year' : 2017,
-                'id' : 345890
-            }
+        'COURSE0' : {
+            'name' : 'course0',
+            'year' : 2018,
+            'id' : 327678
+        },
+        'COURSE1' : {
+            'name' : 'course1',
+            'year' : 2017,
+            'id' : 345890
         }
+    }
 
-    courses = json.dumps(courses);
+    courses = json.dumps(courses)
 
     return render_template('courses.html',
-                            courses=courses)
+                           courses=courses)
 
 
 
@@ -407,24 +406,11 @@ def explore():
         return redirect('/login')
     return render_template('explore.html')
 
-@app.route('/removecourse', methods= ['GET', 'POST'])
+@app.route('/removecourse', methods=['GET', 'POST'])
 def remove_course():
 
     # remove from db
-    courseID = request.form['id']
+    courseId = request.form['id']
     print(courseID)
-
-    courses = {
-            'COURSE0' : {
-                'name' : 'course0',
-                'year' : 2018,
-                'id' : 327678
-            },
-            'COURSE1' : {
-                'name' : 'course1',
-                'year' : 2017,
-                'id' : 345890
-            }
-        }
 
     return courseID
