@@ -48,5 +48,40 @@
     </ul>
   </ul>
 
+  <br/>
+
+  <!-- tabs for either courses, aocs, doubles, slashes -->
+  <ul class="nav nav-tabs" id="summary-tabs" role="tablist" style="margin-left:10px;margin-right:10px">
+    <li class="nav-item">
+      <button id="courses" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('courses', ['aocs', 'doubles', 'slashes'])" class="nav-link active" aria-selected="true">Courses</button>
+    </li>
+    <li class="nav-item">
+      <button id="aocs" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('aocs', ['courses', 'doubles', 'slashes'])" class="nav-link" aria-selected="false">AOCs</button>
+    </li>
+    <li class="nav-item">
+      <button id="doubles" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('doubles', ['aocs', 'courses', 'slashes'])" class="nav-link" aria-selected="false">Doubles</button>
+    </li>
+    <li class="nav-item">
+      <button id="slashes" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('slashes', ['aocs', 'doubles', 'courses'])" class="nav-link" aria-selected="false">Slashes</button>
+    </li>
+  </ul>
+  <div class="summary" id="summary" style="margin-left:10px;margin-right:10px;">
+    <br />
+    <div id="reqHTML">
+      <!-- HTML handled by JS -->
+    </div>
+  </div>
 </body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+
+<script src="../static/explore.js"></script>
+
+<script>
+
+</script>
+
 </html>

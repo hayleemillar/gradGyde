@@ -406,6 +406,7 @@ def explore():
         return redirect('/login')
     return render_template('explore.html')
 
+
 @app.route('/removecourse', methods=['GET', 'POST'])
 def remove_course():
 
@@ -414,3 +415,4 @@ def remove_course():
     print(course)
 
     return course
+
