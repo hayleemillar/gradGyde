@@ -123,6 +123,7 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
+
     user = get_user(session['user_email']) 
     aocs = get_aoc_json(user, "Divisonal")
     print(aocs)
@@ -138,15 +139,16 @@ def lacs():
     lac = {
         'LAC0' : {
             'name' : 'Diverse Perspectives',
-            'fullfilled' : True,
-            'course' : 'Norman Conquests'
+            'fulfilled' : True,
+            'courses' : ['External Credit']
             },
         'LAC1' : {
             'name' : 'Social Science',
-            'fullfilled' : False,
-            'course' : None
+            'fulfilled' : False,
+            'courses' : None
             }
     }
+
     return render_template('lac.html', lac=lac)
 
 
@@ -186,3 +188,44 @@ def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     return redirect('/student_dashboard/settings')
+
+
+@app.route('/student_dashboard/courses')
+def my_courses():
+    if 'google_token' not in session:
+        return redirect('/login')
+
+    courses = {
+        'COURSE0' : {
+            'name' : 'course0',
+            'year' : 2018,
+            'id' : 327678
+        },
+        'COURSE1' : {
+            'name' : 'course1',
+            'year' : 2017,
+            'id' : 345890
+        }
+    }
+
+    courses = json.dumps(courses)
+
+    return render_template('courses.html',
+                           courses=courses)
+
+
+
+@app.route('/student_dashboard/explore')
+def explore():
+    if 'google_token' not in session:
+        return redirect('/login')
+    return render_template('explore.html')
+
+@app.route('/removecourse', methods=['GET', 'POST'])
+def remove_course():
+
+    # remove from db
+    course = request.form['id']
+    print(course)
+
+    return course

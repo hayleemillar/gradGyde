@@ -15,7 +15,7 @@
   <!-- NAV BAR -->
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <!-- gradGyde image -->
-    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px" onclick="location.href='/student_dashboard'">
 
     <!-- dashboard tab -->
     <li class="nav-item">
@@ -27,10 +27,15 @@
       <a class="nav-link" id="lac-tab" data-toggle="tab" href="/student_dashboard/lacs" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
     </li>
 
+    <!-- courses tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="courses-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="false">My Courses</a>
+    </li>
+
     <!-- explore tab -->
-    <!-- <li class="nav-item">
-      <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
-    </li> -->
+    <li class="nav-item">
+      <a class="nav-link" id="explore-tab" data-toggle="tab" href="/student_dashboard/explore" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
+    </li>
 
     <!-- settings and logout buttons -->
     <ul class="nav nav-tabs ml-auto">

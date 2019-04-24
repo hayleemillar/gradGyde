@@ -16,7 +16,7 @@
   <ul class="nav nav-tabs" id="myTab" role="tablist">
 
     <!-- gradGyde image -->
-    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px" onclick="location.href='/student_dashboard'">
     <!-- dashboard tab -->
     <li class="nav-item">
       <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="/student_dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
@@ -26,10 +26,16 @@
     <li class="nav-item">
       <a class="nav-link active" id="lac-tab" data-toggle="tab" href="/student_dashboard/lacs" role="tab" aria-controls="lac" aria-selected="true">LACs</a>
     </li>
+    
+    <!-- courses tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="courses-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="false">My Courses</a>
+    </li>
+
     <!-- explore tab -->
-    <!-- <li class="nav-item">
-      <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
-    </li> -->
+    <li class="nav-item">
+      <a class="nav-link" id="explore-tab" data-toggle="tab" href="/student_dashboard/explore" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
+    </li>
 
     <!-- settings and logout buttons -->
     <ul class="nav nav-tabs ml-auto">
@@ -63,12 +69,12 @@
 
       <br/>
     </form>
-
   </div>
-
 </body>
+</html>
 
-</html> 
+
+
 
 <script>
   var lacs = {{ lac | tojson }};
@@ -77,12 +83,16 @@
 
   var div;
   var input;
+  var p;
   var text;
   var label;
+  var courses;
 
   var index = 0;
 
   for (lac in lacs) {
+
+    // create checkbox with label and input
     div = document.createElement("div");
     div.class = "form-check";
 
@@ -99,10 +109,47 @@
 
     text = document.createTextNode(lacs[lac]["name"]);
 
+    // place in form
     label.appendChild(text);
     div.appendChild(label);
     form.appendChild(div);
 
+    courses = lacs[lac]["courses"];
+
+    // if there are courses the user has taken for an LAC, display
+    if (courses != null) {
+      // create p element, style for indentation
+      p = document.createElement("p");
+      p.setAttribute("style", "margin-left: 40px;font-size:18px;");
+
+      var br;
+
+      // for each course in courses
+      for (course in courses) {
+
+        // create text and line break
+        text = document.createTextNode(courses[course]);
+        br = document.createElement("br");
+
+        // append to paragraph element
+        p.appendChild(text);
+        p.appendChild(br);
+
+        // append to form
+        form.appendChild(p);
+      }
+
+      // if the LAC has been fulfilled by a NCF course, disable checkbox and set to true
+      if (lacs[lac]["fulfilled"] == true && (!(courses.includes("External Credit")) || courses.length > 1)) {
+        input.checked = true;
+        input.disabled = true;
+        // if the LAC has been fulfilled not by a NCF course, do not disable checkbox  
+      } else if (courses.includes("External Credit")) {
+        input.checked = true;
+      }
+    }
+
+    // increment
     index++;
   }
 </script>
