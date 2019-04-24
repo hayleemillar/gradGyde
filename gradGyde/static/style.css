@@ -118,10 +118,18 @@ button:hover {
   height: 30px;
 }
 
-.lac {
+.contents {
   border-radius: 5px;
-  background: #aeb4b7;
+  background: white;
   color: black;
+  padding: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contents-explore {
+  color: white;
   padding: 20px;
   max-width: 1000px;
   margin-left: auto;
