@@ -29,14 +29,20 @@ def make_class(name, semester, year, credit):
     SESSION.commit()
 
 
-def make_user(email, name, year, u_type):
+def make_user(email, name, da_year, u_type):
     if get_user(email) is None:
         newuser = Users(user_email=email,
                          user_name=name,
-                         year_started=year,
+                         year_started=da_year,
                          user_type=u_type)
-        new_user = SESSION.merge(newuser)
         SESSION.add(new_user)
+        SESSION.commit()
+
+def update_user(email, name, da_year):
+    user = get_user(email)
+    if get_user(email) is not None:
+        user.user_name = name
+        user.year_started = da_year
         SESSION.commit()
 
 
@@ -111,7 +117,8 @@ def get_user(email):
 
 def get_aoc(name, passed_type, year=datetime.date.today().year):
     aoc_query = Aocs.query.filter_by(aoc_name=name).filter_by(
-        aoc_type=passed_type).filter(Aocs.aoc_year <= year).first()
+        aoc_type=passed_type).filter(Aocs.aoc_year <= year).order_by(
+            Aocs.aoc_id.desc()).first()
     return aoc_query
 
 
@@ -275,7 +282,6 @@ def get_classes_json(classes_fulfilling, user):
         class_key = 'class'+str(class_index)
         class_info = {'id' : course.class_id,
                       'name' : course.class_name}
-        print(class_info)
         taken = check_class_taken(user.user_id, course.class_id)
         class_info['taken'] = taken
         class_index = class_index+1
@@ -311,7 +317,9 @@ def get_aoc_json(user, aoc_type):
     for aoc in aoc_list:
         json_aoc_key = "aoc"+str(aoc_index)
         aoc_info = {'id' : aoc.aoc_id,
-                    'name' : aoc.aoc_name}
+                    'name' : aoc.aoc_name,
+                    'year' : aoc.aoc_year,
+                    'type' : aoc.aoc_type}
         requirements = get_requirements_with_tag(aoc.aoc_id)
         reqs = get_requirements_json(requirements, user)
         aoc_index = aoc_index+1

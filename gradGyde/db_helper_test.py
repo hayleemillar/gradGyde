@@ -73,10 +73,10 @@ def db_helper_test():
 
     #create the AOC
     print("Creating aoc")
-    aoc_info = ["Computer Science (Regular)", "Divisonal", 2018]
+    aoc_info = ["Computer Science (2)", "Divisonal", 2018]
     create_aoc(aoc_info, tags, amounts)
     print("Getting aoc...")
-    comp_sci = get_aoc("Computer Science (Regular)", "Divisonal")
+    comp_sci = get_aoc("Computer Science (2)", "Divisonal")
     print(comp_sci)
     print("Getting aoc by type...")
     print(get_aocs_by_type("Divisonal"))

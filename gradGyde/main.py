@@ -8,7 +8,8 @@ from .db_helper import (assign_aoc,
                         get_aoc_json,
                         get_aocs_by_type,
                         get_user, 
-                        make_user)
+                        make_user,
+                        update_user)
 from .db_helper_test import db_helper_test
 from .models import UserType
 
@@ -180,14 +181,22 @@ def settings():
     return render_template('settings.html',
                            aocs=aocs_divisional_names,
                            doubles=aocs_double_names,
-                           slashs=aocs_slash_names)
+                           slashes=aocs_slash_names)
 
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
-    return redirect('/student_dashboard/settings')
+    name = request.form['name']
+    #aoc = request.form.getlist('AOC')
+    #slash = request.form.getlist('slash')
+    da_year = request.form['year']
+    update_user(session['user_email'], name, da_year)
+    user = get_user(session['user_email'])
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
+    return redirect('/student_dashboard')
 
 
 @app.route('/student_dashboard/courses')
