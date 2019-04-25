@@ -35,7 +35,7 @@ def make_user(email, name, da_year, u_type):
                          user_name=name,
                          year_started=da_year,
                          user_type=u_type)
-        SESSION.add(new_user)
+        SESSION.add(newuser)
         SESSION.commit()
 
 def update_user(email, name, da_year):
@@ -275,6 +275,23 @@ def check_class_taken(user_id, da_class_id):
     return False
 
 #8: Stuff all this into a json:
+
+def get_classes_taken_json(classes_taken):
+    if classes_taken is not None:
+        classes = {}
+        class_index = 0
+        for course in classes_taken:
+            class_key = 'class'+str(class_index)
+            class_info = {'name' : course.class_name,
+                          'semester' : course.class_semester,
+                          'year' : course.class_year,
+                          'id' : course.class_id}
+            class_index = class_index+1
+            classes[class_key] = class_info
+        return json.dumps(classes)
+    return None    
+
+
 def get_classes_json(classes_fulfilling, user):
     classes = {}
     class_index = 0
@@ -315,7 +332,7 @@ def get_aoc_json(user, aoc_type):
     aoc_list = get_preffered_aocs(user, aoc_type)
     aoc_index = 0
     for aoc in aoc_list:
-        json_aoc_key = "aoc"+str(aoc_index)
+        json_aoc_key = "aoc"+str(aoc_index) 
         aoc_info = {'id' : aoc.aoc_id,
                     'name' : aoc.aoc_name,
                     'year' : aoc.aoc_year,
@@ -324,6 +341,18 @@ def get_aoc_json(user, aoc_type):
         reqs = get_requirements_json(requirements, user)
         aoc_index = aoc_index+1
         aoc_info['requirements'] = reqs
+        json_base[json_aoc_key] = aoc_info
+    return json.dumps(json_base)
+
+def get_aoc_list_json(aoc_list):
+    #Takes in a list of aoc's as input and outputs a json of the names and ids
+    json_base = {}
+    aoc_index = 0
+    for aoc in aoc_list:
+        json_aoc_key = "aoc"+str(aoc_index) 
+        aoc_info = {'name' : aoc.aoc_name,
+                    'id' : aoc_id}
+        aoc_index = aoc_index+1
         json_base[json_aoc_key] = aoc_info
     return json.dumps(json_base)
 

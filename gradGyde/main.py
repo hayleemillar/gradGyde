@@ -6,7 +6,10 @@ from gradGyde import app
 from .db_helper import (assign_aoc,
                         get_aoc,
                         get_aoc_json,
+                        get_aoc_list_json,
                         get_aocs_by_type,
+                        get_classes_taken,
+                        get_classes_taken_json,
                         get_user, 
                         make_user,
                         update_user)
@@ -82,20 +85,9 @@ def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
 
-    aocs_divisional = get_aocs_by_type("Divisonal")
-    aocs_divisional_names = []
-    for aoc in aocs_divisional:
-        aocs_divisional_names.append(aoc.aoc_name)
-
-    aocs_slash = get_aocs_by_type("Slash")
-    aocs_slash_names = []
-    for aoc in aocs_slash:
-        aocs_slash_names.append(aoc.aoc_name)
-
-    aocs_double = get_aocs_by_type("Double")
-    aocs_double_names = []
-    for aoc in aocs_double:
-        aocs_double_names.append(aoc.aoc_name)
+    aocs_divisional = get_aoc_list_json(get_aocs_by_type("Divisonal"))
+    aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
+    aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
     return render_template('signup_form.html',
                            aocs=aocs_divisional_names,
                            slashs=aocs_slash_names,
@@ -204,21 +196,9 @@ def my_courses():
     if 'google_token' not in session:
         return redirect('/login')
 
-    courses = {
-        'COURSE0' : {
-            'name' : 'course0',
-            'year' : 2018,
-            'id' : 327678
-        },
-        'COURSE1' : {
-            'name' : 'course1',
-            'year' : 2017,
-            'id' : 345890
-        }
-    }
-
-    courses = json.dumps(courses)
-
+    user = get_user(session['user_email'])
+    course_list = get_classes_taken(user)
+    courses = get_classes_taken_json(course_list)
     return render_template('courses.html',
                            courses=courses)
 
