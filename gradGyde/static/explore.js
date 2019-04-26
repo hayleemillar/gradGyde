@@ -298,10 +298,58 @@ function getResults(searchType, event) {
 				year: document.getElementById("inputYear").value,
 				semester: document.getElementById("selectSemester").value
 			},
-			success: function(result) {
-				console.log(result);
+			success: function(results) {
+				results = JSON.parse(results);
+
+				// display results
+
+				var resultsSection = document.getElementById("results");
+
+				var text;
+				var h;
+				var hr;
+				var p;
+				var b;
+
+				// results title
+				h = document.createElement("h3");
+				var b = document.createElement("b");
+				text = document.createTextNode("Results");
+				b.appendChild(text);
+				h.appendChild(b);
+				resultsSection.appendChild(h);
+				resultsSection.appendChild(document.createElement("br"));
+
+				for (var i in results) {
+					course = results[i];
+
+					// name portion
+					b = document.createElement("b");
+
+					text = document.createTextNode(course["name"]);
+					b.appendChild(text);
+
+					h = document.createElement("h5");
+					h.setAttribute("id", course["id"])
+					h.appendChild(b);
+					resultsSection.appendChild(h);
+
+					// info portion
+					// create p element, style for indentation
+    			p = document.createElement("p");
+    			p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+
+    			text = document.createTextNode("Year: " + course["year"]);
+    			p.appendChild(text);
+    			p.appendChild(document.createElement("br"));
+
+    			resultsSection.appendChild(p);
+
+					resultsSection.appendChild(document.createElement("hr"));
+				}
 			},
 			error: function(xhr) {
+				// display an error message
 				console.log("error");
 			}
 		});
@@ -316,11 +364,138 @@ function getResults(searchType, event) {
 				year: document.getElementById("inputYear").value,
 			},
 			success: function(results) {
+				results = JSON.parse(results);
+
+				// display results
+
 				console.log(results);
+
+				var resultsSection = document.getElementById("results");
+
+				// results title
+				h = document.createElement("h3");
+				var b = document.createElement("b");
+				text = document.createTextNode("Results");
+				b.appendChild(text);
+				h.appendChild(b);
+				resultsSection.appendChild(h);
+				resultsSection.appendChild(document.createElement("br"));
+
+				var aoi;
+				var html
+				var h;
+				var text;
+				var p;
+				var b;
+
+				for (var i in results) {
+					aoi = results[i];
+
+					console.log(aoi);
+
+					// name portion
+					b = document.createElement("b");
+
+
+					text = document.createTextNode(aoi["name"]);
+					b.appendChild(text);
+
+					h = document.createElement("h5");
+					h.setAttribute("id", aoi["id"]);
+					h.appendChild(b);
+					resultsSection.appendChild(h);
+
+					// info portion
+					// create p element, style for indentation
+    			p = document.createElement("p");
+    			p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+
+					html = generateRequirementsHTML(aoi["name"], aoi); 
+
+					p.insertAdjacentHTML('beforeend', html);
+
+					resultsSection.appendChild(p);
+
+					resultsSection.appendChild(document.createElement("hr"));
+				}
 			},
 			error: function(xhr) {
+				// display an error message
 				console.log("error");
 			}
 		});
 	}
+}
+
+
+/**
+ * Generates HTML form of requirements based on area of interest.
+ * @param aoi
+ */
+function generateRequirementsHTML(aoiName, aoi) {
+  var html = "";
+
+  html += "Requirements: <br/>";
+
+  var reqs = aoi["requirements"];
+  console.log(reqs);
+
+  var name;
+  var fulfilled;
+  var numCredits;
+
+  // for each requirement
+  for (req in reqs) {
+  	console.log(req);
+
+    // get requirement name, whether it has been fulfilled, and # credits
+    name = reqs[req]["name"];
+    fulfilled = reqs[req]["fulfilled"];
+    numCredits = reqs[req]["amount"];
+
+    // if the req is fulfilled
+    if (fulfilled == true) {
+      // if the req only requires a single course to be satisfied,
+      // use correct grammar
+      if (numCredits == 1) {
+        html += "<img src='../static/img/check-blue.png' height='16px'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString() 
+        + " course credit required" + "</p>";
+      } else {
+        html += "<img src='../static/img/check-blue.png' height='16px'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString() 
+        + " course credits required" + "</p>";
+      }
+    } else {
+      if (numCredits == 1) {
+        html += "<img src='../static/img/x-blue.png' height='16px'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString()
+        + " course credit required" + "</p>";
+      } else {
+        html += "<img src='../static/img/x-blue.png' height='16px'></img><b>" + name + "</b> : " + reqs[req]["amount"].toString()
+        + " course credits required" + "</p>";
+      }
+    }
+
+    // if requirement has classes
+    if (reqs[req].hasOwnProperty("classes")) {
+
+      var courses = reqs[req]["classes"];
+      var taken;
+
+      // for each course
+      for (course in courses) {
+
+        name = courses[course]["name"];
+        taken = courses[course]["taken"];
+
+        // if taken display text with check box
+        if (taken == true) {
+          html += "<p class='tab'><img src='../static/img/check-dark.png' height='16px'></img>" + name + "</p>";
+        // else display text with x box
+        } else {
+          html += "<p class='tab'><img src='../static/img/x-dark.png' height='16px'></img>" 
+          + name + "</p>";
+        }
+      } 
+    }
+  }
+  return html;
 }

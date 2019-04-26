@@ -420,7 +420,7 @@ def explore_results():
         results = {
             'COURSE0' : {
                 'name' : 'course0',
-                'year' : 2018,
+                'year' : 2017,
                 'id' : 327678
             },
             'COURSE1' : {
