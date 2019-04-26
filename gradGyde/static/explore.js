@@ -7,35 +7,35 @@
  */
 function switchTab(newTabID, tabIDArray, elementID) {
 
-	var temp;
+  var temp;
 
-	// for each ID
-	for (id in tabIDArray) {
-		// get element
-		temp = document.getElementById(tabIDArray[id]);
+  // for each ID
+  for (id in tabIDArray) {
+    // get element
+    temp = document.getElementById(tabIDArray[id]);
 
-		// if the element is active, deactivate
-		if (temp.getAttribute("aria-selected") == "true") {
-			var oldTab = temp;
-			oldTab.setAttribute("class", "nav-link");
-			oldTab.setAttribute("aria-selected", "false");
-		}
-	}
+    // if the element is active, deactivate
+    if (temp.getAttribute("aria-selected") == "true") {
+      var oldTab = temp;
+      oldTab.setAttribute("class", "nav-link");
+      oldTab.setAttribute("aria-selected", "false");
+    }
+  }
 
-	// get new element to be active
-	var newTab = document.getElementById(newTabID);
+  // get new element to be active
+  var newTab = document.getElementById(newTabID);
 
-	// set to active
-	newTab.setAttribute("class", "nav-link active");
-	newTab.setAttribute("aria-selected", "true");
+  // set to active
+  newTab.setAttribute("class", "nav-link active");
+  newTab.setAttribute("aria-selected", "true");
 
-	var oldFormID = "form-" + oldTab.getAttribute("id");
+  var oldFormID = "form-" + oldTab.getAttribute("id");
 
-	// reset results section to have nothing in it.
-	var divResults = document.getElementById("results");
-	divResults.innerHTML = "";
+  // reset results section to have nothing in it.
+  var divResults = document.getElementById("results");
+  divResults.innerHTML = "";
 
-	generateForm(newTabID, elementID, oldFormID);
+  generateForm(newTabID, elementID, oldFormID);
 }
 
 
@@ -45,96 +45,96 @@ function switchTab(newTabID, tabIDArray, elementID) {
  */
 function generateForm(tab, elementID, oldFormID) {
 
-	var oldForm = document.getElementById(oldFormID);
-	oldForm.parentNode.removeChild(oldForm);
+  var oldForm = document.getElementById(oldFormID);
+  oldForm.parentNode.removeChild(oldForm);
 
-	var label;
-	var input;
-	var select;
-	var text;
-	var option;
-	var button;
-
-
-	var form = document.createElement("form");
-	// form.setAttribute("action", "/student_dashboard/explore-results");
-
-	if (tab == "courses") {
-		form.setAttribute("id", "form-courses");
-
-		/***************
-		 * COURSE NAME *
-		 ***************/
-		// label
-		label = document.createElement("label");
-		label.setAttribute("for", "inputName");
-
-		text = document.createTextNode("Course Name");
-		label.appendChild(text);
-
-		form.appendChild(label);
-
-		// input
-		input = document.createElement("input");
-		input.setAttribute("name", "name");
-		input.setAttribute("type", "text");
-		input.setAttribute("class", "form-control");
-		input.setAttribute("id", "inputName");
-		input.setAttribute("placeholder", "Enter course name");
-
-		form.appendChild(input);
-
-		// line break
-		form.appendChild(document.createElement("br"));
+  var label;
+  var input;
+  var select;
+  var text;
+  var option;
+  var button;
 
 
-		/****************
-		 * YEAR OFFERED *
-		 ****************/
-		// label
-		label = document.createElement("label");
-		label.setAttribute("for", "inputYear");
+  var form = document.createElement("form");
+  // form.setAttribute("action", "/student_dashboard/explore-results");
 
-		text = document.createTextNode("Year");
-		label.appendChild(text);
+  if (tab == "courses") {
+    form.setAttribute("id", "form-courses");
 
-		form.appendChild(label);
+    /***************
+     * COURSE NAME *
+     ***************/
+    // label
+    label = document.createElement("label");
+    label.setAttribute("for", "inputName");
 
-		// input
-		input = document.createElement("input");
-		input.setAttribute("name", "year");
-		input.setAttribute("type", "number");
-		input.setAttribute("class", "form-control");
-		input.setAttribute("id", "inputYear");
-		input.setAttribute("placeholder", "Enter year");
+    text = document.createTextNode("Course Name");
+    label.appendChild(text);
 
-		form.appendChild(input);
+    form.appendChild(label);
 
-		// line break
-		form.appendChild(document.createElement("br"));
+    // input
+    input = document.createElement("input");
+    input.setAttribute("name", "name");
+    input.setAttribute("type", "text");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputName");
+    input.setAttribute("placeholder", "Enter course name");
+
+    form.appendChild(input);
+
+    // line break
+    form.appendChild(document.createElement("br"));
 
 
-		/********************
-		 * SEMESTER OFFERED *
-		 ********************/
-		// label
-		label = document.createElement("label");
-		label.setAttribute("for", "selectSemester");
+    /****************
+     * YEAR OFFERED *
+     ****************/
+    // label
+    label = document.createElement("label");
+    label.setAttribute("for", "inputYear");
 
-		text = document.createTextNode("Select semester");
-		label.appendChild(text);
+    text = document.createTextNode("Year");
+    label.appendChild(text);
 
-		form.appendChild(label);
+    form.appendChild(label);
 
-		// select
-		select = document.createElement("select");
-		select.setAttribute("name", "semester");
-		select.setAttribute("id", "selectSemester");
-		select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
-		select.setAttribute("for", "selectSemester");
+    // input
+    input = document.createElement("input");
+    input.setAttribute("name", "year");
+    input.setAttribute("type", "number");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputYear");
+    input.setAttribute("placeholder", "Enter year");
 
-		// select options
-		option = document.createElement("option");
+    form.appendChild(input);
+
+    // line break
+    form.appendChild(document.createElement("br"));
+
+
+    /********************
+     * SEMESTER OFFERED *
+     ********************/
+    // label
+    label = document.createElement("label");
+    label.setAttribute("for", "selectSemester");
+
+    text = document.createTextNode("Select semester");
+    label.appendChild(text);
+
+    form.appendChild(label);
+
+    // select
+    select = document.createElement("select");
+    select.setAttribute("name", "semester");
+    select.setAttribute("id", "selectSemester");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
+    select.setAttribute("for", "selectSemester");
+
+    // select options
+    option = document.createElement("option");
     option.textContent = "Fall";
     option.value = "Fall";
     select.appendChild(option);
@@ -170,109 +170,109 @@ function generateForm(tab, elementID, oldFormID) {
     form.appendChild(button);
 
 
-	} else {
+  } else {
 
-		/********
-		 * NAME *
-		 ********/
-		// label
-		label = document.createElement("label");
-		label.setAttribute("for", "inputName");
+    /********
+     * NAME *
+     ********/
+    // label
+    label = document.createElement("label");
+    label.setAttribute("for", "inputName");
 
-		switch (tab) {
-			case "aocs":
-				form.setAttribute("id", "form-aocs");
-				text = document.createTextNode("AOC Name");
-				break;
-			case "doubles":
-				form.setAttribute("id", "form-doubles");
-				text = document.createTextNode("Double Name");
-				break;
-			case "slashes":
-				form.setAttribute("id", "form-slashes");
-				text = document.createTextNode("Slash Name");
-				break;
-		}
+    switch (tab) {
+      case "aocs":
+        form.setAttribute("id", "form-aocs");
+        text = document.createTextNode("AOC Name");
+        break;
+      case "doubles":
+        form.setAttribute("id", "form-doubles");
+        text = document.createTextNode("Double Name");
+        break;
+      case "slashes":
+        form.setAttribute("id", "form-slashes");
+        text = document.createTextNode("Slash Name");
+        break;
+    }
 
-		label.appendChild(text);
+    label.appendChild(text);
 
-		form.appendChild(label);
+    form.appendChild(label);
 
-		// input
-		input = document.createElement("input");
-		input.setAttribute("name", "name");
-		input.setAttribute("type", "text");
-		input.setAttribute("class", "form-control");
-		input.setAttribute("id", "inputName");
+    // input
+    input = document.createElement("input");
+    input.setAttribute("name", "name");
+    input.setAttribute("type", "text");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputName");
 
-		switch (tab) {
-			case "aocs":
-				input.setAttribute("placeholder", "Enter AOC name");
-				break;
-			case "doubles":
-				input.setAttribute("placeholder", "Enter double name");
-				break;
-			case "slashes":
-				input.setAttribute("placeholder", "Enter slash name");
-				break;
-		}
+    switch (tab) {
+      case "aocs":
+        input.setAttribute("placeholder", "Enter AOC name");
+        break;
+      case "doubles":
+        input.setAttribute("placeholder", "Enter double name");
+        break;
+      case "slashes":
+        input.setAttribute("placeholder", "Enter slash name");
+        break;
+    }
 
-		form.appendChild(input);
+    form.appendChild(input);
 
-		// line break
-		form.appendChild(document.createElement("br"));
+    // line break
+    form.appendChild(document.createElement("br"));
 
 
-		/****************
-		 * YEAR OFFERED *
-		 ****************/
-		// label
-		label = document.createElement("label");
-		label.setAttribute("for", "inputYear");
+    /****************
+     * YEAR OFFERED *
+     ****************/
+    // label
+    label = document.createElement("label");
+    label.setAttribute("for", "inputYear");
 
-		text = document.createTextNode("Year");
-		label.appendChild(text);
+    text = document.createTextNode("Year");
+    label.appendChild(text);
 
-		form.appendChild(label);
+    form.appendChild(label);
 
-		// input
-		input = document.createElement("input");
-		input.setAttribute("name", "year");
-		input.setAttribute("type", "number");
-		input.setAttribute("class", "form-control");
-		input.setAttribute("id", "inputYear");
-		input.setAttribute("placeholder", "Enter year");
+    // input
+    input = document.createElement("input");
+    input.setAttribute("name", "year");
+    input.setAttribute("type", "number");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputYear");
+    input.setAttribute("placeholder", "Enter year");
 
-		form.appendChild(input);
+    form.appendChild(input);
 
-		// 2 line breaks
-		form.appendChild(document.createElement("br"));
-		form.appendChild(document.createElement("br"));
+    // 2 line breaks
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
 
-		// submit button
-		button = document.createElement("button");
+    // submit button
+    button = document.createElement("button");
     button.setAttribute("style", "border-radius:3px;");
 
     switch (tab) {
-			case "aocs":
-				button.setAttribute("onclick", "getResults('aocs', event);");
-				break;
-			case "doubles":
-				button.setAttribute("onclick", "getResults('doubles', event);");
-				break;
-			case "slashes":
-				button.setAttribute("onclick", "getResults('slashes', event);");
-				break;
-		}
+      case "aocs":
+        button.setAttribute("onclick", "getResults('aocs', event);");
+        break;
+      case "doubles":
+        button.setAttribute("onclick", "getResults('doubles', event);");
+        break;
+      case "slashes":
+        button.setAttribute("onclick", "getResults('slashes', event);");
+        break;
+    }
 
     text = document.createTextNode("Search");
     button.appendChild(text);
 
     form.appendChild(button);
-	}
+  }
 
-	var element = document.getElementById(elementID);
-	element.appendChild(form);
+  var element = document.getElementById(elementID);
+  element.appendChild(form);
 }
 
 
@@ -281,150 +281,150 @@ function generateForm(tab, elementID, oldFormID) {
  * @param type
  */
 function getResults(searchType, event) {
-	event.preventDefault();
+  event.preventDefault();
 
-	console.log("getResults");
+  console.log("getResults");
 
-	var formID = "#form-" + searchType
+  var formID = "#form-" + searchType
 
-	if (searchType == "courses") {
-		console.log("courses");
+  if (searchType == "courses") {
+    console.log("courses");
 
-		$.ajax({url: "/student_dashboard/explore_results", 
-			type: "get",
-			data: {
-				type: "courses",
-				name: document.getElementById("inputName").value,
-				year: document.getElementById("inputYear").value,
-				semester: document.getElementById("selectSemester").value
-			},
-			success: function(results) {
-				results = JSON.parse(results);
+    $.ajax({url: "/student_dashboard/explore_results", 
+      type: "get",
+      data: {
+        type: "courses",
+        name: document.getElementById("inputName").value,
+        year: document.getElementById("inputYear").value,
+        semester: document.getElementById("selectSemester").value
+      },
+      success: function(results) {
+        results = JSON.parse(results);
 
-				// display results
+        // display results
 
-				var resultsSection = document.getElementById("results");
+        var resultsSection = document.getElementById("results");
 
-				var text;
-				var h;
-				var hr;
-				var p;
-				var b;
+        var text;
+        var h;
+        var hr;
+        var p;
+        var b;
 
-				// results title
-				h = document.createElement("h3");
-				var b = document.createElement("b");
-				text = document.createTextNode("Results");
-				b.appendChild(text);
-				h.appendChild(b);
-				resultsSection.appendChild(h);
-				resultsSection.appendChild(document.createElement("br"));
+        // results title
+        h = document.createElement("h3");
+        var b = document.createElement("b");
+        text = document.createTextNode("Results");
+        b.appendChild(text);
+        h.appendChild(b);
+        resultsSection.appendChild(h);
+        resultsSection.appendChild(document.createElement("br"));
 
-				for (var i in results) {
-					course = results[i];
+        for (var i in results) {
+          course = results[i];
 
-					// name portion
-					b = document.createElement("b");
+          // name portion
+          b = document.createElement("b");
 
-					text = document.createTextNode(course["name"]);
-					b.appendChild(text);
+          text = document.createTextNode(course["name"]);
+          b.appendChild(text);
 
-					h = document.createElement("h5");
-					h.setAttribute("id", course["id"])
-					h.appendChild(b);
-					resultsSection.appendChild(h);
+          h = document.createElement("h5");
+          h.setAttribute("id", course["id"])
+          h.appendChild(b);
+          resultsSection.appendChild(h);
 
-					// info portion
-					// create p element, style for indentation
-    			p = document.createElement("p");
-    			p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+          // info portion
+          // create p element, style for indentation
+          p = document.createElement("p");
+          p.setAttribute("style", "margin-left: 40px;font-size:16px;");
 
-    			text = document.createTextNode("Year: " + course["year"]);
-    			p.appendChild(text);
-    			p.appendChild(document.createElement("br"));
+          text = document.createTextNode("Year: " + course["year"]);
+          p.appendChild(text);
+          p.appendChild(document.createElement("br"));
 
-    			resultsSection.appendChild(p);
+          resultsSection.appendChild(p);
 
-					resultsSection.appendChild(document.createElement("hr"));
-				}
-			},
-			error: function(xhr) {
-				// display an error message
-				console.log("error");
-			}
-		});
-	} else {
-		console.log("rest");
+          resultsSection.appendChild(document.createElement("hr"));
+        }
+      },
+      error: function(xhr) {
+        // display an error message
+        console.log("error");
+      }
+    });
+  } else {
+    console.log("rest");
 
-		$.ajax({url: "/student_dashboard/explore_results", 
-			type: "get",
-			data: {
-				type: searchType,
-				name: document.getElementById("inputName").value,
-				year: document.getElementById("inputYear").value,
-			},
-			success: function(results) {
-				results = JSON.parse(results);
+    $.ajax({url: "/student_dashboard/explore_results", 
+      type: "get",
+      data: {
+        type: searchType,
+        name: document.getElementById("inputName").value,
+        year: document.getElementById("inputYear").value,
+      },
+      success: function(results) {
+        results = JSON.parse(results);
 
-				// display results
+        // display results
 
-				console.log(results);
+        console.log(results);
 
-				var resultsSection = document.getElementById("results");
+        var resultsSection = document.getElementById("results");
 
-				// results title
-				h = document.createElement("h3");
-				var b = document.createElement("b");
-				text = document.createTextNode("Results");
-				b.appendChild(text);
-				h.appendChild(b);
-				resultsSection.appendChild(h);
-				resultsSection.appendChild(document.createElement("br"));
+        // results title
+        h = document.createElement("h3");
+        var b = document.createElement("b");
+        text = document.createTextNode("Results");
+        b.appendChild(text);
+        h.appendChild(b);
+        resultsSection.appendChild(h);
+        resultsSection.appendChild(document.createElement("br"));
 
-				var aoi;
-				var html
-				var h;
-				var text;
-				var p;
-				var b;
+        var aoi;
+        var html
+        var h;
+        var text;
+        var p;
+        var b;
 
-				for (var i in results) {
-					aoi = results[i];
+        for (var i in results) {
+          aoi = results[i];
 
-					console.log(aoi);
+          console.log(aoi);
 
-					// name portion
-					b = document.createElement("b");
+          // name portion
+          b = document.createElement("b");
 
 
-					text = document.createTextNode(aoi["name"]);
-					b.appendChild(text);
+          text = document.createTextNode(aoi["name"]);
+          b.appendChild(text);
 
-					h = document.createElement("h5");
-					h.setAttribute("id", aoi["id"]);
-					h.appendChild(b);
-					resultsSection.appendChild(h);
+          h = document.createElement("h5");
+          h.setAttribute("id", aoi["id"]);
+          h.appendChild(b);
+          resultsSection.appendChild(h);
 
-					// info portion
-					// create p element, style for indentation
-    			p = document.createElement("p");
-    			p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+          // info portion
+          // create p element, style for indentation
+          p = document.createElement("p");
+          p.setAttribute("style", "margin-left: 40px;font-size:16px;");
 
-					html = generateRequirementsHTML(aoi["name"], aoi); 
+          html = generateRequirementsHTML(aoi["name"], aoi); 
 
-					p.insertAdjacentHTML('beforeend', html);
+          p.insertAdjacentHTML('beforeend', html);
 
-					resultsSection.appendChild(p);
+          resultsSection.appendChild(p);
 
-					resultsSection.appendChild(document.createElement("hr"));
-				}
-			},
-			error: function(xhr) {
-				// display an error message
-				console.log("error");
-			}
-		});
-	}
+          resultsSection.appendChild(document.createElement("hr"));
+        }
+      },
+      error: function(xhr) {
+        // display an error message
+        console.log("error");
+      }
+    });
+  }
 }
 
 
@@ -446,7 +446,7 @@ function generateRequirementsHTML(aoiName, aoi) {
 
   // for each requirement
   for (req in reqs) {
-  	console.log(req);
+    console.log(req);
 
     // get requirement name, whether it has been fulfilled, and # credits
     name = reqs[req]["name"];
