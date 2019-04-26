@@ -31,6 +31,10 @@ function switchTab(newTabID, tabIDArray, elementID) {
 
 	var oldFormID = "form-" + oldTab.getAttribute("id");
 
+	// reset results section to have nothing in it.
+	var divResults = document.getElementById("results");
+	divResults.innerHTML = "";
+
 	generateForm(newTabID, elementID, oldFormID);
 }
 
@@ -51,9 +55,9 @@ function generateForm(tab, elementID, oldFormID) {
 	var option;
 	var button;
 
+
 	var form = document.createElement("form");
-	form.setAttribute("method", "post");
-	form.setAttribute("action", "");
+	// form.setAttribute("action", "/student_dashboard/explore-results");
 
 	if (tab == "courses") {
 		form.setAttribute("id", "form-courses");
@@ -125,7 +129,7 @@ function generateForm(tab, elementID, oldFormID) {
 		// select
 		select = document.createElement("select");
 		select.setAttribute("name", "semester");
-		select.setAttribute("id", "select_semester");
+		select.setAttribute("id", "selectSemester");
 		select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
 		select.setAttribute("for", "selectSemester");
 
@@ -157,7 +161,7 @@ function generateForm(tab, elementID, oldFormID) {
     // submit = document.createElement("center");
 
     button = document.createElement("button");
-    button.setAttribute("onclick", "location.href='/student_dashboard/explore");
+    button.setAttribute("onclick", "getResults('courses', event);");
     button.setAttribute("style", "border-radius:3px;");
 
     text = document.createTextNode("Search");
@@ -168,9 +172,9 @@ function generateForm(tab, elementID, oldFormID) {
 
 	} else {
 
-		/************
-		 * AOC NAME *
-		 ************/
+		/********
+		 * NAME *
+		 ********/
 		// label
 		label = document.createElement("label");
 		label.setAttribute("for", "inputName");
@@ -187,6 +191,7 @@ function generateForm(tab, elementID, oldFormID) {
 			case "slashes":
 				form.setAttribute("id", "form-slashes");
 				text = document.createTextNode("Slash Name");
+				break;
 		}
 
 		label.appendChild(text);
@@ -209,6 +214,7 @@ function generateForm(tab, elementID, oldFormID) {
 				break;
 			case "slashes":
 				input.setAttribute("placeholder", "Enter slash name");
+				break;
 		}
 
 		form.appendChild(input);
@@ -245,8 +251,19 @@ function generateForm(tab, elementID, oldFormID) {
 
 		// submit button
 		button = document.createElement("button");
-    button.setAttribute("onclick", "location.href='/student_dashboard/explore");
     button.setAttribute("style", "border-radius:3px;");
+
+    switch (tab) {
+			case "aocs":
+				button.setAttribute("onclick", "getResults('aocs', event);");
+				break;
+			case "doubles":
+				button.setAttribute("onclick", "getResults('doubles', event);");
+				break;
+			case "slashes":
+				button.setAttribute("onclick", "getResults('slashes', event);");
+				break;
+		}
 
     text = document.createTextNode("Search");
     button.appendChild(text);
@@ -256,4 +273,54 @@ function generateForm(tab, elementID, oldFormID) {
 
 	var element = document.getElementById(elementID);
 	element.appendChild(form);
+}
+
+
+/*
+ * Gets the results and displays in results section of the page.
+ * @param type
+ */
+function getResults(searchType, event) {
+	event.preventDefault();
+
+	console.log("getResults");
+
+	var formID = "#form-" + searchType
+
+	if (searchType == "courses") {
+		console.log("courses");
+
+		$.ajax({url: "/student_dashboard/explore_results", 
+			type: "get",
+			data: {
+				type: "courses",
+				name: document.getElementById("inputName").value,
+				year: document.getElementById("inputYear").value,
+				semester: document.getElementById("selectSemester").value
+			},
+			success: function(result) {
+				console.log(result);
+			},
+			error: function(xhr) {
+				console.log("error");
+			}
+		});
+	} else {
+		console.log("rest");
+
+		$.ajax({url: "/student_dashboard/explore_results", 
+			type: "get",
+			data: {
+				type: searchType,
+				name: document.getElementById("inputName").value,
+				year: document.getElementById("inputYear").value,
+			},
+			success: function(results) {
+				console.log(results);
+			},
+			error: function(xhr) {
+				console.log("error");
+			}
+		});
+	}
 }
