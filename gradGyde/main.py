@@ -85,13 +85,13 @@ def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
 
-    aocs_divisional = get_aoc_list_json(get_aocs_by_type("Divisonal"))
+    aocs_divisional = get_aoc_list_json(get_aocs_by_type("aoc"))
     aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
     aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
     return render_template('signup_form.html',
-                           aocs=aocs_divisional_names,
-                           slashs=aocs_slash_names,
-                           doubles=aocs_double_names)
+                           aocs=aocs_divisional,
+                           slashs=aocs_slash,
+                           doubles=aocs_double)
 
 
 @app.route('/signup_form/post', methods=['POST'])
@@ -99,7 +99,7 @@ def signup_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     name = request.form['name']
-    #aoc = request.form.getlist('AOC')
+    #aoc = request.form.getlist(''AOC'')
     #slash = request.form.getlist('slash')
     da_year = request.form['year']
     make_user(session['user_email'], name, da_year, UserType.STUDENT)
@@ -107,7 +107,7 @@ def signup_form_submit():
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
     session['user_type'] = str(user.user_type)
-    comp_sci = get_aoc("Computer Science (Regular)", "Divisonal")
+    comp_sci = get_aoc("Computer Science (Regular)", "aoc")
     assign_aoc(comp_sci, user)
     return redirect('/student_dashboard')
 
@@ -118,7 +118,7 @@ def dash_stud():
         return redirect('/login')
 
     user = get_user(session['user_email']) 
-    aocs = get_aoc_json(user, "Divisonal")
+    aocs = get_aoc_json(user, "aoc")
     print(aocs)
     return render_template('dash_stud.html',
                            name=session['user_name'],
@@ -156,7 +156,7 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    aocs_divisional = get_aocs_by_type("Divisonal")
+    aocs_divisional = get_aocs_by_type("aoc")
     aocs_divisional_names = []
     for aoc in aocs_divisional:
         aocs_divisional_names.append(aoc.aoc_name)
@@ -171,9 +171,9 @@ def settings():
     for aoc in aocs_double:
         aocs_double_names.append(aoc.aoc_name)
     return render_template('settings.html',
-                           aocs=aocs_divisional_names,
-                           doubles=aocs_double_names,
-                           slashes=aocs_slash_names)
+                           aocs=aocs_divisional,
+                           doubles=aocs_doubles,
+                           slashes=aocs_slash)
 
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])

@@ -351,7 +351,7 @@ def get_aoc_list_json(aoc_list):
     for aoc in aoc_list:
         json_aoc_key = "aoc"+str(aoc_index) 
         aoc_info = {'name' : aoc.aoc_name,
-                    'id' : aoc_id}
+                    'id' : aoc.aoc_id}
         aoc_index = aoc_index+1
         json_base[json_aoc_key] = aoc_info
     return json.dumps(json_base)

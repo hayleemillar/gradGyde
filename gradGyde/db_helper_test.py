@@ -73,13 +73,13 @@ def db_helper_test():
 
     #create the AOC
     print("Creating aoc")
-    aoc_info = ["Computer Science (2)", "Divisonal", 2018]
+    aoc_info = ["Computer Science (Regular)", "aoc", 2018]
     create_aoc(aoc_info, tags, amounts)
     print("Getting aoc...")
-    comp_sci = get_aoc("Computer Science (2)", "Divisonal")
+    comp_sci = get_aoc("Computer Science (Regular)", "aoc")
     print(comp_sci)
     print("Getting aoc by type...")
-    print(get_aocs_by_type("Divisonal"))
+    print(get_aocs_by_type("aoc"))
     print("Getting tags...")
     for tag in tags:
         print(get_tag(tag))
@@ -103,7 +103,7 @@ def db_helper_test():
     print("Setting preffered aoc...")
     assign_aoc(comp_sci, student)
     print("Getting preffered aoc...")
-    print(get_preffered_aocs(student, "Divisonal"))
+    print(get_preffered_aocs(student, "aoc"))
 
     #test getting class tags
     print("Getting class tags...")
@@ -180,7 +180,7 @@ def db_helper_test():
 
     #Testing get_aoc_json
     print("Getting the aoc json...")
-    print(get_aoc_json(student, "Divisonal"))
+    print(get_aoc_json(student, "aoc"))
 
     #Testing delete
     # print("Testing delete class taken. Test 3 should be gone...")
@@ -209,7 +209,7 @@ def db_helper_test():
 
     # print("Testing delete aoc...")
     # delete_aoc(comp_sci)
-    # print(get_aoc("Computer Science (Regular)", "Divisonal"))
+    # print(get_aoc("Computer Science (Regular)", "aoc"))
 
     # print("Testing delete user...")
     # delete_user(student)
