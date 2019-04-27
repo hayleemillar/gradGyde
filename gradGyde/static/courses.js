@@ -4,19 +4,21 @@
  * @param elementID
  * @param courses
  */
-function populateSections(elementID, courses) {
-  var years = [];
+function populateSections(elementID, jsonData, sectionType, boolSort) {
+  var sections = [];
 
   // for each course
-  for (course in courses) {
+  for (var i in jsonData) {
     // if year course was offered not in array, push
-    if (!(years.includes(courses[course]["year"]))) {
-      years.push(courses[course]["year"]);
+    if (!(sections.includes(jsonData[i][sectionType]))) {
+      sections.push(jsonData[i][sectionType]);
     }
   }
 
-  // sort years in descending order
-  years.sort();
+  if (boolSort == true) {
+    // sort years in descending order
+    sections.sort();
+  }
 
   // get element sections will be appended to
   var element = document.getElementById(elementID);
@@ -24,11 +26,11 @@ function populateSections(elementID, courses) {
   var text;
   var b;
 
-  for (year in years) {
+  for (var i in sections) {
     section = document.createElement("h4");
-    section.setAttribute("id", years[year].toString())
+    section.setAttribute("id", sections[i].toString())
     b = document.createElement("b");
-    text = document.createTextNode(years[year].toString());
+    text = document.createTextNode(sections[i].toString());
 
     b.appendChild(text);
     section.appendChild(b);
@@ -41,28 +43,28 @@ function populateSections(elementID, courses) {
  * Populates the courses under each section year the user has taken.
  * @param courses
  */
-function populateCourses(courses) {
+function populateSubsections(jsonData, sectionType, postPath, forWhat) {
 
   var p;
   var button;
   var img;
   var div;
+  var text;
 
   // for each course
-  for (course in courses) {
+  for (var i in jsonData) {
     // create p element, style for indentation
     p = document.createElement("p");
     p.setAttribute("style", "margin-left: 40px;font-size:18px;");
 
     // get year section it should be under
-    section = document.getElementById(courses[course]["year"].toString());
-    console.log(section);
+    section = document.getElementById(jsonData[i][sectionType].toString());
 
     // button
     button = document.createElement("button");
     // set button id to course id
-    button.setAttribute("id", courses[course]["id"]);
-    button.setAttribute("onclick", "removeCourse(this.id)");
+    button.setAttribute("id", jsonData[i]["id"]);
+    button.setAttribute("onclick", "removeCourse(this.id, '" + postPath + "')");
     button.setAttribute("style", "background-color:#FFFFFFFF;display:inline;");
     button.setAttribute("alt", "Delete Course");
     button.setAttribute("title", "delete course");
@@ -74,11 +76,15 @@ function populateCourses(courses) {
     button.appendChild(img);
     
     div = document.createElement("div");
-    div.setAttribute("id", "text" + courses[course]["id"]);
+    div.setAttribute("id", "text" + jsonData[i]["id"]);
     div.setAttribute("style", "display:inline;");
 
-    // create text and line break
-    text = document.createTextNode(courses[course]["name"]);
+    if (forWhat == "courses") {
+      // create text and line break
+      text = document.createTextNode(jsonData[i]["name"] + ": " + jsonData[i]['semester'] + " Semester");
+    } else if (forWhat == "aois") {
+      text = document.createTextNode(jsonData[i]["name"] + ": " + jsonData[i]['year']);
+    }
 
     div.appendChild(text);
 
@@ -96,13 +102,13 @@ function populateCourses(courses) {
 
 
 
-function removeCourse(courseID) {
-  $.post("/removecourse", {
-      id: courseID
+function removeCourse(delID, postPath) {
+  $.post(postPath, {
+      id: delID
   });
 
-  var button = document.getElementById(courseID);
-  var text = document.getElementById("text" + courseID);
+  var button = document.getElementById(delID);
+  var text = document.getElementById("text" + delID);
 
   button.parentElement.removeChild(button);
   text.parentElement.removeChild(text);

@@ -106,52 +106,13 @@ def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
 
-    # aocs = {
-    #     "AOC1" : {
-    #         "Name" : "Computer Science 2018",
-    #         "Requirements" : {
-    #             "Req1" : {
-    #                 "Name" :  "CS Introductory Course",
-    #                 "Amount" : 1,
-    #                 "Fulfilled" : True,
-    #                 "Classes" : {
-    #                     "Class1" : {
-    #                         "Name" : "Intro to Programming in Python",
-    #                         "Taken" : False
-    #                     },
-    #                     "Class2" : {
-    #                         "Name" : "Intro to Programming in C",
-    #                         "Taken" : True
-    #                     }
-    #                 }
-    #             },
-    #             "Req2" : {
-    #                 "Name" :  "Math",
-    #                 "Amount" : 2,
-    #                 "Fulfilled" : False,
-    #                 "Classes" : {
-    #                     "Class1" : {
-    #                         "Name" : "Calculus 1",
-    #                         "Taken" : False
-    #                     },
-    #                     "Class2" : {
-    #                         "Name" : "Discrete Mathematics for Computer Science",
-    #                         "Taken" : True
-    #                     },
-    #                     "Class3" : {
-    #                         "Name" : "Dealing With Data",
-    #                         "Taken" : False
-    #                     }
-    #                 }
-    #             }
-    #         }
-    #     }
-    # }
-
+    # valid types: "aoc", "double", "slash"
     aocs = {
         "AOC0": {
             "id": 1,
-            "name": "Computer Science (Regular)",
+            "name": "Computer Science",
+            "type" : "aoc",
+            "year" : 2018,
             "requirements": {
                 "req0": {
                     "id": 1,
@@ -319,11 +280,20 @@ def dash_stud():
         }
     }
 
+    doubles = {}
+
+    slashes = {}
+
+
     aocs = json.dumps(aocs)
+    doubles = json.dumps(doubles)
+    slashes = json.dumps(slashes)
 
     return render_template('dash_stud.html',
                            name=session['user_name'],
-                           aocs=aocs)
+                           aocs=aocs,
+                           doubles=doubles,
+                           slashes=slashes)
 
 
 @app.route('/student_dashboard/lacs')
@@ -357,21 +327,87 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    aocs = ['Wizardry',
-            'Computer Science',
-            'General Studies',
-            'Underwater Basket Weaving',
-            'Biology']
+    
+    name = "Haylee"
+    year = 2017
+
+    aocs = {
+        "AOC0": {
+            "id": 1,
+            "name": "Computer Science",
+            "type" : "aoc",
+            "year" : 2018,
+            "requirements": {
+                "req0": {
+                    "id": 1,
+                    "name": "CS Introductory Course",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
+                        },
+                        "class1": {
+                            "id": 2,
+                            "name": "Test 1",
+                            "taken": False
+                        },
+                        "class2": {
+                            "id": 3,
+                            "name": "Test 2",
+                            "taken": False
+                        },
+                        "class3": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
+                        }
+                    }
+                },
+                "req1": {
+                    "id": 2,
+                    "name": "Object Oriented Programming With Java",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
+                        },
+                        "class1": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    doubles = {}
+
+    slashes = {}
+
     return render_template('settings.html',
+                           name=name,
+                           year=year,
                            aocs=aocs,
-                           doubles=aocs,
-                           slashes=aocs)
+                           doubles=doubles,
+                           slashes=slashes)
 
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
+
+    name = request.form['name']
+    year = request.form['year']
+
     return redirect('/student_dashboard/settings')
 
 
@@ -384,12 +420,14 @@ def my_courses():
         'COURSE0' : {
             'name' : 'course0',
             'year' : 2018,
-            'id' : 327678
+            'id' : 327678,
+            'semester' : 'Fall'
         },
         'COURSE1' : {
             'name' : 'course1',
             'year' : 2017,
-            'id' : 345890
+            'id' : 345890,
+            'semester' : 'Spring'
         }
     }
 
@@ -421,12 +459,14 @@ def explore_results():
             'COURSE0' : {
                 'name' : 'course0',
                 'year' : 2017,
-                'id' : 327678
+                'id' : 327678,
+                'semester' : 'Fall'
             },
             'COURSE1' : {
                 'name' : 'course1',
                 'year' : 2017,
-                'id' : 345890
+                'id' : 345890,
+                'semester' : 'Spring'
             }
         }
     elif searchType == "aocs":
@@ -609,4 +649,11 @@ def remove_course():
     print(course)
 
     return course
+
+@app.route('/removeaoi', methods=['GET', 'POST'])
+def remove_aoi():
+
+    aoi = request.form['id']
+
+    return aoi
 
