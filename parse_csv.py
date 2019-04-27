@@ -13,7 +13,10 @@ def parse_aocs(file_path):
         amounts = []
         for line in aocs:
             if line[0] != "Name":
-                aoc_info = [line[0],line[1],int(line[2],10)]
+                aoc_type = line[1].lower()
+                if aoc_type == "joint":
+                    aoc_type = "double"
+                aoc_info = [line[0],aoc_type,int(line[2],10)]
                 tags = []
                 amounts = []
                 count = 3
@@ -26,10 +29,26 @@ def parse_aocs(file_path):
                     count += 1
                 create_aoc(aoc_info,tags,amounts)
         
+def parse_class(file_path):
+    with open(file_path, 'r') as file:
+        classes = csv.reader(file, delimiter="\t")
+        class_info = []
+        tags = []
+        for line in classes:
+            if line[0] != "Name":
+                class_info = [line[0],line[1],int(line[2],10),int(line[3],10)]
+                tags = []
+                count = 4
+                while count < len(line) and line[count] != "":
+                    tags.append(line[count])
+                    count += 1
+                create_class(class_info,tags)
 
 def main():
     aoc_file = os.getcwd() + "/aocs.tsv"
     parse_aocs(aoc_file)
+    # class_file = os.getcwd() + "/classes.tsv"
+    # parse_class(class_file)
 
     
 if __name__ == '__main__':
