@@ -166,16 +166,16 @@ def settings():
     if 'google_token' not in session:
         return redirect('/login')
     user = get_user(session['user_email'])
-    aocs_divisional = get_aoc_json(user, "aoc")
-    print(aocs_divisional)
+    aocs = get_aoc_json(user, "aoc")
+    print(aocs)
     aocs_slash = get_aoc_json(user, "slash")
     aocs_double = get_aoc_json(user, "double")
     return render_template('settings.html',
                            name=session['user_name'],
                            year=session['user_year'],
-                           aocs=aocs_divisional,
-                           doubles=aocs_double,
-                           slashes=aocs_slash)
+                           aocs=json.loads(aocs),
+                           doubles=json.loads(aocs_double),
+                           slashes=json.loads(aocs_slash))
 
 
 
