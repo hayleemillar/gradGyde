@@ -283,12 +283,9 @@ function generateForm(tab, elementID, oldFormID) {
 function getResults(searchType, event) {
   event.preventDefault();
 
-  console.log("getResults");
-
   var formID = "#form-" + searchType
 
   if (searchType == "courses") {
-    console.log("courses");
 
     $.ajax({url: "/student_dashboard/explore_results", 
       type: "get",
@@ -310,6 +307,7 @@ function getResults(searchType, event) {
         var hr;
         var p;
         var b;
+        var button;
 
         // results title
         h = document.createElement("h3");
@@ -330,7 +328,6 @@ function getResults(searchType, event) {
           b.appendChild(text);
 
           h = document.createElement("h5");
-          h.setAttribute("id", course["id"])
           h.appendChild(b);
           resultsSection.appendChild(h);
 
@@ -342,8 +339,21 @@ function getResults(searchType, event) {
           text = document.createTextNode("Year: " + course["year"]);
           p.appendChild(text);
           p.appendChild(document.createElement("br"));
+          text = document.createTextNode("Semester: " + course['semester']);
+          p.appendChild(text);
+          p.appendChild(document.createElement("br"));
 
           resultsSection.appendChild(p);
+
+          button = document.createElement("button");
+          button.setAttribute("id", course["id"]);
+          button.setAttribute("onclick", "addCourse(this.id)");
+          button.setAttribute("style", "font-size:14px;");
+
+          text = document.createTextNode("Add Course as Taken");
+          button.appendChild(text);
+
+          resultsSection.appendChild(button);
 
           resultsSection.appendChild(document.createElement("hr"));
         }
@@ -354,7 +364,6 @@ function getResults(searchType, event) {
       }
     });
   } else {
-    console.log("rest");
 
     $.ajax({url: "/student_dashboard/explore_results", 
       type: "get",
@@ -367,8 +376,6 @@ function getResults(searchType, event) {
         results = JSON.parse(results);
 
         // display results
-
-        console.log(results);
 
         var resultsSection = document.getElementById("results");
 
@@ -391,17 +398,28 @@ function getResults(searchType, event) {
         for (var i in results) {
           aoi = results[i];
 
-          console.log(aoi);
-
           // name portion
           b = document.createElement("b");
 
+          var type = aoi["type"];
 
-          text = document.createTextNode(aoi["name"]);
+          switch (type) {
+            case ("aoc"):
+              type = "AOC";
+              break;
+            case ("double"):
+              type = "Double";
+              break;
+            case ("slash"):
+              type = "Slash";
+              break;
+          }
+          var year = aoi["year"];
+
+          text = document.createTextNode(aoi["name"] + " " + type + " " + year);
           b.appendChild(text);
 
           h = document.createElement("h5");
-          h.setAttribute("id", aoi["id"]);
           h.appendChild(b);
           resultsSection.appendChild(h);
 
@@ -415,6 +433,16 @@ function getResults(searchType, event) {
           p.insertAdjacentHTML('beforeend', html);
 
           resultsSection.appendChild(p);
+
+          button = document.createElement("button");
+          button.setAttribute("id", aoi["id"]);
+          button.setAttribute("onclick", "addAOI(this.id)");
+          button.setAttribute("style", "font-size:14px;");
+
+          text = document.createTextNode("Add " + type + " as Area of Interest");
+          button.appendChild(text);
+
+          resultsSection.appendChild(button);
 
           resultsSection.appendChild(document.createElement("hr"));
         }
@@ -435,10 +463,7 @@ function getResults(searchType, event) {
 function generateRequirementsHTML(aoiName, aoi) {
   var html = "";
 
-  html += "Requirements: <br/>";
-
   var reqs = aoi["requirements"];
-  console.log(reqs);
 
   var name;
   var fulfilled;
@@ -446,7 +471,6 @@ function generateRequirementsHTML(aoiName, aoi) {
 
   // for each requirement
   for (req in reqs) {
-    console.log(req);
 
     // get requirement name, whether it has been fulfilled, and # credits
     name = reqs[req]["name"];
@@ -498,4 +522,32 @@ function generateRequirementsHTML(aoiName, aoi) {
     }
   }
   return html;
+}
+
+/**
+ * Post request to add course as taken by user.
+ */
+function addCourse(courseID) {
+  $.post("/addcourse", {
+      id: courseID
+  });
+
+  var button = document.getElementById(courseID);
+  var text = document.getElementById("text" + courseID);
+
+  button.parentElement.removeChild(button);
+}
+
+/**
+ * Post request to add AOI as taken by user.
+ */
+function addAOI(aoiID) {
+  $.post("/addaoi", {
+      id: aoiID
+  });
+
+  var button = document.getElementById(aoiID);
+  var text = document.getElementById("text" + aoiID);
+
+  button.parentElement.removeChild(button);
 }

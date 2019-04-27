@@ -474,6 +474,8 @@ def explore_results():
             "AOC0": {
                 "id": 1,
                 "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -529,6 +531,8 @@ def explore_results():
             "AOC0": {
                 "id": 1,
                 "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -584,6 +588,8 @@ def explore_results():
             "AOC0": {
                 "id": 1,
                 "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -640,20 +646,35 @@ def explore_results():
     return results
 
 
-
-@app.route('/removecourse', methods=['GET', 'POST'])
+@app.route('/removecourse', methods=['POST'])
 def remove_course():
 
     # remove from db
     course = request.form['id']
     print(course)
 
-    return course
+    return "Successfully removed course " + course
 
-@app.route('/removeaoi', methods=['GET', 'POST'])
+
+@app.route('/removeaoi', methods=['POST'])
 def remove_aoi():
 
     aoi = request.form['id']
 
-    return aoi
+    return "Successfully removed AOI " + aoi
 
+
+@app.route('/addcourse', methods=['POST'])
+def add_course():
+
+    course = request.form['id']
+
+    return "Successfully added course " + course
+
+
+@app.route('/addaoi', methods=['POST'])
+def add_aoi():
+
+    aoi = request.form['id']
+
+    return "Successfully add AOI " + aoi
