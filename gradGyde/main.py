@@ -73,16 +73,7 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    # Change these to pull from the database
-    aoc = ['Wizardry',
-           'Computer Science',
-           'General Studies',
-           'Underwater Basket Weaving',
-           'Biology']
-    return render_template('signup_form.html',
-                           aocs=aoc,
-                           slashs=aoc,
-                           doubles=aoc)
+    return render_template('signup_form.html')
 
 
 @app.route('/signup_form/post', methods=['POST'])
