@@ -13,5 +13,4 @@ function populateSelect(selectID, options) {
     el.value = opt;
     select.appendChild(el);
   }
-
 }

@@ -130,6 +130,8 @@ function populateAoiTabs(aois, tabElementID) {
   var tabElement = document.getElementById(tabElementID);
 
   var area;
+  var type;
+  var year;
   var aoiList;
 
   var index = 0;
@@ -142,6 +144,8 @@ function populateAoiTabs(aois, tabElementID) {
 
     // get aoi name
     area = aois[aoi]["name"];
+    type = aois[aoi]["type"];
+    year = aois[aoi]["year"];
 
     // create tab using bootstrap stuff
     tab = document.createElement("li");
@@ -153,7 +157,7 @@ function populateAoiTabs(aois, tabElementID) {
     button.setAttribute("role", "tab");
     button.setAttribute("aria-controls", "dashboard");
     button.setAttribute("style", "font-size:16px;");
-    button.setAttribute("onclick", "switchRequirements(this.id, 'summary')");
+    button.setAttribute("onclick", "switchRequirements(aois, '" + area + "', 'summary')");
 
     // if the tab is the first one made, make it active by default
     if (index == 0) {
@@ -166,7 +170,18 @@ function populateAoiTabs(aois, tabElementID) {
     }
 
     // append elements together to create tab
-    text = document.createTextNode(area);
+    switch (type) {
+      case "aoc":
+        text = document.createTextNode(area + " AOC " + year);
+        break;
+      case "double":
+        text = document.createTextNode(area + " Double " + year);
+        break;
+      case "slash":
+        text = document.createTextNode(area + " Slash " + year);
+        break;
+    }
+
     button.appendChild(text);
 
     tab.appendChild(button);
@@ -184,14 +199,29 @@ function populateAoiTabs(aois, tabElementID) {
  */
 function generateRequirementsHTML(aoiName, aois) {
   var html = "";
+  var title;
 
-  html += "<h3><center><b>Requirements for " + aoiName + "</b></center></h3>";
+  // console.log(aois[aoi]["name"]);
+  // console.log(aoiName);
 
   // for each aoi
   for (aoi in aois) {
     // if aoi name is the param String aoiName
     if (aois[aoi]["name"] == aoiName) {
       // generate HTML for it
+
+      switch (aois[aoi]["type"]) {
+        case "aoc":
+          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " AOC " + aois[aoi]["year"].toString() + "</b></center></h3>";
+          break;
+        case "double":
+          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " Double " + aois[aoi]["year"].toString() + "</b></center></h3>";
+          break;
+        case "slash":
+          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " Slash " + aois[aoi]["year"].toString() + "</b></center></h3>";
+          break;
+      }
+
 
       var reqs = aois[aoi]["requirements"];
 
@@ -255,17 +285,19 @@ function generateRequirementsHTML(aoiName, aois) {
     }
   }
   // in case something goes wrong
-  return "No requirements could be found";
+  return "No requirements found";
 }
 
 
 /**
  * Switches the form HTML according to aoi
  */
-function switchRequirements(aois, aoiID, elementID) {
+function switchRequirements(aois, aoiName, elementID) {
+
+  console.log(aoiName);
 
   element = document.getElementById(elementID);
-  aoi = document.getElementById(aoiID).innerHTML;
+  // aoi = document.getElementById(aoiID).innerHTML;
 
-  element.innerHTML = generateRequirementsHTML(aoi, aois);
+  element.innerHTML = generateRequirementsHTML(aoiName, aois);
 }
