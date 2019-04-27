@@ -18,56 +18,41 @@
         <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
       </center>
 
-      <h1>Please fill in the following to complete your sign up for gradGyde.</h1>
-      <br/><br/>
+      <br/>
+
+      <h3>Please fill in the following to complete your sign up for gradGyde.</h3>
+
+      <br/>
 
       <!-- sign up form -->
       <form action="/signup_form/post" method="post">
 
         <!-- preferrend name -->
-        <label for="inputName">Preferred Name</label>
+        <label for="inputName">Name</label>
         <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
 
-        <!-- year started at NCF -->
-        <label for="inputYear">Year you started at NCF</label>
-        <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
+        <br/>
 
-        <!-- primary aoc -->
-        <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-        <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
-          <!-- options populated by js -->
-        </select>
-
-        <br/><br/>
-
-        <!-- double aoc -->
-        <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-        <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-          <!-- options populated by js -->
-        </select>
-
-        <br/><br/>
-
-        <!-- slashes -->
-        <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-        <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
+        <!-- year started -->
+        <label for="inputYear">The year you started New College</label><br/>
+        <select name='year' id="inputYear" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputYear" required>
           <!-- options populated by js -->
         </select>
 
         <br/><br/>
 
         <!-- ferpa agreement -->
-        By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records.
+        By signing up to gradGyde you understand you are putting in your own education records. By doing so you are waiving your FERPA rights specifically to allow gradGyde to save your inputted education records. We will not share your information with anyone without your explicitly granted permission.
         <br/>
         <div class="form-check">
           <input type="checkbox" class="form-check-input" id="waiverCheck" required="true">
-          <label class="form-check-label" for="waiverCheck">I agree to allow gradGyde to save the education records I provide.</label>
+          <label class="form-check-label" for="waiverCheck">I agree to allow gradGyde to save the education records I provide and share said records with those I have granted permission.</label>
         </div>
 
         <br/>
         <br/>
 
-        <button onclick="post('/signup_form/post')";type="button" class="btn btn-primary">Sign up</button>
+        <button type="submit" style="border-radius: 3px;">Sign up</button>
       </form>
     </div>
 </body>
@@ -81,15 +66,18 @@
 <script src="../static/populate-select.js"></script>
 
 <script>
-  // get all possible AOCs, slashes, and doubles
-  var aocs = {{ aocs|safe }};
-  var slashes = {{ slashs|safe }};
-  var doubles = {{ doubles|safe }};
+  // populate select for year
+  var currentYear = new Date().getFullYear(), years = [];
+  startYear = 2010;
 
-  // populate AOCs, slashes, and doubles selects
-  populateSelect("select_AOC", aocs);
-  populateSelect("select_double", doubles);
-  populateSelect("select_slash", slashes);
+  var el;
+
+  while (startYear <= currentYear) {
+    years.push(startYear);
+    startYear++;
+  }
+
+  populateSelect("inputYear", years);
 </script>
 
 </html> 

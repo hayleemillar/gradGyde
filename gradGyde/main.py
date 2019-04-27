@@ -73,16 +73,7 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    # Change these to pull from the database
-    aoc = ['Wizardry',
-           'Computer Science',
-           'General Studies',
-           'Underwater Basket Weaving',
-           'Biology']
-    return render_template('signup_form.html',
-                           aocs=aoc,
-                           slashs=aoc,
-                           doubles=aoc)
+    return render_template('signup_form.html')
 
 
 @app.route('/signup_form/post', methods=['POST'])
@@ -106,52 +97,13 @@ def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
 
-    # aocs = {
-    #     "AOC1" : {
-    #         "Name" : "Computer Science 2018",
-    #         "Requirements" : {
-    #             "Req1" : {
-    #                 "Name" :  "CS Introductory Course",
-    #                 "Amount" : 1,
-    #                 "Fulfilled" : True,
-    #                 "Classes" : {
-    #                     "Class1" : {
-    #                         "Name" : "Intro to Programming in Python",
-    #                         "Taken" : False
-    #                     },
-    #                     "Class2" : {
-    #                         "Name" : "Intro to Programming in C",
-    #                         "Taken" : True
-    #                     }
-    #                 }
-    #             },
-    #             "Req2" : {
-    #                 "Name" :  "Math",
-    #                 "Amount" : 2,
-    #                 "Fulfilled" : False,
-    #                 "Classes" : {
-    #                     "Class1" : {
-    #                         "Name" : "Calculus 1",
-    #                         "Taken" : False
-    #                     },
-    #                     "Class2" : {
-    #                         "Name" : "Discrete Mathematics for Computer Science",
-    #                         "Taken" : True
-    #                     },
-    #                     "Class3" : {
-    #                         "Name" : "Dealing With Data",
-    #                         "Taken" : False
-    #                     }
-    #                 }
-    #             }
-    #         }
-    #     }
-    # }
-
+    # valid types: "aoc", "double", "slash"
     aocs = {
         "AOC0": {
             "id": 1,
-            "name": "Computer Science (Regular)",
+            "name": "Computer Science",
+            "type" : "aoc",
+            "year" : 2018,
             "requirements": {
                 "req0": {
                     "id": 1,
@@ -319,11 +271,20 @@ def dash_stud():
         }
     }
 
+    doubles = {}
+
+    slashes = {}
+
+
     aocs = json.dumps(aocs)
+    doubles = json.dumps(doubles)
+    slashes = json.dumps(slashes)
 
     return render_template('dash_stud.html',
                            name=session['user_name'],
-                           aocs=aocs)
+                           aocs=aocs,
+                           doubles=doubles,
+                           slashes=slashes)
 
 
 @app.route('/student_dashboard/lacs')
@@ -357,21 +318,87 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    aocs = ['Wizardry',
-            'Computer Science',
-            'General Studies',
-            'Underwater Basket Weaving',
-            'Biology']
+
+    name = "Haylee"
+    year = 2017
+
+    aocs = {
+        "AOC0": {
+            "id": 1,
+            "name": "Computer Science",
+            "type" : "aoc",
+            "year" : 2018,
+            "requirements": {
+                "req0": {
+                    "id": 1,
+                    "name": "CS Introductory Course",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
+                        },
+                        "class1": {
+                            "id": 2,
+                            "name": "Test 1",
+                            "taken": False
+                        },
+                        "class2": {
+                            "id": 3,
+                            "name": "Test 2",
+                            "taken": False
+                        },
+                        "class3": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
+                        }
+                    }
+                },
+                "req1": {
+                    "id": 2,
+                    "name": "Object Oriented Programming With Java",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {
+                        "class0": {
+                            "id": 1,
+                            "name": "Introduction to Programming With Python",
+                            "taken": False
+                        },
+                        "class1": {
+                            "id": 4,
+                            "name": "Test 3",
+                            "taken": False
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    doubles = {}
+
+    slashes = {}
+
     return render_template('settings.html',
+                           name=name,
+                           year=year,
                            aocs=aocs,
-                           doubles=aocs,
-                           slashes=aocs)
+                           doubles=doubles,
+                           slashes=slashes)
 
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
+
+    # name = request.form['name']
+    # year = request.form['year']
+
     return redirect('/student_dashboard/settings')
 
 
@@ -384,12 +411,14 @@ def my_courses():
         'COURSE0' : {
             'name' : 'course0',
             'year' : 2018,
-            'id' : 327678
+            'id' : 327678,
+            'semester' : 'Fall'
         },
         'COURSE1' : {
             'name' : 'course1',
             'year' : 2017,
-            'id' : 345890
+            'id' : 345890,
+            'semester' : 'Spring'
         }
     }
 
@@ -406,11 +435,237 @@ def explore():
         return redirect('/login')
     return render_template('explore.html')
 
-@app.route('/removecourse', methods=['GET', 'POST'])
+
+@app.route('/student_dashboard/explore_results', methods=['GET', 'POST'])
+def explore_results():
+    if 'google_token' not in session:
+        return redirect('/login')
+
+    search_type = request.args.get('type')
+
+    # query db to get results based on user input.
+    # NOTE: the user isn't required to fill in every field
+    if search_type == "courses":
+        results = {
+            'COURSE0' : {
+                'name' : 'course0',
+                'year' : 2017,
+                'id' : 327678,
+                'semester' : 'Fall'
+            },
+            'COURSE1' : {
+                'name' : 'course1',
+                'year' : 2017,
+                'id' : 345890,
+                'semester' : 'Spring'
+            }
+        }
+    elif search_type == "aocs":
+        results = {
+            "AOC0": {
+                "id": 1,
+                "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    elif search_type == "doubles":
+        results = {
+            "AOC0": {
+                "id": 1,
+                "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    elif search_type == "slashes":
+        results = {
+            "AOC0": {
+                "id": 1,
+                "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    else:
+        results = None
+    results = json.dumps(results)
+    return results
+
+
+@app.route('/removecourse', methods=['POST'])
 def remove_course():
 
     # remove from db
     course = request.form['id']
     print(course)
 
-    return course
+    return "Successfully removed course " + course
+
+
+@app.route('/removeaoi', methods=['POST'])
+def remove_aoi():
+
+    aoi = request.form['id']
+
+    return "Successfully removed AOI " + aoi
+
+
+@app.route('/addcourse', methods=['POST'])
+def add_course():
+
+    course = request.form['id']
+
+    return "Successfully added course " + course
+
+
+@app.route('/addaoi', methods=['POST'])
+def add_aoi():
+
+    aoi = request.form['id']
+
+    return "Successfully add AOI " + aoi
