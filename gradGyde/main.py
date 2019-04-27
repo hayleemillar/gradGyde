@@ -318,7 +318,7 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-    
+
     name = "Haylee"
     year = 2017
 
@@ -396,8 +396,8 @@ def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
 
-    name = request.form['name']
-    year = request.form['year']
+    # name = request.form['name']
+    # year = request.form['year']
 
     return redirect('/student_dashboard/settings')
 
@@ -441,11 +441,11 @@ def explore_results():
     if 'google_token' not in session:
         return redirect('/login')
 
-    searchType = request.args.get('type');
+    search_type = request.args.get('type')
 
     # query db to get results based on user input.
     # NOTE: the user isn't required to fill in every field
-    if searchType == "courses":
+    if search_type == "courses":
         results = {
             'COURSE0' : {
                 'name' : 'course0',
@@ -460,7 +460,7 @@ def explore_results():
                 'semester' : 'Spring'
             }
         }
-    elif searchType == "aocs":
+    elif search_type == "aocs":
         results = {
             "AOC0": {
                 "id": 1,
@@ -517,7 +517,7 @@ def explore_results():
                 }
             }
         }
-    elif searchType == "doubles":
+    elif search_type == "doubles":
         results = {
             "AOC0": {
                 "id": 1,
@@ -574,7 +574,7 @@ def explore_results():
                 }
             }
         }
-    elif searchType == "slashes":
+    elif search_type == "slashes":
         results = {
             "AOC0": {
                 "id": 1,
