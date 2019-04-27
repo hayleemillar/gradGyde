@@ -283,7 +283,7 @@ def get_classes_taken_json(classes_taken):
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
-                          'semester' : course.class_semester,
+                          'semester' : course.class_semester.value,
                           'year' : course.class_year,
                           'id' : course.class_id}
             class_index = class_index+1

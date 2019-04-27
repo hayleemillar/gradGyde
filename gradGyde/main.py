@@ -8,10 +8,13 @@ from .db_helper import (assign_aoc,
                         get_aoc_json,
                         get_aoc_list_json,
                         get_aocs_by_type,
+                        get_class,
+                        get_class_by_id,
                         get_classes_taken,
                         get_classes_taken_json,
                         get_user, 
                         make_user,
+                        take_class,
                         update_user)
 from .db_helper_test import db_helper_test
 from .models import UserType
@@ -162,26 +165,16 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-
-    aocs_divisional = get_aocs_by_type("aoc")
-    aocs_divisional_names = []
-    for aoc in aocs_divisional:
-        aocs_divisional_names.append(aoc.aoc_name)
-    print(aocs_divisional_names)
-    aocs_slash = get_aocs_by_type("Slash")
-    aocs_slash_names = []
-    for aoc in aocs_slash:
-        aocs_slash_names.append(aoc.aoc_name)
-
-    aocs_double = get_aocs_by_type("Double")
-    aocs_double_names = []
-    for aoc in aocs_double:
-        aocs_double_names.append(aoc.aoc_name)
+    user = get_user(session['user_email'])
+    aocs_divisional = get_aoc_json(user, "aoc")
+    print(aocs_divisional)
+    aocs_slash = get_aoc_json(user, "slash")
+    aocs_double = get_aoc_json(user, "double")
     return render_template('settings.html',
                            name=session['user_name'],
                            year=session['user_year'],
                            aocs=aocs_divisional,
-                           doubles=aocs_doubles,
+                           doubles=aocs_double,
                            slashes=aocs_slash)
 
 
@@ -209,8 +202,11 @@ def my_courses():
         return redirect('/login')
 
     user = get_user(session['user_email'])
+    take_class(get_class("Introduction to Programming With Python"), user)
     course_list = get_classes_taken(user)
+    print(course_list)
     courses = get_classes_taken_json(course_list)
+    print(courses)
     return render_template('courses.html',
                            courses=courses)
 

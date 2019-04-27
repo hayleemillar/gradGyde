@@ -4,16 +4,16 @@ from gradGyde import db
 
 
 class SemesterType(enum.Enum):
-    SPRING = "spring"
-    SUMMER = "summer"
-    FALL = "fall"
-    ISP = "isp"
+    SPRING = "Spring"
+    SUMMER = "Summer"
+    FALL = "Fall"
+    ISP = "Isp"
 
 
 class UserType(enum.Enum):
-    STUDENT = "student"
-    PROFESSOR = "professor"
-    ADMIN = "administrator"
+    STUDENT = "Student"
+    PROFESSOR = "Professor"
+    ADMIN = "Administrator"
 
 
 class Aocs(db.Model):
