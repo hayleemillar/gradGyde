@@ -102,7 +102,8 @@ def create_aoc(aoc_info, tags, amounts):
     make_aoc(aoc_info[0], aoc_info[1], aoc_info[2])
     aoc = get_aoc(aoc_info[0], aoc_info[1])
     for tag in tags:
-        make_tag(tag)
+        if not tag_exists(tag):
+            make_tag(tag)
         da_tag = get_tag(tag)
         make_requirement(aoc.aoc_id, da_tag.tag_id, amounts[tags.index(tag)])
 
@@ -156,6 +157,13 @@ def get_tag(text):
 def get_tag_by_id(t_id):
     tag_query = Tags.query.filter_by(tag_id=t_id).first()
     return tag_query
+
+def tag_exists(text):
+    tag_query = Tags.query.filter_by(tag_name=text).first()
+    if tag_query is None:
+        return False
+    return True
+
 
 #1.0 Tasks:
 
