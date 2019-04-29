@@ -1,11 +1,26 @@
+# pylint: disable=R1714
 import os
 import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import get_user, make_user
-from .models import UserType
-
+from .db_helper import (assign_aoc,
+                        delete_class_taken,
+                        delete_pref_aoc,
+                        get_aoc_by_id,
+                        get_aoc_json,
+                        get_class_by_id,
+                        get_classes,
+                        get_classes_taken,
+                        get_classes_taken_json,
+                        get_lacs_json,
+                        get_user,
+                        make_user,
+                        search_aoc_json,
+                        search_classes_json,
+                        take_class,
+                        update_user)
+from .models import UserType, SemesterType
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -17,22 +32,19 @@ GOOGLE = OAUTH.remote_app('google',
                           access_token_url='https://accounts.google.com/o/oauth2/token',
                           authorize_url='https://accounts.google.com/o/oauth2/auth')
 
-
 @GOOGLE.tokengetter
 def get_google_token():
     return session.get("google_token")
 
-
 @app.route('/')
 def index():
-    return redirect('/student_dashboard')
+    return redirect('/login')
 
 
 @app.route('/oauth_google')
 def oauth_google():
     return GOOGLE.authorize(callback=url_for('oauth_google_authorized',
                                              _external=True))
-
 
 @app.route('/authorized/')
 def oauth_google_authorized():
@@ -50,9 +62,10 @@ def oauth_google_authorized():
         return redirect('/signup_form')
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)
+    session['user_type'] = user.user_type.value
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     return redirect('/student_dashboard')
-
 
 @app.route('/login')
 def login():
@@ -60,14 +73,14 @@ def login():
         return redirect('/student_dashboard')
     return render_template('login.html')
 
-
 @app.route('/logout')
 def oauth_logout():
     session.pop('google_token', None)
-    session['google_user'] = None
-    session['user_email'] = None
+    session.pop('google_user', None)
+    session.pop('user_email', None)
+    session.pop('user_year', None)
+    session.pop('user_type', None)
     return redirect('/login')
-
 
 @app.route('/signup_form')
 def signup_form():
@@ -81,14 +94,14 @@ def signup_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     name = request.form['name']
-    #aoc = request.form.getlist('AOC')
+    #aoc = request.form.getlist(''divisional'')
     #slash = request.form.getlist('slash')
     da_year = request.form['year']
     make_user(session['user_email'], name, da_year, UserType.STUDENT)
     user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)
+    session['user_type'] = user.user_type.value
     return redirect('/student_dashboard')
 
 
@@ -96,145 +109,15 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
-
-    # valid types: "divisional", "double", "slash"
-    aocs = {
-        "aoc0": {
-            "id": 0,
-            "name": "Anthropology",
-            "year": 2019,
-            "type": "divisional",
-            "requirements": {
-                "req0": {
-                    "id": 3,
-                    "name": "Intro Anthro",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 4,
-                    "name": "Intro Archeology",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req2": {
-                    "id": 5,
-                    "name": "Upper Level or Thematic Course",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req3": {
-                    "id": 6,
-                    "name": "History of Anthro Theory ",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req4": {
-                    "id": 7,
-                    "name": "Linguistic or Physical Anthro",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req5": {
-                    "id": 8,
-                    "name": "Method and Theory In Archeology ",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req6": {
-                    "id": 9,
-                    "name": "Foreign Lanuguage ",
-                    "amount": 4,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        },
-        "aoc1": {
-            "id": 1,
-            "name": "Russian",
-            "year": 2019,
-            "type": "divisional",
-            "requirements": {
-                "req0": {
-                    "id": 1,
-                    "name": "Russian Language",
-                    "amount": 6,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 2,
-                    "name": "Russian Literature",
-                    "amount": 6,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        }
-    }
-
-    doubles = {
-        "aoc0": {
-            "id": 2,
-            "name": "Classics",
-            "year": 2019,
-            "type": "double",
-            "requirements": {
-                "req0": {
-                    "id": 69,
-                    "name": "Greek or Latin",
-                    "amount": 9,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 70,
-                    "name": "Greek and Roman Culture",
-                    "amount": 4,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        }
-    }
-
-    slashes = {
-        "aoc0": {
-            "id": 3,
-            "name": "Classics",
-            "year": 2019,
-            "type": "slash",
-            "requirements": {
-                "req0": {
-                    "id": 69,
-                    "name": "Greek or Latin",
-                    "amount": 9,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 70,
-                    "name": "Greek and Roman Culture",
-                    "amount": 4,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        }
-    }
-
-
-    aocs = json.dumps(aocs)
-    doubles = json.dumps(doubles)
-    slashes = json.dumps(slashes)
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    user = get_user(session['user_email'])
+    aocs = get_aoc_json(user, 'divisional')
+    doubles = get_aoc_json(user, 'double')
+    slashes = get_aoc_json(user, 'slash')
+    #print(aocs)
+    #print(doubles)
+    #print(slashes)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs,
@@ -246,21 +129,25 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-    lac = {
-        'LAC0' : {
-            'name' : 'Diverse Perspectives',
-            'fulfilled' : True,
-            'courses' : ['External Credit'],
-            'id' : 0
-            },
-        'LAC1' : {
-            'name' : 'Social Science',
-            'fulfilled' : False,
-            'courses' : None,
-            'id' : 1
-            }
-    }
-
+#     lac = {
+#         'LAC0' : {
+#             'name' : 'Diverse Perspectives',
+#             'fulfilled' : True,
+#             'courses' : ['External Credit'],
+#             'id' : 0
+#             },
+#         'LAC1' : {
+#             'name' : 'Social Science',
+#             'fulfilled' : False,
+#             'courses' : None,
+#             'id' : 1
+#             }
+#     }
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    user = get_user(session['user_email'])
+    lac = get_lacs_json(user)
+    #print(lac)
     return render_template('lac.html', lac=lac)
 
 
@@ -268,10 +155,10 @@ def lacs():
 def lacs_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     oldJson = request.args.get("old")
     newJson = request.args.get("new")
-
     return redirect('/student_dashboard/lacs')
 
 
@@ -279,156 +166,31 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
-
-    name = "Haylee"
-    year = 2017
-
-    aocs = {
-        "aoc0": {
-            "id": 2,
-            "name": "Anthropology",
-            "year": 2019,
-            "type": "divisional",
-            "requirements": {
-                "req0": {
-                    "id": 3,
-                    "name": "Intro Anthro",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 4,
-                    "name": "Intro Archeology",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req2": {
-                    "id": 5,
-                    "name": "Upper Level or Thematic Course",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req3": {
-                    "id": 6,
-                    "name": "History of Anthro Theory ",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req4": {
-                    "id": 7,
-                    "name": "Linguistic or Physical Anthro",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req5": {
-                    "id": 8,
-                    "name": "Method and Theory In Archeology ",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req6": {
-                    "id": 9,
-                    "name": "Foreign Lanuguage ",
-                    "amount": 4,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        },
-        "aoc1": {
-            "id": 1,
-            "name": "Russian",
-            "year": 2019,
-            "type": "divisional",
-            "requirements": {
-                "req0": {
-                    "id": 1,
-                    "name": "Russian Language",
-                    "amount": 6,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 2,
-                    "name": "Russian Literature",
-                    "amount": 6,
-                    "fulfilled": False,
-                    "classes": {}
-                }
-            }
-        }
-    }
-
-    doubles = {
-        "aoc0": {
-            "id": 11,
-            "name": "Classics",
-            "year": 2019,
-            "type": "double",
-            "requirements": {
-                "req0": {
-                    "id": 69,
-                    "name": "Greek or Latin",
-                    "amount": 9,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 70,
-                    "name": "Greek and Roman Culture",
-                    "amount": 4,
-                    "fulfilled": False, "classes": {}
-                }
-            }
-        }
-    }
-
-    slashes = {
-        "aoc0": {
-            "id": 11,
-            "name": "Classics",
-            "year": 2019,
-            "type": "slash",
-            "requirements": {
-                "req0": {
-                    "id": 69,
-                    "name": "Greek or Latin",
-                    "amount": 9,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req1": {
-                    "id": 70,
-                    "name": "Greek and Roman Culture",
-                    "amount": 4,
-                    "fulfilled": False, "classes": {}
-                }
-            }
-        }
-    }
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    user = get_user(session['user_email'])
+    aocs = get_aoc_json(user, 'divisional')
+    aocs_slash = get_aoc_json(user, "slash")
+    aocs_double = get_aoc_json(user, "double")
     return render_template('settings.html',
-                           name=name,
-                           year=year,
-                           aocs=aocs,
-                           doubles=doubles,
-                           slashes=slashes)
-
+                           name=session['user_name'],
+                           year=session['user_year'],
+                           aocs=json.loads(aocs),
+                           doubles=json.loads(aocs_double),
+                           slashes=json.loads(aocs_slash))
 
 @app.route('/student_dashboard/settings/post', methods=['POST'])
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
-
-    # name = request.form['name']
-    # year = request.form['year']
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    name = request.form['name']
+    da_year = request.form['year']
+    update_user(session['user_email'], name, da_year)
+    user = get_user(session['user_email'])
+    session['user_name'] = user.user_name
+    session['user_year'] = user.year_started
     return redirect('/student_dashboard/settings')
 
 
@@ -436,33 +198,22 @@ def settings_form_submit():
 def my_courses():
     if 'google_token' not in session:
         return redirect('/login')
-
-    courses = {
-        'COURSE0' : {
-            'name' : 'course0',
-            'year' : 2018,
-            'id' : 327678,
-            'semester' : 'Fall'
-        },
-        'COURSE1' : {
-            'name' : 'course1',
-            'year' : 2017,
-            'id' : 345890,
-            'semester' : 'Spring'
-        }
-    }
-
-    courses = json.dumps(courses)
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    user = get_user(session['user_email'])
+    course_list = get_classes_taken(user)
+    #print(course_list)
+    courses = get_classes_taken_json(course_list)
+    #print(courses)
     return render_template('courses.html',
                            courses=courses)
-
-
 
 @app.route('/student_dashboard/explore')
 def explore():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     return render_template('explore.html')
 
 
@@ -470,246 +221,79 @@ def explore():
 def explore_results():
     if 'google_token' not in session:
         return redirect('/login')
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
+    user = get_user(session['user_email'])
     search_type = request.args.get('type')
-
+    search_name = request.args.get('name')
+    search_year = request.args.get('year')
+    if search_name == "" or search_name == "Any":
+        search_name = None
+    if search_year == "" or search_year == "Any":
+        search_year = None
+    #print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
     # query db to get results based on user input.
     # NOTE: the user isn't required to fill in every field
     if search_type == "courses":
-        results = {
-            'COURSE0' : {
-                'name' : 'course0',
-                'year' : 2017,
-                'id' : 327678,
-                'semester' : 'Fall',
-                'taken' : True
-            },
-            'COURSE1' : {
-                'name' : 'course1',
-                'year' : 2017,
-                'id' : 345890,
-                'semester' : 'Spring',
-                'taken' : False
-            }
-        }
+        search_semester = request.args.get('semester')
+        semester_enums = {'Spring' : SemesterType.SPRING,
+                          'Summer' : SemesterType.SUMMER,
+                          'Fall' : SemesterType.FALL}
+        search_semester = semester_enums[search_semester]
+        classes = get_classes(search_name, search_year, search_semester)
+        results = search_classes_json(user, classes)
+
     elif search_type == "aocs":
-        results = {
-            "AOC0": {
-                "id": 1,
-                "name": "Computer Science (Regular)",
-                "type": "aoc",
-                "year": 2017,
-                "assigned" : True,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        results = search_aoc_json(user, 'divisional', search_name, search_year)
     elif search_type == "doubles":
-        results = {
-            "AOC0": {
-                "id": 2,
-                "name": "Computer Science (Regular)",
-                "type": "double",
-                "year": 2017,
-                "assigned" : False,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        results = search_aoc_json(user, 'double', search_name, search_year)
     elif search_type == "slashes":
-        results = {
-            "AOC0": {
-                "id": 1,
-                "name": "Computer Science (Regular)",
-                "type": "aoc",
-                "year": 2017,
-                "assigned" : False,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        results = search_aoc_json(user, 'slash', search_name, search_year)
     else:
-        results = {}
-    results = json.dumps(results)
+        results = None
     return results
 
 
-@app.route('/removecourse', methods=['POST'])
+@app.route('/removecourses', methods=['POST'])
 def remove_course():
-
+    user = get_user(session['user_email'])
     # remove from db
     course = request.form['id']
-    print(course)
-
+    delete_class_taken(user.user_id, course)
     return "Successfully removed course " + course
 
 
 @app.route('/removeaoi', methods=['POST'])
 def remove_aoi():
-
+    user = get_user(session['user_email'])
     aoi = request.form['id']
-
+    delete_pref_aoc(user.user_id, aoi)
     return "Successfully removed AOI " + aoi
 
 
 @app.route('/addcourse', methods=['POST'])
 def add_course():
-
+    user = get_user(session['user_email'])
     course = request.form['id']
-
+    take_class(get_class_by_id(course), user)
     return "Successfully added course " + course
-
 
 @app.route('/addaoi', methods=['POST'])
 def add_aoi():
-
+    user = get_user(session['user_email'])
     aoi = request.form['id']
-
+    assign_aoc(get_aoc_by_id(aoi), user)
     return "Successfully add AOI " + aoi
 
 
 @app.route('/admin')
 def admin():
-
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
     return render_template('admin.html')
+
 
 
 @app.route('/admin/results', methods=['GET'])
@@ -915,3 +499,11 @@ def admin_results():
     results = json.dumps(results)
 
     return results
+  
+@app.route('/admin/settings', methods=['GET'])
+def admin_settings():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+    return render_template('admin-settings.html')
