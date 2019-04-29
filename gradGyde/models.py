@@ -1,19 +1,21 @@
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods, invalid-name, wrong-import-position
 import enum
+import sqlalchemy
 from gradGyde import db
 
 
+
 class SemesterType(enum.Enum):
-    SPRING = "spring"
-    SUMMER = "summer"
-    FALL = "fall"
-    ISP = "isp"
+    SPRING = "Spring"
+    SUMMER = "Summer"
+    FALL = "Fall"
+    ISP = "Isp"
 
 
 class UserType(enum.Enum):
-    STUDENT = "student"
-    PROFESSOR = "professor"
-    ADMIN = "administrator"
+    STUDENT = "Student"
+    PROFESSOR = "Professor"
+    ADMIN = "Administrator"
 
 
 class Aocs(db.Model):
@@ -118,4 +120,13 @@ class Requirements(db.Model):
 
 
 def init_database():
-    db.create_all()
+    if sqlalchemy.inspect(db.engine).get_table_names() == []:
+        db.create_all()
+        from .parse_csv import parse
+        parse()
+        from .db_helper import make_user
+        # make_user("erik.ridd16@ncf.edu", "Admin Erik", 2016, UserType.ADMIN)
+        make_user("haylee.millar17@ncf.edu", "Admin Haylee", 2017, UserType.ADMIN)
+        # make_user("isaac.denner17@ncf.edu", "Admin Isaac", 2017, UserType.ADMIN)
+        # make_user("amilia.macintyre18@ncf.edu", "Admin Amilia", 2018, UserType.ADMIN)
+        # make_user("jordan.deagan17@ncf.edu", "Admin Jordan", 2017, UserType.ADMIN)

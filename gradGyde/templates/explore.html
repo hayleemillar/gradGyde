@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <title>gradGyde Student Dashboard</title>
+
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+  <link rel="stylesheet" type="text/css" href="../static/style.css" />
+  <link rel='shortcut icon' href='../static/favicon.ico'>
+
+</head>
+
+<body>
+  <!-- NAV BAR -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+    <!-- gradGyde image -->
+    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px" onclick="location.href='/student_dashboard'">
+
+    <!-- dashboard tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="/student_dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
+    </li>
+
+    <!-- lac tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="lac-tab" data-toggle="tab" href="/student_dashboard/lacs" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
+    </li>
+
+    <!-- courses tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="courses-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="false">My Courses</a>
+    </li>
+
+    <!-- explore tab -->
+    <li class="nav-item">
+      <a class="nav-link active" id="explore-tab" data-toggle="tab" href="/student_dashboard/explore" role="tab" aria-controls="explore" aria-selected="true">Explore</a>
+    </li>
+
+    <!-- settings and logout buttons -->
+    <ul class="nav nav-tabs ml-auto">
+      <a href="/student_dashboard/settings" class="img-link">
+        <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
+      </a>
+      <button type="button" onclick="location.href='/logout';">Logout</button>
+    </ul>
+  </ul>
+
+  <br/>
+
+  <div class="contents-explore">
+    <center><h3><b>Explore</b></h3></center>
+
+    <p style="font-size: 18px">
+      View and add courses, AOCs, doubles and slashes.
+    </p>
+
+    <br/>
+
+    <!-- tabs for either courses, aocs, doubles, slashes -->
+    <ul class="nav nav-tabs" id="summary-tabs" role="tablist" style="margin-left:10px;margin-right:10px">
+      <li class="nav-item">
+        <button id="courses" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('courses', ['courses', 'aocs', 'doubles', 'slashes'], 'summary')" class="nav-link active" aria-selected="true">Courses</button>
+      </li>
+      <li class="nav-item">
+        <button id="aocs" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('aocs', ['aocs', 'courses', 'doubles', 'slashes'], 'summary')" class="nav-link" aria-selected="false">AOCs</button>
+      </li>
+      <li class="nav-item">
+        <button id="doubles" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('doubles', ['doubles', 'aocs', 'courses', 'slashes'], 'summary')" class="nav-link" aria-selected="false">Doubles</button>
+      </li>
+      <li class="nav-item">
+        <button id="slashes" data-toggle="tab" role="tab" aria-controls="dashboard" style="font-size:16px;" onclick="switchTab('slashes', ['slashes', 'aocs', 'doubles', 'courses'], 'summary')" class="nav-link" aria-selected="false">Slashes</button>
+      </li>
+    </ul>
+    <div class="summary" id="summary" style="margin-left:10px;margin-right:10px;">
+      <br />
+      <form id="form-courses"></form>
+    </div>
+    <br/>
+    <div class="summary" id="results" style="margin-left:10px;margin-right:10px;">
+
+    </div>
+  </div>
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+
+<script src="../static/explore.js"></script>
+
+<script>
+  switchTab('courses', ['courses', 'aocs', 'doubles', 'slashes'], 'summary');
+</script>
+
+</html>

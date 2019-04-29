@@ -15,7 +15,7 @@
   <!-- NAV BAR -->
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <!-- gradGyde image -->
-    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px">
+    <img src="../static/img/gradGyde.png" Alt="gradGyde" style="width:160px;height:48px;padding:0px 5px 2px 5px" onclick="location.href='/student_dashboard'">
 
     <!-- dashboard tab -->
     <li class="nav-item">
@@ -27,10 +27,15 @@
       <a class="nav-link" id="lac-tab" data-toggle="tab" href="/student_dashboard/lacs" role="tab" aria-controls="lac" aria-selected="false">LACs</a>
     </li>
 
+    <!-- courses tab -->
+    <li class="nav-item">
+      <a class="nav-link" id="courses-tab" data-toggle="tab" href="/student_dashboard/courses" role="tab" aria-controls="courses" aria-selected="false">My Courses</a>
+    </li>
+
     <!-- explore tab -->
-    <!-- <li class="nav-item">
-      <a class="nav-link" id="explore-tab" data-toggle="tab" href="stub.html" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
-    </li> -->
+    <li class="nav-item">
+      <a class="nav-link" id="explore-tab" data-toggle="tab" href="/student_dashboard/explore" role="tab" aria-controls="explore" aria-selected="false">Explore</a>
+    </li>
 
     <!-- settings and logout buttons -->
     <ul class="nav nav-tabs ml-auto">
@@ -47,53 +52,48 @@
   <div class="settings">
     <center><h2><b>Settings</b></h2></center>
 
+    <p style="font-size: 16px;">
+      If you wish to change your name or year started, fill out the proper fields below and click the "Save Changes" button to save the changes you have made. If you wish to remove an area of interest, simply click the red "x" button to the left of the area of interest.
+    </p>
+
     <br/>
 
     <!-- FORM TO CHANGE USER INFORMATION -->
-    <form id="" method="post" action="">
+    <form id="" method="post" action="/student_dashboard/settings/post">
 
       <!-- preferred name -->
       <label for="inputName">Preferred Name</label>
-      <input name='name' type="text" class="form-control" id="inputName" placeholder="Enter your preferred name" required>
+
+      <input name='name' type="text" class="form-control" id="inputName" value={{name}} required>
 
       <br/>
 
-      <!-- year started at NCF -->
-      <label for="inputYear">Year you started at NCF</label>
-      <input name='year' type="number" class="form-control" id="inputName" placeholder="Enter year you started" required>
-
-      <br/>
-
-      <!-- primary aoc -->
-      <label for="inputSelectAOC">Select the primary AOC you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-      <select name='AOC' id="select_AOC" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOC">
+      <!-- year started -->
+      <label for="inputYear">The year you started New College</label><br/>
+      <select name='year' id="inputYear" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputYear" required>
         <!-- options populated by js -->
       </select>
 
       <br/><br/>
 
-      <!-- double aoc -->
-      <label for="inputSelectAOCDouble">Optionally, select an AOC you you currently plan on completing as a double AOC. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-      <select name='AOC_double' id="select_double" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectAOCDouble">
-        <!-- options populated by js -->
-      </select>
-
-      <br/><br/>
-
-      <!-- slashes -->
-      <label for="inputSelectSlashes">Optionally, select all slashes you currently plan on completing. (Hold down CTRL while selecting if selecting multiple)</label><br/>
-      <select name='slash' id="select_slash" class="mdb-select colorful-select dropdown-primary md-form" multiple searchable="Search here.." for="inputSelectSlashes">
-        <!-- options populated by js -->
-      </select>
-
-      <br/><br/>
-
-      <center><button onclick="location.href='/student_dashboard/settings';" type="button" class="btn btn-primary">Save Changes</button></center>
-
+      <center><button type="submit" style="border-radius:3px">Save Changes</button></center>
     </form>
 
     <br/><br/>
+
+    <div class="contents">
+      <div class="summary" id="summary" style="margin-left:10px;margin-right:10px;">
+        
+        <center><h3><b>Areas of Interest</b></h3></center>
+
+        <center><button style="font-size:18px;border-radius:3px;" onclick="location.href='/student_dashboard/explore';">+ add Area of Interest</button></center>
+        <br/>
+
+        <!-- insert areas of interest here -->
+      </div>
+    </div>
   </div> 
+  <br/>
 </body>
 
 <script
@@ -104,16 +104,53 @@
 
 <script src="../static/populate-select.js"></script>
 
-<script>
-  // get all possible AOCs, slashes, and doubles
-  var aocs = {{ aocs|safe }};
-  var slashes = {{ slashes|safe }};
-  var doubles = {{ doubles|safe }};
+<script src="../static/courses.js"></script>
 
-  // populate AOCs, slashes, and doubles selects
-  populateSelect("select_AOC", aocs);
-  populateSelect("select_double", doubles);
-  populateSelect("select_slash", slashes);
+<script>
+
+  var aocs = {{ aocs | tojson | safe }};
+  var doubles = {{ doubles | tojson | safe }};
+  var slashes = {{ slashes | tojson | safe}};
+
+
+  // populate select for year
+  var currentYear = new Date().getFullYear(), years = [];
+  startYear = currentYear - 10;
+
+  var el;
+
+  while (startYear <= currentYear) {
+    years.push(startYear);
+    startYear++;
+  }
+
+  populateSelect("inputYear", years);
+
+  var aoc;
+  var doubles;
+  var slashes;
+
+  for (var i in aocs) {
+    aocs[i]["type"] = "AOCs";
+  }
+
+  for (var i in doubles) {
+    doubles[i]["type"] = "Doubles";
+  }
+
+  for (var i in slashes) {
+    slashes[i]["type"] = "Slashes";
+  }
+
+  populateSections("summary", aocs, "type", false);
+  populateSubsections(aocs, "type", '/removeaoi', "aois");
+
+  populateSections("summary", doubles, "type", false);
+  populateSubsections(doubles, "type", '/removeaoi', "aois");
+
+  populateSections("summary", slashes, "type", false);
+  populateSubsections(slashes, "type", '/removeaoi', "aois");
+
 </script>
 
 </html> 

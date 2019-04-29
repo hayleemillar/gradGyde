@@ -3,6 +3,7 @@ body {
   font-family: "Verdana", Geneva, sans-serif;
   color: white;
   font-size: 20px;
+  min-width: 200px;
 }
 
 h3 {
@@ -15,10 +16,17 @@ button {
   padding: 5px 10px;
   font-family: "Verdana", Geneva, sans-serif;
   color: black;
+  transition: 0.3s;
+}
+
+button:hover:enabled {
+  background-color: #003482;
+  color: white;
 }
 
 .loginsignup, .settings {
   max-width: 600px;
+  min-width: 200px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -112,10 +120,18 @@ button {
   height: 30px;
 }
 
-.lac {
+.contents {
   border-radius: 5px;
-  background: #aeb4b7;
+  background: white;
   color: black;
+  padding: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contents-explore {
+  color: white;
   padding: 20px;
   max-width: 1000px;
   margin-left: auto;
