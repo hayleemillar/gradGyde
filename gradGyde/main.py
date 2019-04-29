@@ -35,22 +35,19 @@ GOOGLE = OAUTH.remote_app('google',
                           access_token_url='https://accounts.google.com/o/oauth2/token',
                           authorize_url='https://accounts.google.com/o/oauth2/auth')
 
-
 @GOOGLE.tokengetter
 def get_google_token():
     return session.get("google_token")
 
-
 @app.route('/')
 def index():
-    return redirect('/student_dashboard')
+    return redirect('/login')
 
 
 @app.route('/oauth_google')
 def oauth_google():
     return GOOGLE.authorize(callback=url_for('oauth_google_authorized',
                                              _external=True))
-
 
 @app.route('/authorized/')
 def oauth_google_authorized():
@@ -68,9 +65,10 @@ def oauth_google_authorized():
         return redirect('/signup_form')
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)
+    session['user_type'] = user.user_type.value
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')    
     return redirect('/student_dashboard')
-
 
 @app.route('/login')
 def login():
@@ -78,27 +76,19 @@ def login():
         return redirect('/student_dashboard')
     return render_template('login.html')
 
-
 @app.route('/logout')
 def oauth_logout():
     session.pop('google_token', None)
-    session['google_user'] = None
-    session['user_email'] = None
+    session.pop('google_user', None)
+    session.pop('user_email', None)
+    session.pop('user_year', None)
+    session.pop('user_type', None)
     return redirect('/login')
-
 
 @app.route('/signup_form')
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    # aocs_divisional = get_aoc_list_json(get_aocs_by_type('divisional'))
-    # aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
-    # aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
-    # return render_template('signup_form.html',
-    #                        aocs=aocs_divisional,
-    #                        slashs=aocs_slash,
-    #                        doubles=aocs_double)
-
     return render_template('signup_form.html')
 
 
@@ -114,7 +104,7 @@ def signup_form_submit():
     user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = user.user_type.value
+    session['user_type'] == user.user_type.value
     return redirect('/student_dashboard')
 
 
@@ -122,6 +112,8 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     user = get_user(session['user_email']) 
     aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
@@ -140,6 +132,8 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     user = get_user(session['user_email'])
     lac = get_lacs_json(user)
     print(lac)
@@ -150,6 +144,8 @@ def lacs():
 def lacs_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     return redirect('/student_dashboard/lacs')
 
 
@@ -157,6 +153,8 @@ def lacs_form_submit():
 def settings():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     user = get_user(session['user_email'])
     aocs = get_aoc_json(user, 'divisional')
     aocs_slash = get_aoc_json(user, "slash")
@@ -168,12 +166,12 @@ def settings():
                            doubles=json.loads(aocs_double),
                            slashes=json.loads(aocs_slash))
 
-
-
 @app.route('/student_dashboard/settings/post', methods=['POST'])
 def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     name = request.form['name']
     da_year = request.form['year']
     update_user(session['user_email'], name, da_year)
@@ -187,7 +185,8 @@ def settings_form_submit():
 def my_courses():
     if 'google_token' not in session:
         return redirect('/login')
-
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     user = get_user(session['user_email'])
     course_list = get_classes_taken(user)
     print(course_list)
@@ -196,12 +195,12 @@ def my_courses():
     return render_template('courses.html',
                            courses=courses)
 
-
-
 @app.route('/student_dashboard/explore')
 def explore():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     return render_template('explore.html')
 
 
@@ -209,6 +208,8 @@ def explore():
 def explore_results():
     if 'google_token' not in session:
         return redirect('/login')
+    if session['user_type'] == UserType.ADMIN.value:
+        return redirect('/admin')
     user = get_user(session['user_email'])
     search_type = request.args.get('type')
     search_name = request.args.get('name')
@@ -230,22 +231,11 @@ def explore_results():
         results = search_classes_json(user, classes)
 
     elif search_type == "aocs":
-        if search_year is not None:
-            results = search_aoc_json(user, 'divisional', da_year=search_year)
-        else: 
-            results = search_aoc_json(user, 'divisional')
-        
+        results = search_aoc_json(user, 'divisional', search_name, search_year)
     elif search_type == "doubles":
-        if search_year is not None:
-            results = search_aoc_json(user, 'double', da_year=search_year)
-        else: 
-            results = search_aoc_json(user, 'double')
-
+        results = search_aoc_json(user, 'double', search_name, search_year)
     elif search_type == "slashes":
-        if search_year is not None:
-            results = search_aoc_json(user, 'slash', da_year=search_year)
-        else: 
-            results = search_aoc_json(user, 'slash')
+        results = search_aoc_json(user, 'slash', search_name, search_year)
     else:
         results = None
     return results
@@ -285,11 +275,17 @@ def add_aoi():
 
 @app.route('/admin')
 def admin():
-
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
     return render_template('admin.html')
 
 
 @app.route('/admin/settings', methods=['GET'])
 def admin_settings():
-
+    if 'google_token' not in session:
+        return redirect('/student_dashboard')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/admin')
     return render_template('admin-settings.html')

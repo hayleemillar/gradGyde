@@ -19,7 +19,6 @@ def make_aoc(name, passed_type, year):
     SESSION.add(new_aoc)
     SESSION.commit()
 
-
 def make_class(name, semester, year, credit):
     new_class = Classes(class_name=name,
                         class_semester=semester,
@@ -27,7 +26,6 @@ def make_class(name, semester, year, credit):
                         credit_type=credit)
     SESSION.add(new_class)
     SESSION.commit()
-
 
 def make_user(email, name, da_year, u_type):
     if get_user(email) is None:
@@ -131,6 +129,15 @@ def get_aocs_by_type(pref_type):
     aocs_query = Aocs.query.filter_by(aoc_type=pref_type).all()
     return aocs_query
 
+def get_aocs(pref_type, name, da_year):
+    filters = []
+    if da_year is not None:
+        filters.append(Aocs.aoc_year >= da_year)
+    if name is not None:
+        filters.append(Aocs.aoc_name == name)
+    filters.append(Aocs.aoc_type==pref_type)
+    print(filters)
+    return SESSION.query(Aocs).filter(*filters).all()
 
 def get_preffered_aocs(user, pref_type):
     pref_aocs_query = PrefferedAocs.query.filter_by(user_id=user.user_id).all()
@@ -167,11 +174,6 @@ def tag_exists(text):
         return False
     return True
 
-
-#1.0 Tasks:
-
-#1: Get a list of courses taken by a student that is filterable
-#By semester, year, tag, and name
 def get_classes(name, da_year, semester):
     filters = []
     if semester is not None:
@@ -186,9 +188,6 @@ def get_classes(name, da_year, semester):
 
 
 def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name=None):
-    #Old version of query:
-    #class_taken_query = ClassTaken.query.filter_by(
-    #student_id=user.user_id).all()
     filters = []
     #filters is the list of all filters we want to have
     if semester is not None:
@@ -215,8 +214,6 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
             classes_taken.append(da_class)
     return classes_taken
 
-#2: Get a list of potential courses a student could take, based on
-#Associated tag and year. Year >= Student's start year
 def get_potential_classes(da_tag_id, da_year):
     #Takes in a tag_id and a year as input
     #Outputs a list of class objects that fit the req.
@@ -228,8 +225,6 @@ def get_potential_classes(da_tag_id, da_year):
         potential_courses.append(course.Classes)
     return potential_courses
 
-
-#3: Get a list of all tags associated with a course
 def get_class_tags(da_class_id):
     #This function takes a class_id from the database as input
     #And outputs a list of class tags
@@ -241,16 +236,11 @@ def get_class_tags(da_class_id):
         class_tag_list.append(class_tag.Tags)
     return class_tag_list
 
-#4: Given a prereq and year, get all the classes that fulfill the prereq
-#Step 1: Get prereqs
 def get_prereqs(chosen_id):
     #Takes the chosen tag's id as an input
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
-#step 2: Get potential courses that fulfill the prereq
-#This is basically get potential classes, we'll just use the prereq id.
 
-#5: Get the requirments for an AOC
 def get_requirements(da_aoc_id):
     #Takes an aoc id as input, outputs a list of requirement objects that match it
     req_query = Requirements.query.filter_by(aoc_id=da_aoc_id).all()
@@ -261,10 +251,6 @@ def get_requirements_with_tag(da_aoc_id):
     req_query = SESSION.query(Requirements, Tags).filter_by(aoc_id=da_aoc_id).join(Tags).all()
     return req_query
 
-#6: Get the potential courses a student could take that fulfill those reqs
-#Just use get potential courses
-
-#7: Of the potential courses above, get the ones a student has taken
 def check_classes_taken(user_id, class_list):
     #Takes a list of classes as inputs
     #outputs a list of classes a student has taken
@@ -292,8 +278,6 @@ def check_aoc_pref(user_id, aoc_id):
     if query:
         return True
     return False
-
-#8: Stuff all this into a json:
 
 def get_classes_taken_json(classes_taken):
     if classes_taken is not None:
@@ -385,10 +369,10 @@ def get_aoc_json(user, aoc_type):
         json_base[json_aoc_key] = aoc_info
     return json.dumps(json_base)
 
-def search_aoc_json(user, aoc_type, da_year=None):
+def search_aoc_json(user, aoc_type, da_name, da_year):
     #First, get the list of aocs
     json_base = {}
-    aoc_list = get_aocs_by_type(aoc_type)
+    aoc_list = get_aocs(aoc_type, da_name, da_year)
     aoc_index = 0
     for aoc in aoc_list:
         json_aoc_key = "aoc"+str(aoc_index) 
@@ -440,10 +424,6 @@ def get_lacs_json(user):
         lac_index=lac_index+1
     return json_base
 
-#9: Get all this for a student's preffered AOC of all 3 types
-
-#10: Get a list of all courses or course names for Haylee to display.
-#One that has all, one that filters by year>=student's start year
 def get_all_classes():
     class_query = Classes.query.all()
     return class_query

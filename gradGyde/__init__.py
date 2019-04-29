@@ -12,8 +12,6 @@ app = Flask("gradGyde")
 app.secret_key = os.getenv('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gradGyde.db'
-#Uncomment the following line of code if you are a heathen like Erik
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gradGyde\\gradGyde.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 SESSION = db.session
