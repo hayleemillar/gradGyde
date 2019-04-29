@@ -129,6 +129,20 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
+#     lac = {
+#         'LAC0' : {
+#             'name' : 'Diverse Perspectives',
+#             'fulfilled' : True,
+#             'courses' : ['External Credit'],
+#             'id' : 0
+#             },
+#         'LAC1' : {
+#             'name' : 'Social Science',
+#             'fulfilled' : False,
+#             'courses' : None,
+#             'id' : 1
+#             }
+#     }
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
     user = get_user(session['user_email'])
@@ -143,6 +157,8 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
+    # old_json = request.args.get("old")
+    # new_json = request.args.get("new")
     return redirect('/student_dashboard/lacs')
 
 
@@ -278,6 +294,211 @@ def admin():
         return redirect('/student_dashboard')
     return render_template('admin.html')
 
+
+
+@app.route('/admin/results', methods=['GET'])
+def admin_results():
+
+    search_type = request.args.get('type')
+
+    # query db to get results based on user input.
+    # NOTE: the user isn't required to fill in every field
+    if search_type == "courses":
+        results = {
+            'COURSE0' : {
+                'name' : 'course0',
+                'year' : 2017,
+                'id' : 327678,
+                'semester' : 'Fall',
+                'taken' : True
+            },
+            'COURSE1' : {
+                'name' : 'course1',
+                'year' : 2017,
+                'id' : 345890,
+                'semester' : 'Spring',
+                'taken' : False
+            }
+        }
+    elif search_type == "aocs":
+        results = {
+            "AOC0": {
+                "id": 1,
+                "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
+                "assigned" : True,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    elif search_type == "doubles":
+        results = {
+            "AOC0": {
+                "id": 2,
+                "name": "Computer Science (Regular)",
+                "type": "double",
+                "year": 2017,
+                "assigned" : False,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    elif search_type == "slashes":
+        results = {
+            "AOC0": {
+                "id": 1,
+                "name": "Computer Science (Regular)",
+                "type": "aoc",
+                "year": 2017,
+                "assigned" : False,
+                "requirements": {
+                    "req0": {
+                        "id": 1,
+                        "name": "CS Introductory Course",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 2,
+                                "name": "Test 1",
+                                "taken": False
+                            },
+                            "class2": {
+                                "id": 3,
+                                "name": "Test 2",
+                                "taken": False
+                            },
+                            "class3": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    },
+                    "req1": {
+                        "id": 2,
+                        "name": "Object Oriented Programming With Java",
+                        "amount": 1,
+                        "fulfilled": False,
+                        "classes": {
+                            "class0": {
+                                "id": 1,
+                                "name": "Introduction to Programming With Python",
+                                "taken": False
+                            },
+                            "class1": {
+                                "id": 4,
+                                "name": "Test 3",
+                                "taken": False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    else:
+        results = {}
+    results = json.dumps(results)
+
+    return results
 
 @app.route('/admin/settings', methods=['GET'])
 def admin_settings():

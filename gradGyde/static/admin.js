@@ -55,6 +55,14 @@ function generateForm(tab, elementID, oldFormID) {
   var option;
   var button;
 
+  var element = document.getElementById(elementID);
+
+  button = document.createElement("button");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-toggle", "modal");
+  button.setAttribute("data-target", "courseModal");
+
+  text = document.createTextNode("")
 
   var form = document.createElement("form");
   // form.setAttribute("action", "/student_dashboard/explore-results");
@@ -91,7 +99,6 @@ function generateForm(tab, elementID, oldFormID) {
     /****************
      * YEAR OFFERED *
      ****************/
-    // label
     label = document.createElement("label");
     label.setAttribute("for", "inputYear");
 
@@ -99,18 +106,40 @@ function generateForm(tab, elementID, oldFormID) {
     label.appendChild(text);
 
     form.appendChild(label);
+    form.appendChild(document.createElement("br"));
 
-    // input
-    input = document.createElement("input");
-    input.setAttribute("name", "year");
-    input.setAttribute("type", "number");
-    input.setAttribute("class", "form-control");
-    input.setAttribute("id", "inputYear");
-    input.setAttribute("placeholder", "Enter year");
+    select = document.createElement("select");
+    select.setAttribute("name", "year");
+    select.setAttribute("id", "inputYear");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
 
-    form.appendChild(input);
+    // populate select for year
+    var currentYear = new Date().getFullYear(), years = [];
+    startYear = currentYear - 10;
+
+    var el;
+    var opt;
+
+    opt = "Any";
+    el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    select.appendChild(el);
+
+    while (startYear <= currentYear) {
+      opt = startYear;
+      el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      select.appendChild(el);
+
+      startYear++;
+    }
+
+    form.appendChild(select);
 
     // line break
+    form.appendChild(document.createElement("br"));
     form.appendChild(document.createElement("br"));
 
 
@@ -147,49 +176,6 @@ function generateForm(tab, elementID, oldFormID) {
     option = document.createElement("option");
     option.textContent = "Summer";
     option.value = "Summer";
-    select.appendChild(option);
-
-    form.appendChild(document.createElement("br"));
-
-    form.appendChild(select);
-
-    form.appendChild(document.createElement("br"));
-
-
-    /************************
-     * TYPE OF AOI FOR TAGS *
-     ************************/
-    // label
-    form.appendChild(document.createElement("br"));
-
-    label = document.createElement("label");
-    label.setAttribute("for", "selectAOI");
-
-    text = document.createTextNode("Select type of area of interest");
-    label.appendChild(text);
-
-    form.appendChild(label);
-
-    // select area of interest
-    select = document.createElement("select");
-    select.setAttribute("name", "aoi");
-    select.setAttribute("id", "selectAOI");
-    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
-    select.setAttribute("for", "aoi");
-
-    option = document.createElement("option");
-    option.textContent = "AOC";
-    option.value = "AOC";
-    select.appendChild(option);
-
-    option = document.createElement("option");
-    option.textContent = "Double";
-    option.value = "Double";
-    select.appendChild(option);
-
-    option = document.createElement("option");
-    option.textContent = "Slash";
-    option.value = "Slash";
     select.appendChild(option);
 
     form.appendChild(document.createElement("br"));
@@ -269,7 +255,6 @@ function generateForm(tab, elementID, oldFormID) {
     /****************
      * YEAR OFFERED *
      ****************/
-    // label
     label = document.createElement("label");
     label.setAttribute("for", "inputYear");
 
@@ -277,16 +262,37 @@ function generateForm(tab, elementID, oldFormID) {
     label.appendChild(text);
 
     form.appendChild(label);
+    form.appendChild(document.createElement("br"));
 
-    // input
-    input = document.createElement("input");
-    input.setAttribute("name", "year");
-    input.setAttribute("type", "number");
-    input.setAttribute("class", "form-control");
-    input.setAttribute("id", "inputYear");
-    input.setAttribute("placeholder", "Enter year");
+    select = document.createElement("select");
+    select.setAttribute("name", "year");
+    select.setAttribute("id", "inputYear");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
 
-    form.appendChild(input);
+    // populate select for year
+    var currentYear = new Date().getFullYear(), years = [];
+    startYear = currentYear - 10;
+
+    var el;
+    var opt;
+
+    opt = "Any";
+    el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    select.appendChild(el);
+
+    while (startYear <= currentYear) {
+      opt = startYear;
+      el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      select.appendChild(el);
+
+      startYear++;
+    }
+
+    form.appendChild(select);
 
     // 2 line breaks
     form.appendChild(document.createElement("br"));
@@ -314,7 +320,6 @@ function generateForm(tab, elementID, oldFormID) {
     form.appendChild(button);
   }
 
-  var element = document.getElementById(elementID);
   element.appendChild(form);
 }
 
@@ -330,7 +335,7 @@ function getResults(searchType, event) {
 
   if (searchType == "courses") {
 
-    $.ajax({url: "/student_dashboard/explore_results", 
+    $.ajax({url: "/admin/results", 
       type: "get",
       data: {
         type: "courses",
@@ -408,7 +413,7 @@ function getResults(searchType, event) {
     });
   } else {
 
-    $.ajax({url: "/student_dashboard/explore_results", 
+    $.ajax({url: "/admin/results", 
       type: "get",
       data: {
         type: searchType,
@@ -570,8 +575,8 @@ function generateRequirementsHTML(aoiName, aoi) {
 /**
  * Post request to add course as taken by user.
  */
-function addCourse(courseID) {
-  $.post("/addcourse", {
+function removeCourse(courseID) {
+  $.post("/removecourse", {
       id: courseID
   });
 
@@ -584,8 +589,8 @@ function addCourse(courseID) {
 /**
  * Post request to add AOI as taken by user.
  */
-function addAOI(aoiID) {
-  $.post("/addaoi", {
+function removeAOI(aoiID) {
+  $.post("/removeaoi", {
       id: aoiID
   });
 
