@@ -124,3 +124,4 @@ def init_database():
         db.create_all()
         from .parse_csv import parse
         parse()
+        

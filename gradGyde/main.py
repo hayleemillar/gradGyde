@@ -1,3 +1,4 @@
+# pylint: disable=R1714
 import os
 import json
 from flask import render_template, request, session, url_for
@@ -9,15 +10,12 @@ from .db_helper import (assign_aoc,
                         get_aoc,
                         get_aoc_by_id,
                         get_aoc_json,
-                        get_aoc_list_json,
-                        get_aocs_by_type,
-                        get_class,
                         get_class_by_id,
                         get_classes,
                         get_classes_taken,
                         get_classes_taken_json,
                         get_lacs_json,
-                        get_user, 
+                        get_user,
                         make_user,
                         search_aoc_json,
                         search_classes_json,
@@ -67,7 +65,7 @@ def oauth_google_authorized():
     session['user_year'] = user.year_started
     session['user_type'] = user.user_type.value
     if session['user_type'] == UserType.ADMIN.value:
-        return redirect('/admin')    
+        return redirect('/admin')
     return redirect('/student_dashboard')
 
 @app.route('/login')
@@ -114,7 +112,7 @@ def dash_stud():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    user = get_user(session['user_email']) 
+    user = get_user(session['user_email'])
     aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
     slashes = get_aoc_json(user, 'slash')

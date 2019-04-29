@@ -1,5 +1,5 @@
+# pylint: disable=E1101
 import datetime
-import os
 import json
 from . import SESSION
 from .models import (Aocs,
@@ -30,9 +30,9 @@ def make_class(name, semester, year, credit):
 def make_user(email, name, da_year, u_type):
     if get_user(email) is None:
         newuser = Users(user_email=email,
-                         user_name=name,
-                         year_started=da_year,
-                         user_type=u_type)
+                        user_name=name,
+                        year_started=da_year,
+                        user_type=u_type)
         SESSION.add(newuser)
         SESSION.commit()
 
@@ -135,7 +135,7 @@ def get_aocs(pref_type, name, da_year):
         filters.append(Aocs.aoc_year >= da_year)
     if name is not None:
         filters.append(Aocs.aoc_name == name)
-    filters.append(Aocs.aoc_type==pref_type)
+    filters.append(Aocs.aoc_type == pref_type)
     print(filters)
     return SESSION.query(Aocs).filter(*filters).all()
 
@@ -293,7 +293,7 @@ def get_classes_taken_json(classes_taken):
             class_index = class_index+1
             classes[class_key] = class_info
         return json.dumps(classes)
-    return None 
+    return None
 
 def search_classes_json(user, classes_taken):
     if classes_taken is not None:
@@ -311,7 +311,7 @@ def search_classes_json(user, classes_taken):
             class_index = class_index+1
             classes[class_key] = class_info
         return json.dumps(classes)
-    return None    
+    return None
 
 
 def get_classes_json(classes_fulfilling, user):
@@ -357,7 +357,7 @@ def get_aoc_json(user, aoc_type):
     aoc_list = get_preffered_aocs(user, aoc_type)
     aoc_index = 0
     for aoc in aoc_list:
-        json_aoc_key = "aoc"+str(aoc_index) 
+        json_aoc_key = "aoc"+str(aoc_index)
         aoc_info = {'id' : aoc.aoc_id,
                     'name' : aoc.aoc_name,
                     'year' : aoc.aoc_year,
@@ -375,7 +375,7 @@ def search_aoc_json(user, aoc_type, da_name, da_year):
     aoc_list = get_aocs(aoc_type, da_name, da_year)
     aoc_index = 0
     for aoc in aoc_list:
-        json_aoc_key = "aoc"+str(aoc_index) 
+        json_aoc_key = "aoc"+str(aoc_index)
         aoc_info = {'id' : aoc.aoc_id,
                     'name' : aoc.aoc_name,
                     'year' : aoc.aoc_year,
@@ -394,7 +394,7 @@ def get_aoc_list_json(aoc_list):
     json_base = {}
     aoc_index = 0
     for aoc in aoc_list:
-        json_aoc_key = "aoc"+str(aoc_index) 
+        json_aoc_key = "aoc"+str(aoc_index)
         aoc_info = {'name' : aoc.aoc_name,
                     'id' : aoc.aoc_id}
         aoc_index = aoc_index+1
@@ -421,7 +421,7 @@ def get_lacs_json(user):
             courses.append(da_class.class_name)
         lac_info['courses'] = courses
         json_base[json_lac_key] = lac_info
-        lac_index=lac_index+1
+        lac_index = lac_index+1
     return json_base
 
 def get_all_classes():
