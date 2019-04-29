@@ -5,19 +5,22 @@ from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import (assign_aoc,
                         get_aoc,
+                        get_aoc_by_id,
                         get_aoc_json,
                         get_aoc_list_json,
                         get_aocs_by_type,
                         get_class,
                         get_class_by_id,
+                        get_classes,
                         get_classes_taken,
                         get_classes_taken_json,
                         get_user, 
                         make_user,
+                        search_aoc_json,
                         take_class,
                         update_user)
 from .db_helper_test import db_helper_test
-from .models import UserType
+from .models import UserType, SemesterType
 
 db_helper_test()
 OAUTH = OAuth()
@@ -111,8 +114,6 @@ def signup_form_submit():
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
     session['user_type'] = str(user.user_type)
-    comp_sci = get_aoc("Computer Science (Regular)", "aoc")
-    assign_aoc(comp_sci, user)
     return redirect('/student_dashboard')
 
 
@@ -184,15 +185,11 @@ def settings_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     name = request.form['name']
-    #aoc = request.form.getlist('AOC')
-    #slash = request.form.getlist('slash')
     da_year = request.form['year']
     update_user(session['user_email'], name, da_year)
     user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    # name = request.form['name']
-    # year = request.form['year']
     return redirect('/student_dashboard/settings')
 
 
@@ -223,200 +220,45 @@ def explore():
 def explore_results():
     if 'google_token' not in session:
         return redirect('/login')
-
+    user = get_user(session['user_email'])
     search_type = request.args.get('type')
-
+    search_name = request.args.get('name')
+    search_year = request.args.get('year')
+    if search_name == "":
+        search_name = None
+    if search_year == "":
+        search_year = None
+    #print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
     # query db to get results based on user input.
     # NOTE: the user isn't required to fill in every field
     if search_type == "courses":
-        results = {
-            'COURSE0' : {
-                'name' : 'course0',
-                'year' : 2017,
-                'id' : 327678,
-                'semester' : 'Fall'
-            },
-            'COURSE1' : {
-                'name' : 'course1',
-                'year' : 2017,
-                'id' : 345890,
-                'semester' : 'Spring'
-            }
-        }
+        search_semester = request.args.get('semester')
+        semester_enums = {'Spring' : SemesterType.SPRING,
+                          'Summer' : SemesterType.SUMMER,
+                          'Fall' : SemesterType.FALL}
+        search_semester = semester_enums[search_semester]
+        classes = get_classes(search_name, search_year, search_semester)
+        results = get_classes_taken_json(classes)
+
     elif search_type == "aocs":
-        results = {
-            "AOC0": {
-                "id": 1,
-                "name": "Computer Science (Regular)",
-                "type": "aoc",
-                "year": 2017,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        if search_year is not None:
+            results = search_aoc_json(user, 'aoc', da_year=search_year)
+        else: 
+            results = search_aoc_json(user, 'aoc')
+        
     elif search_type == "doubles":
-        results = {
-            "AOC0": {
-                "id": 1,
-                "name": "Computer Science (Regular)",
-                "type": "aoc",
-                "year": 2017,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        if search_year is not None:
+            results = search_aoc_json(user, 'double', da_year=search_year)
+        else: 
+            results = search_aoc_json(user, 'double')
+
     elif search_type == "slashes":
-        results = {
-            "AOC0": {
-                "id": 1,
-                "name": "Computer Science (Regular)",
-                "type": "aoc",
-                "year": 2017,
-                "requirements": {
-                    "req0": {
-                        "id": 1,
-                        "name": "CS Introductory Course",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 2,
-                                "name": "Test 1",
-                                "taken": False
-                            },
-                            "class2": {
-                                "id": 3,
-                                "name": "Test 2",
-                                "taken": False
-                            },
-                            "class3": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    },
-                    "req1": {
-                        "id": 2,
-                        "name": "Object Oriented Programming With Java",
-                        "amount": 1,
-                        "fulfilled": False,
-                        "classes": {
-                            "class0": {
-                                "id": 1,
-                                "name": "Introduction to Programming With Python",
-                                "taken": False
-                            },
-                            "class1": {
-                                "id": 4,
-                                "name": "Test 3",
-                                "taken": False
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        if search_year is not None:
+            results = search_aoc_json(user, 'slash', da_year=search_year)
+        else: 
+            results = search_aoc_json(user, 'slash')
     else:
         results = None
-    results = json.dumps(results)
     return results
 
 
@@ -440,15 +282,14 @@ def remove_aoi():
 
 @app.route('/addcourse', methods=['POST'])
 def add_course():
-
-    course = request.form['id']
-
+    user = get_user(session['user_email'])
+    course = request.form['id']\
+    take_class(get_class_by_id(course), user)
     return "Successfully added course " + course
-
 
 @app.route('/addaoi', methods=['POST'])
 def add_aoi():
-
+    user = get_user(session['user_email'])
     aoi = request.form['id']
-
+    assign_aoc(get_aoc_by_id(aoi), user)
     return "Successfully add AOI " + aoi

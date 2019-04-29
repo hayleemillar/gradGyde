@@ -172,6 +172,19 @@ def tag_exists(text):
 
 #1: Get a list of courses taken by a student that is filterable
 #By semester, year, tag, and name
+def get_classes(name, da_year, semester):
+    filters = []
+    if semester is not None:
+        filters.append(Classes.class_semester == semester)
+    if da_year is not None:
+        filters.append(Classes.class_year >= da_year)
+    if name is not None:
+        filters.append(Classes.class_name == name)
+    class_query = SESSION.query(Classes).filter(*filters).all()
+    return class_query
+
+
+
 def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name=None):
     #Old version of query:
     #class_taken_query = ClassTaken.query.filter_by(
@@ -280,6 +293,7 @@ def get_classes_taken_json(classes_taken):
     if classes_taken is not None:
         classes = {}
         class_index = 0
+        print(classes_taken)
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
@@ -305,7 +319,7 @@ def get_classes_json(classes_fulfilling, user):
         classes[class_key] = class_info
     return classes
 
-def get_requirements_json(requirements, user):
+def get_requirements_json(requirements, user, da_year=None):
     req_index = 0
     reqs = {}
     for req in requirements:
@@ -313,7 +327,10 @@ def get_requirements_json(requirements, user):
         req_info = {'id' : req.Requirements.req_id,
                     'name' : req.Tags.tag_name,
                     'amount' : req.Requirements.num_req}
-        classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
+        if da_year is not None:
+            classes_fulfilling = get_potential_classes(req.Tags.tag_id, da_year)
+        else:
+            classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
         classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
         fulfilled = False
         if len(classes_taken) >= req.Requirements.num_req:
@@ -339,6 +356,24 @@ def get_aoc_json(user, aoc_type):
                     'type' : aoc.aoc_type}
         requirements = get_requirements_with_tag(aoc.aoc_id)
         reqs = get_requirements_json(requirements, user)
+        aoc_index = aoc_index+1
+        aoc_info['requirements'] = reqs
+        json_base[json_aoc_key] = aoc_info
+    return json.dumps(json_base)
+
+def search_aoc_json(user, aoc_type, da_year=None):
+    #First, get the list of aocs
+    json_base = {}
+    aoc_list = get_aocs_by_type(aoc_type)
+    aoc_index = 0
+    for aoc in aoc_list:
+        json_aoc_key = "aoc"+str(aoc_index) 
+        aoc_info = {'id' : aoc.aoc_id,
+                    'name' : aoc.aoc_name,
+                    'year' : aoc.aoc_year,
+                    'type' : aoc.aoc_type}
+        requirements = get_requirements_with_tag(aoc.aoc_id)
+        reqs = get_requirements_json(requirements, user, da_year=da_year)
         aoc_index = aoc_index+1
         aoc_info['requirements'] = reqs
         json_base[json_aoc_key] = aoc_info
