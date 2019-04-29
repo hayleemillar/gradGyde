@@ -19,7 +19,7 @@ button {
   transition: 0.3s;
 }
 
-button:hover {
+button:hover:enabled {
   background-color: #003482;
   color: white;
 }

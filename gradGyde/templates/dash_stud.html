@@ -102,9 +102,7 @@
         <button onclick="location.href='/student_dashboard/courses';" style="font-size:18px;border-radius:3px;">Edit My Course History</button>
         <button onclick="location.href='/student_dashboard/settings';" style="font-size:18px;border-radius:3px;">Manage Areas of Interest</button>
       </center>
-
     </div>
-
   </div>
 
 </body>
@@ -121,23 +119,35 @@
   var doubles = $.parseJSON({{ doubles | tojson | safe }});
   var slashes = $.parseJSON({{ slashes | tojson | safe }});
 
-  reqs = {};
-
-  aois = $.extend(aocs, doubles);
-  aois = $.extend(aois, slashes);
-
   // var aocs is declared in dash_stud.html
   // this is because it is data from the DB and is received by the HTML
 
-  for (aoi in aois) {
-    var first = aois[aoi]["name"];
-    break;
+  names = [];
+
+  for (var i in aocs) {
+    names.push(aocs[i]["name"]);
+  }
+  for (var i in doubles) {
+    names.push(doubles[i]["name"]);
+  }
+  for (var i in slashes) {
+    names.push(slashes[i]["name"]);
   }
 
-  populateAOIList(aois, "user-aoc");
-  addProgressBars(aois, "progress-bars");
-  populateAoiTabs(aois, "summary-tabs");
-  switchRequirements(aois, first, "reqHTML");
+  var first = names[0];
+
+  console.log(first);
+
+  populateAOIList(aocs, "user-aoc");
+  populateAOIList(doubles, "user-double");
+  populateAOIList(slashes, "user-slash");
+  addProgressBars(aocs, "AOC", "progress-bars");
+  addProgressBars(doubles, "Double", "progress-bars");
+  addProgressBars(slashes, "Slash", "progress-bars");
+  populateAoiTabs(true, aocs, "summary-tabs");
+  populateAoiTabs(false, doubles, "summary-tabs");
+  populateAoiTabs(false, slashes, "summary-tabs");
+  switchRequirements(aocs, doubles, slashes, first, "divisional", "reqHTML");
 </script>
 
 </html> 
