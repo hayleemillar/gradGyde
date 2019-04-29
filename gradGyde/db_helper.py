@@ -177,7 +177,7 @@ def get_classes(name, da_year, semester):
     if semester is not None:
         filters.append(Classes.class_semester == semester)
     if da_year is not None:
-        filters.append(Classes.class_year >= da_year)
+        filters.append(Classes.class_year == da_year)
     if name is not None:
         filters.append(Classes.class_name == name)
     class_query = SESSION.query(Classes).filter(*filters).all()
@@ -458,6 +458,10 @@ def delete_prereq(da_prereq_id, da_chosen_id):
 
 def delete_requirement(requirement):
     merge_and_delete(requirement)
+
+def delete_pref_aoc(user_id, aoc_id):
+    pref_aocs = PrefferedAocs.query.filter_by(user_id=user_id).filter_by(aoc_id=aoc_id).first()
+    merge_and_delete(pref_aocs)
 
 def delete_aoc(aoc):
     pref_aocs_query = PrefferedAocs.query.filter_by(aoc_id=aoc.aoc_id).all()

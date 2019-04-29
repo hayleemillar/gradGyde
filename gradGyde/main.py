@@ -4,6 +4,8 @@ from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import (assign_aoc,
+                        delete_class_taken,
+                        delete_pref_aoc,
                         get_aoc,
                         get_aoc_by_id,
                         get_aoc_json,
@@ -199,7 +201,6 @@ def my_courses():
         return redirect('/login')
 
     user = get_user(session['user_email'])
-    take_class(get_class("Introduction to Programming With Python"), user)
     course_list = get_classes_taken(user)
     print(course_list)
     courses = get_classes_taken_json(course_list)
@@ -259,31 +260,31 @@ def explore_results():
             results = search_aoc_json(user, 'slash')
     else:
         results = None
+    print(results)
     return results
 
 
-@app.route('/removecourse', methods=['POST'])
+@app.route('/removecourses', methods=['POST'])
 def remove_course():
-
+    user = get_user(session['user_email'])
     # remove from db
     course = request.form['id']
-    print(course)
-
+    delete_class_taken(user.user_id, course)
     return "Successfully removed course " + course
 
 
 @app.route('/removeaoi', methods=['POST'])
 def remove_aoi():
-
+    user = get_user(session['user_email'])
     aoi = request.form['id']
-
+    delete_pref_aoc(user.user_id, aoi)
     return "Successfully removed AOI " + aoi
 
 
 @app.route('/addcourse', methods=['POST'])
 def add_course():
     user = get_user(session['user_email'])
-    course = request.form['id']\
+    course = request.form['id']
     take_class(get_class_by_id(course), user)
     return "Successfully added course " + course
 
