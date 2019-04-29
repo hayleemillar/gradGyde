@@ -100,36 +100,17 @@ function generateForm(tab, elementID, oldFormID) {
 
     form.appendChild(label);
 
-    form.appendChild(document.createElement("br"));
-
     // input
-    select = document.createElement("select");
-    select.setAttribute("name", "year");
-    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
-    select.setAttribute("id", "inputYear");
-    select.setAttribute("for", "inputYear");
+    input = document.createElement("input");
+    input.setAttribute("name", "year");
+    input.setAttribute("type", "number");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputYear");
+    input.setAttribute("placeholder", "Enter year");
 
-    // populate select for year
-    var currentYear = new Date().getFullYear(), years = [];
-    startYear = 2010;
-
-    var el;
-    var opt;
-
-    while (startYear <= currentYear) {
-      opt = startYear;
-      el = document.createElement("option");
-      el.textContent = opt;
-      el.value = opt;
-      select.appendChild(el);
-
-      startYear++;
-    }
-
-    form.appendChild(select);
+    form.appendChild(input);
 
     // line break
-    form.appendChild(document.createElement("br"));
     form.appendChild(document.createElement("br"));
 
 
@@ -145,7 +126,7 @@ function generateForm(tab, elementID, oldFormID) {
 
     form.appendChild(label);
 
-    // select
+    // select semester
     select = document.createElement("select");
     select.setAttribute("name", "semester");
     select.setAttribute("id", "selectSemester");
@@ -166,6 +147,49 @@ function generateForm(tab, elementID, oldFormID) {
     option = document.createElement("option");
     option.textContent = "Summer";
     option.value = "Summer";
+    select.appendChild(option);
+
+    form.appendChild(document.createElement("br"));
+
+    form.appendChild(select);
+
+    form.appendChild(document.createElement("br"));
+
+
+    /************************
+     * TYPE OF AOI FOR TAGS *
+     ************************/
+    // label
+    form.appendChild(document.createElement("br"));
+
+    label = document.createElement("label");
+    label.setAttribute("for", "selectAOI");
+
+    text = document.createTextNode("Select type of area of interest");
+    label.appendChild(text);
+
+    form.appendChild(label);
+
+    // select area of interest
+    select = document.createElement("select");
+    select.setAttribute("name", "aoi");
+    select.setAttribute("id", "selectAOI");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
+    select.setAttribute("for", "aoi");
+
+    option = document.createElement("option");
+    option.textContent = "AOC";
+    option.value = "AOC";
+    select.appendChild(option);
+
+    option = document.createElement("option");
+    option.textContent = "Double";
+    option.value = "Double";
+    select.appendChild(option);
+
+    option = document.createElement("option");
+    option.textContent = "Slash";
+    option.value = "Slash";
     select.appendChild(option);
 
     form.appendChild(document.createElement("br"));
@@ -254,33 +278,15 @@ function generateForm(tab, elementID, oldFormID) {
 
     form.appendChild(label);
 
-    form.appendChild(document.createElement("br"));
-
     // input
-    select = document.createElement("select");
-    select.setAttribute("name", "year");
-    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
-    select.setAttribute("id", "inputYear");
-    select.setAttribute("for", "inputYear");
+    input = document.createElement("input");
+    input.setAttribute("name", "year");
+    input.setAttribute("type", "number");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", "inputYear");
+    input.setAttribute("placeholder", "Enter year");
 
-    // populate select for year
-    var currentYear = new Date().getFullYear(), years = [];
-    startYear = 2010;
-
-    var el;
-    var opt;
-
-    while (startYear <= currentYear) {
-      opt = startYear;
-      el = document.createElement("option");
-      el.textContent = opt;
-      el.value = opt;
-      select.appendChild(el);
-
-      startYear++;
-    }
-
-    form.appendChild(select);
+    form.appendChild(input);
 
     // 2 line breaks
     form.appendChild(document.createElement("br"));
@@ -338,7 +344,6 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
-        resultsSection.innerHTML = "";
 
         var text;
         var h;
@@ -416,7 +421,6 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
-        resultsSection.innerHTML = "";
 
         // results title
         h = document.createElement("h3");

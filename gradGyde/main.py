@@ -293,3 +293,15 @@ def add_aoi():
     aoi = request.form['id']
     assign_aoc(get_aoc_by_id(aoi), user)
     return "Successfully add AOI " + aoi
+
+
+@app.route('/admin')
+def admin():
+
+    return render_template('admin.html')
+
+
+@app.route('/admin/settings', methods=['GET'])
+def admin_settings():
+
+    return render_template('admin-settings.html')
