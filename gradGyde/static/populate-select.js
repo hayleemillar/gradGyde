@@ -6,9 +6,12 @@
 function populateSelect(selectID, options) {
   var select = document.getElementById(selectID);
 
+  var opt;
+  var el;
+
   for (var i = 0; i < options.length; i++) {
-    var opt = options[i];
-    var el = document.createElement("option");
+    opt = options[i];
+    el = document.createElement("option");
     el.textContent = opt;
     el.value = opt;
     select.appendChild(el);

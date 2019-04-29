@@ -83,7 +83,7 @@ button:hover:enabled {
  * SIDEBAR NAVIGATION *
  **********************/
 .sidenav {
-  height: 100%;
+  height: 93%;
   width: 20%;
   position: fixed;
   z-index: 1;
