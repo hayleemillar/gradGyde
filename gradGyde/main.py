@@ -19,6 +19,7 @@ from .db_helper import (assign_aoc,
                         get_user, 
                         make_user,
                         search_aoc_json,
+                        search_classes_json,
                         take_class,
                         update_user)
 from .db_helper_test import db_helper_test
@@ -92,9 +93,9 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    aocs_divisional = get_aoc_list_json(get_aocs_by_type("aoc"))
-    aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
-    aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
+    # aocs_divisional = get_aoc_list_json(get_aocs_by_type("aoc"))
+    # aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
+    # aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
     # return render_template('signup_form.html',
     #                        aocs=aocs_divisional,
     #                        slashs=aocs_slash,
@@ -115,7 +116,7 @@ def signup_form_submit():
     user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] = str(user.user_type)
+    session['user_type'] = user.user_type.value
     return redirect('/student_dashboard')
 
 
@@ -127,7 +128,6 @@ def dash_stud():
 
     user = get_user(session['user_email']) 
     aocs = get_aoc_json(user, "aoc")
-    print(aocs)
     doubles = get_aoc_json(user, 'double')
     slashes = get_aoc_json(user, 'slashes')
     return render_template('dash_stud.html',
@@ -170,7 +170,6 @@ def settings():
         return redirect('/login')
     user = get_user(session['user_email'])
     aocs = get_aoc_json(user, "aoc")
-    print(aocs)
     aocs_slash = get_aoc_json(user, "slash")
     aocs_double = get_aoc_json(user, "double")
     return render_template('settings.html',
@@ -239,7 +238,7 @@ def explore_results():
                           'Fall' : SemesterType.FALL}
         search_semester = semester_enums[search_semester]
         classes = get_classes(search_name, search_year, search_semester)
-        results = get_classes_taken_json(classes)
+        results = search_classes_json(user, classes)
 
     elif search_type == "aocs":
         if search_year is not None:

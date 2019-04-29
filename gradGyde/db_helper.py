@@ -287,6 +287,12 @@ def check_class_taken(user_id, da_class_id):
         return True
     return False
 
+def check_aoc_pref(user_id, aoc_id):
+    query = PrefferedAocs.query.filter_by(aoc_id=aoc_id).filter_by(user_id=user_id).first()
+    if query:
+        return True
+    return False
+
 #8: Stuff all this into a json:
 
 def get_classes_taken_json(classes_taken):
@@ -300,6 +306,24 @@ def get_classes_taken_json(classes_taken):
                           'semester' : course.class_semester.value,
                           'year' : course.class_year,
                           'id' : course.class_id}
+            class_index = class_index+1
+            classes[class_key] = class_info
+        return json.dumps(classes)
+    return None 
+
+def search_classes_json(user, classes_taken):
+    if classes_taken is not None:
+        classes = {}
+        class_index = 0
+        print(classes_taken)
+        for course in classes_taken:
+            class_key = 'class'+str(class_index)
+            class_info = {'name' : course.class_name,
+                          'semester' : course.class_semester.value,
+                          'year' : course.class_year,
+                          'id' : course.class_id}
+            taken = check_class_taken(user.user_id, course.class_id)
+            class_info['taken'] = taken
             class_index = class_index+1
             classes[class_key] = class_info
         return json.dumps(classes)
@@ -372,6 +396,8 @@ def search_aoc_json(user, aoc_type, da_year=None):
                     'name' : aoc.aoc_name,
                     'year' : aoc.aoc_year,
                     'type' : aoc.aoc_type}
+        taken = check_aoc_pref(user.user_id, aoc.aoc_id)
+        class_info['assigned'] = taken
         requirements = get_requirements_with_tag(aoc.aoc_id)
         reqs = get_requirements_json(requirements, user, da_year=da_year)
         aoc_index = aoc_index+1
