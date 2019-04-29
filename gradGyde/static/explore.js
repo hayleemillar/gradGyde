@@ -111,10 +111,16 @@ function generateForm(tab, elementID, oldFormID) {
 
     // populate select for year
     var currentYear = new Date().getFullYear(), years = [];
-    startYear = 2010;
+    startYear = currentYear - 10;
 
     var el;
     var opt;
+
+    opt = "Any";
+    el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    select.appendChild(el);
 
     while (startYear <= currentYear) {
       opt = startYear;
@@ -265,10 +271,16 @@ function generateForm(tab, elementID, oldFormID) {
 
     // populate select for year
     var currentYear = new Date().getFullYear(), years = [];
-    startYear = 2010;
+    startYear = currentYear - 10;
 
     var el;
     var opt;
+
+    opt = "Any";
+    el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    select.appendChild(el);
 
     while (startYear <= currentYear) {
       opt = startYear;
