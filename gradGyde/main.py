@@ -157,8 +157,8 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    oldJson = request.args.get("old")
-    newJson = request.args.get("new")
+    # old_json = request.args.get("old")
+    # new_json = request.args.get("new")
     return redirect('/student_dashboard/lacs')
 
 
@@ -499,7 +499,7 @@ def admin_results():
     results = json.dumps(results)
 
     return results
-  
+
 @app.route('/admin/settings', methods=['GET'])
 def admin_settings():
     if 'google_token' not in session:
