@@ -1,7 +1,6 @@
-import sqlite3
 import os
 import csv
-from .db_helper import create_aoc
+from .db_helper import create_aoc, create_class
 
 def parse_aocs(file_path):
     with open(file_path, 'r') as file:
@@ -14,16 +13,16 @@ def parse_aocs(file_path):
                 aoc_type = line[1].lower()
                 if aoc_type == "joint":
                     aoc_type = "double"
-                aoc_info = [line[0], aoc_type,int(line[2], 10)]
+                aoc_info = [line[0], aoc_type, int(line[2], 10)]
                 tags = []
                 amounts = []
                 count = 3
                 while count < len(line) and line[count] != "":
                     combined = line[count].split("(")
-                    curTag = combined[0]
-                    curAmount = int(combined[1].split(")")[0], 10)
-                    tags.append(curTag)
-                    amounts.append(curAmount)
+                    cur_tag = combined[0]
+                    cur_amount = int(combined[1].split(")")[0], 10)
+                    tags.append(cur_tag)
+                    amounts.append(cur_amount)
                     count += 1
                 create_aoc(aoc_info, tags, amounts)
 

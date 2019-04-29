@@ -7,7 +7,6 @@ from gradGyde import app
 from .db_helper import (assign_aoc,
                         delete_class_taken,
                         delete_pref_aoc,
-                        get_aoc,
                         get_aoc_by_id,
                         get_aoc_json,
                         get_class_by_id,
