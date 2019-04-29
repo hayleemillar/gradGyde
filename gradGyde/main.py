@@ -97,183 +97,138 @@ def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
 
-    # valid types: "aoc", "double", "slash"
+    # valid types: "divisional", "double", "slash"
     aocs = {
-        "AOC0": {
-            "id": 1,
-            "name": "Computer Science",
-            "type" : "aoc",
-            "year" : 2018,
+        "aoc0": {
+            "id": 0,
+            "name": "Anthropology",
+            "year": 2019,
+            "type": "divisional",
             "requirements": {
                 "req0": {
-                    "id": 1,
-                    "name": "CS Introductory Course",
+                    "id": 3,
+                    "name": "Intro Anthro",
                     "amount": 1,
                     "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 1,
-                            "name": "Introduction to Programming With Python",
-                            "taken": False
-                        },
-                        "class1": {
-                            "id": 2,
-                            "name": "Test 1",
-                            "taken": False
-                        },
-                        "class2": {
-                            "id": 3,
-                            "name": "Test 2",
-                            "taken": False
-                        },
-                        "class3": {
-                            "id": 4,
-                            "name": "Test 3",
-                            "taken": False
-                        }
-                    }
+                    "classes": {}
                 },
                 "req1": {
-                    "id": 2,
-                    "name": "Object Oriented Programming With Java",
+                    "id": 4,
+                    "name": "Intro Archeology",
                     "amount": 1,
                     "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 1,
-                            "name": "Introduction to Programming With Python",
-                            "taken": False
-                        },
-                        "class1": {
-                            "id": 4,
-                            "name": "Test 3",
-                            "taken": False
-                        }
-                    }
+                    "classes": {}
                 },
                 "req2": {
-                    "id": 3,
-                    "name": "Object Oriented Design In Java",
+                    "id": 5,
+                    "name": "Upper Level or Thematic Course",
                     "amount": 1,
                     "fulfilled": False,
                     "classes": {}
                 },
                 "req3": {
-                    "id": 4,
-                    "name": "Software Engineering",
+                    "id": 6,
+                    "name": "History of Anthro Theory ",
                     "amount": 1,
                     "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 2,
-                            "name": "Test 1",
-                            "Taken": False
-                        },
-                        "class1": {
-                            "id": 3,
-                            "name": "Test 2",
-                            "taken": False
-                        }
-                    }
+                    "classes": {}
                 },
                 "req4": {
-                    "id": 5,
-                    "name": "Discrete Mathematics",
+                    "id": 7,
+                    "name": "Linguistic or Physical Anthro",
                     "amount": 1,
                     "fulfilled": False,
                     "classes": {}
                 },
                 "req5": {
-                    "id": 6,
-                    "name": "Data Structures in Java",
+                    "id": 8,
+                    "name": "Method and Theory In Archeology ",
                     "amount": 1,
                     "fulfilled": False,
                     "classes": {}
                 },
                 "req6": {
-                    "id": 7,
-                    "name": "Algorithms",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req7": {
-                    "id": 8,
-                    "name": "Programming Languages",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req8": {
                     "id": 9,
-                    "name": "Systems",
-                    "amount": 2,
+                    "name": "Foreign Lanuguage ",
+                    "amount": 4,
+                    "fulfilled": False,
+                    "classes": {}
+                }
+            }
+        },
+        "aoc1": {
+            "id": 1,
+            "name": "Russian",
+            "year": 2019,
+            "type": "divisional",
+            "requirements": {
+                "req0": {
+                    "id": 1,
+                    "name": "Russian Language",
+                    "amount": 6,
                     "fulfilled": False,
                     "classes": {}
                 },
-                "req9": {
-                    "id": 10,
-                    "name": "Theory",
-                    "amount": 1,
+                "req1": {
+                    "id": 2,
+                    "name": "Russian Literature",
+                    "amount": 6,
                     "fulfilled": False,
                     "classes": {}
-                },
-                "req10": {
-                    "id": 11,
-                    "name": "AI",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req11": {
-                    "id": 12,
-                    "name": "Applications",
-                    "amount": 2,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req12": {
-                    "id": 13,
-                    "name": "Math",
-                    "amount": 2,
-                    "fulfilled": False,
-                    "classes": {}
-                },
-                "req13": {
-                    "id": 14,
-                    "name": "CS Introductory Course",
-                    "amount": 1,
-                    "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 1,
-                            "name": "Introduction to Programming With Python",
-                            "taken": False
-                        },
-                        "class1": {
-                            "id": 2,
-                            "name": "Test 1",
-                            "taken": False
-                        },
-                        "class2": {
-                            "id": 3,
-                            "name": "Test 2",
-                            "taken": False
-                        },
-                        "class3": {
-                            "id": 4,
-                            "name": "Test 3",
-                            "taken": False
-                        }
-                    }
                 }
             }
         }
     }
 
-    doubles = {}
+    doubles = {
+        "aoc0": {
+            "id": 2,
+            "name": "Classics",
+            "year": 2019,
+            "type": "double",
+            "requirements": {
+                "req0": {
+                    "id": 69,
+                    "name": "Greek or Latin",
+                    "amount": 9,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req1": {
+                    "id": 70,
+                    "name": "Greek and Roman Culture",
+                    "amount": 4,
+                    "fulfilled": False,
+                    "classes": {}
+                }
+            }
+        }
+    }
 
-    slashes = {}
+    slashes = {
+        "aoc0": {
+            "id": 3,
+            "name": "Classics",
+            "year": 2019,
+            "type": "slash",
+            "requirements": {
+                "req0": {
+                    "id": 69,
+                    "name": "Greek or Latin",
+                    "amount": 9,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req1": {
+                    "id": 70,
+                    "name": "Greek and Roman Culture",
+                    "amount": 4,
+                    "fulfilled": False,
+                    "classes": {}
+                }
+            }
+        }
+    }
 
 
     aocs = json.dumps(aocs)
@@ -323,65 +278,134 @@ def settings():
     year = 2017
 
     aocs = {
-        "AOC0": {
+        "aoc0": {
+            "id": 2,
+            "name": "Anthropology",
+            "year": 2019,
+            "type": "divisional",
+            "requirements": {
+                "req0": {
+                    "id": 3,
+                    "name": "Intro Anthro",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req1": {
+                    "id": 4,
+                    "name": "Intro Archeology",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req2": {
+                    "id": 5,
+                    "name": "Upper Level or Thematic Course",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req3": {
+                    "id": 6,
+                    "name": "History of Anthro Theory ",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req4": {
+                    "id": 7,
+                    "name": "Linguistic or Physical Anthro",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req5": {
+                    "id": 8,
+                    "name": "Method and Theory In Archeology ",
+                    "amount": 1,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req6": {
+                    "id": 9,
+                    "name": "Foreign Lanuguage ",
+                    "amount": 4,
+                    "fulfilled": False,
+                    "classes": {}
+                }
+            }
+        },
+        "aoc1": {
             "id": 1,
-            "name": "Computer Science",
-            "type" : "aoc",
-            "year" : 2018,
+            "name": "Russian",
+            "year": 2019,
+            "type": "divisional",
             "requirements": {
                 "req0": {
                     "id": 1,
-                    "name": "CS Introductory Course",
-                    "amount": 1,
+                    "name": "Russian Language",
+                    "amount": 6,
                     "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 1,
-                            "name": "Introduction to Programming With Python",
-                            "taken": False
-                        },
-                        "class1": {
-                            "id": 2,
-                            "name": "Test 1",
-                            "taken": False
-                        },
-                        "class2": {
-                            "id": 3,
-                            "name": "Test 2",
-                            "taken": False
-                        },
-                        "class3": {
-                            "id": 4,
-                            "name": "Test 3",
-                            "taken": False
-                        }
-                    }
+                    "classes": {}
                 },
                 "req1": {
                     "id": 2,
-                    "name": "Object Oriented Programming With Java",
-                    "amount": 1,
+                    "name": "Russian Literature",
+                    "amount": 6,
                     "fulfilled": False,
-                    "classes": {
-                        "class0": {
-                            "id": 1,
-                            "name": "Introduction to Programming With Python",
-                            "taken": False
-                        },
-                        "class1": {
-                            "id": 4,
-                            "name": "Test 3",
-                            "taken": False
-                        }
-                    }
+                    "classes": {}
                 }
             }
         }
     }
 
-    doubles = {}
+    doubles = {
+        "aoc0": {
+            "id": 11,
+            "name": "Classics",
+            "year": 2019,
+            "type": "double",
+            "requirements": {
+                "req0": {
+                    "id": 69,
+                    "name": "Greek or Latin",
+                    "amount": 9,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req1": {
+                    "id": 70,
+                    "name": "Greek and Roman Culture",
+                    "amount": 4,
+                    "fulfilled": False, "classes": {}
+                }
+            }
+        }
+    }
 
-    slashes = {}
+    slashes = {
+        "aoc0": {
+            "id": 11,
+            "name": "Classics",
+            "year": 2019,
+            "type": "slash",
+            "requirements": {
+                "req0": {
+                    "id": 69,
+                    "name": "Greek or Latin",
+                    "amount": 9,
+                    "fulfilled": False,
+                    "classes": {}
+                },
+                "req1": {
+                    "id": 70,
+                    "name": "Greek and Roman Culture",
+                    "amount": 4,
+                    "fulfilled": False, "classes": {}
+                }
+            }
+        }
+    }
 
     return render_template('settings.html',
                            name=name,
@@ -451,13 +475,15 @@ def explore_results():
                 'name' : 'course0',
                 'year' : 2017,
                 'id' : 327678,
-                'semester' : 'Fall'
+                'semester' : 'Fall',
+                'taken' : True
             },
             'COURSE1' : {
                 'name' : 'course1',
                 'year' : 2017,
                 'id' : 345890,
-                'semester' : 'Spring'
+                'semester' : 'Spring',
+                'taken' : False
             }
         }
     elif search_type == "aocs":
@@ -467,6 +493,7 @@ def explore_results():
                 "name": "Computer Science (Regular)",
                 "type": "aoc",
                 "year": 2017,
+                "assigned" : True,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -520,10 +547,11 @@ def explore_results():
     elif search_type == "doubles":
         results = {
             "AOC0": {
-                "id": 1,
+                "id": 2,
                 "name": "Computer Science (Regular)",
-                "type": "aoc",
+                "type": "double",
                 "year": 2017,
+                "assigned" : False,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -581,6 +609,7 @@ def explore_results():
                 "name": "Computer Science (Regular)",
                 "type": "aoc",
                 "year": 2017,
+                "assigned" : False,
                 "requirements": {
                     "req0": {
                         "id": 1,
