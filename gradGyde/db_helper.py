@@ -408,7 +408,8 @@ def get_lacs_json(user):
     lac_list = get_requirements_with_tag(lac.aoc_id)
     for req in lac_list:
         json_lac_key = "LAC"+str(lac_index)
-        lac_info = {'name' : req.Tags.tag_name}
+        lac_info = {'id' : req.Requirements.req_id,
+                    'name' : req.Tags.tag_name}
         classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
         classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
         fulfilled = False

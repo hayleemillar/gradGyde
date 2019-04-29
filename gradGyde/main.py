@@ -5,6 +5,8 @@ from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import (assign_aoc,
+                        delete_aoc,
+                        delete_class,
                         delete_class_taken,
                         delete_pref_aoc,
                         get_aoc_by_id,
@@ -143,6 +145,8 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
+    print(request.get.args)
+
     return redirect('/student_dashboard/lacs')
 
 
@@ -243,7 +247,10 @@ def remove_course():
     user = get_user(session['user_email'])
     # remove from db
     course = request.form['id']
-    delete_class_taken(user.user_id, course)
+    if session['user_type'] == UserType.STUDENT.value:
+        delete_class_taken(user.user_id, course)
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_class(course)
     return "Successfully removed course " + course
 
 
@@ -251,7 +258,10 @@ def remove_course():
 def remove_aoi():
     user = get_user(session['user_email'])
     aoi = request.form['id']
-    delete_pref_aoc(user.user_id, aoi)
+    if session['user_type'] == UserType.STUDENT.value:
+        delete_pref_aoc(user.user_id, aoi)
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_aoc(aoi)
     return "Successfully removed AOI " + aoi
 
 
