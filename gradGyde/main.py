@@ -16,6 +16,7 @@ from .db_helper import (assign_aoc,
                         get_classes,
                         get_classes_taken,
                         get_classes_taken_json,
+                        get_lacs_json,
                         get_user, 
                         make_user,
                         search_aoc_json,
@@ -25,7 +26,7 @@ from .db_helper import (assign_aoc,
 from .db_helper_test import db_helper_test
 from .models import UserType, SemesterType
 
-db_helper_test()
+#db_helper_test()
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
@@ -93,7 +94,7 @@ def oauth_logout():
 def signup_form():
     if 'google_token' not in session:
         return redirect('/login')
-    # aocs_divisional = get_aoc_list_json(get_aocs_by_type("aoc"))
+    # aocs_divisional = get_aoc_list_json(get_aocs_by_type('divisional'))
     # aocs_slash = get_aoc_list_json(get_aocs_by_type("Slash"))
     # aocs_double = get_aoc_list_json(get_aocs_by_type("Double"))
     # return render_template('signup_form.html',
@@ -109,7 +110,7 @@ def signup_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     name = request.form['name']
-    #aoc = request.form.getlist(''AOC'')
+    #aoc = request.form.getlist(''divisional'')
     #slash = request.form.getlist('slash')
     da_year = request.form['year']
     make_user(session['user_email'], name, da_year, UserType.STUDENT)
@@ -124,12 +125,13 @@ def signup_form_submit():
 def dash_stud():
     if 'google_token' not in session:
         return redirect('/login')
-
-
     user = get_user(session['user_email']) 
-    aocs = get_aoc_json(user, "aoc")
+    aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
-    slashes = get_aoc_json(user, 'slashes')
+    slashes = get_aoc_json(user, 'slash')
+    print(aocs)
+    print(doubles)
+    print(slashes)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs,
@@ -141,19 +143,9 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-    lac = {
-        'LAC0' : {
-            'name' : 'Diverse Perspectives',
-            'fulfilled' : True,
-            'courses' : ['External Credit']
-            },
-        'LAC1' : {
-            'name' : 'Social Science',
-            'fulfilled' : False,
-            'courses' : None
-            }
-    }
-
+    user = get_user(session['user_email'])
+    lac = get_lacs_json(user)
+    print(lac)
     return render_template('lac.html', lac=lac)
 
 
@@ -169,7 +161,7 @@ def settings():
     if 'google_token' not in session:
         return redirect('/login')
     user = get_user(session['user_email'])
-    aocs = get_aoc_json(user, "aoc")
+    aocs = get_aoc_json(user, 'divisional')
     aocs_slash = get_aoc_json(user, "slash")
     aocs_double = get_aoc_json(user, "double")
     return render_template('settings.html',
@@ -242,9 +234,9 @@ def explore_results():
 
     elif search_type == "aocs":
         if search_year is not None:
-            results = search_aoc_json(user, 'aoc', da_year=search_year)
+            results = search_aoc_json(user, 'divisional', da_year=search_year)
         else: 
-            results = search_aoc_json(user, 'aoc')
+            results = search_aoc_json(user, 'divisional')
         
     elif search_type == "doubles":
         if search_year is not None:
@@ -259,7 +251,6 @@ def explore_results():
             results = search_aoc_json(user, 'slash')
     else:
         results = None
-    print(results)
     return results
 
 

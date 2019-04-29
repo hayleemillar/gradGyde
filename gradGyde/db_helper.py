@@ -397,7 +397,7 @@ def search_aoc_json(user, aoc_type, da_year=None):
                     'year' : aoc.aoc_year,
                     'type' : aoc.aoc_type}
         taken = check_aoc_pref(user.user_id, aoc.aoc_id)
-        class_info['assigned'] = taken
+        aoc_info['assigned'] = taken
         requirements = get_requirements_with_tag(aoc.aoc_id)
         reqs = get_requirements_json(requirements, user, da_year=da_year)
         aoc_index = aoc_index+1
@@ -416,6 +416,29 @@ def get_aoc_list_json(aoc_list):
         aoc_index = aoc_index+1
         json_base[json_aoc_key] = aoc_info
     return json.dumps(json_base)
+
+def get_lacs_json(user):
+    json_base = {}
+    lac_index = 0
+    lac = get_aocs_by_type('lac')[0]
+    lac_list = get_requirements_with_tag(lac.aoc_id)
+    for req in lac_list:
+        json_lac_key = "LAC"+str(lac_index)
+        lac_info = {'name' : req.Tags.tag_name}
+        classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
+        classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
+        fulfilled = False
+        if len(classes_taken) >= req.Requirements.num_req:
+            fulfilled = True
+        lac_info['fulfilled'] = fulfilled
+        classes = get_classes_taken(user, da_tag_id=req.Tags.tag_id)
+        courses = []
+        for da_class in classes:
+            courses.append(da_class.class_name)
+        lac_info['courses'] = courses
+        json_base[json_lac_key] = lac_info
+        lac_index=lac_index+1
+    return json_base
 
 #9: Get all this for a student's preffered AOC of all 3 types
 
