@@ -338,6 +338,7 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
+        resultsSection.innerHTML = "";
 
         var text;
         var h;
@@ -415,6 +416,7 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
+        resultsSection.innerHTML = "";
 
         // results title
         h = document.createElement("h3");
