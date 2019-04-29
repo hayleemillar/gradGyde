@@ -118,9 +118,9 @@ def dash_stud():
     aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
     slashes = get_aoc_json(user, 'slash')
-    print(aocs)
-    print(doubles)
-    print(slashes)
+    #print(aocs)
+    #print(doubles)
+    #print(slashes)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs,
@@ -136,7 +136,7 @@ def lacs():
         return redirect('/admin')
     user = get_user(session['user_email'])
     lac = get_lacs_json(user)
-    print(lac)
+    #print(lac)
     return render_template('lac.html', lac=lac)
 
 
@@ -189,9 +189,9 @@ def my_courses():
         return redirect('/admin')
     user = get_user(session['user_email'])
     course_list = get_classes_taken(user)
-    print(course_list)
+    #print(course_list)
     courses = get_classes_taken_json(course_list)
-    print(courses)
+    #print(courses)
     return render_template('courses.html',
                            courses=courses)
 
@@ -214,9 +214,9 @@ def explore_results():
     search_type = request.args.get('type')
     search_name = request.args.get('name')
     search_year = request.args.get('year')
-    if search_name == "":
+    if search_name == "" or search_name == "Any":
         search_name = None
-    if search_year == "":
+    if search_year == "" or search_year == "Any":
         search_year = None
     #print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
     # query db to get results based on user input.
