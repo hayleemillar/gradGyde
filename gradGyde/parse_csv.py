@@ -1,9 +1,7 @@
 import sqlite3
 import os
-# import sys
-# sys.path.append()
 import csv
-from gradGyde.db_helper import create_aoc
+from .db_helper import create_aoc
 
 def parse_aocs(file_path):
     with open(file_path, 'r') as file:
@@ -44,12 +42,8 @@ def parse_class(file_path):
                     count += 1
                 create_class(class_info,tags)
 
-def main():
-    aoc_file = os.getcwd() + "/aocs.tsv"
+def parse():
+    aoc_file = os.getcwd() + "/gradGyde/tsv_resources/aocs.tsv"
     parse_aocs(aoc_file)
-    # class_file = os.getcwd() + "/classes.tsv"
+    # class_file = os.getcwd() + "/gradGyde/tsv_resources/classes.tsv"
     # parse_class(class_file)
-
-    
-if __name__ == '__main__':
-    main()

@@ -24,6 +24,8 @@ def _set_sqlite_pragma(dbapi_connection, _):
         cursor.close()
 
 from .models import init_database
+from .parse_csv import parse
 init_database()
+parse()
 
 from . import main

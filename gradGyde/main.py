@@ -104,7 +104,7 @@ def signup_form_submit():
     user = get_user(session['user_email'])
     session['user_name'] = user.user_name
     session['user_year'] = user.year_started
-    session['user_type'] == user.user_type.value
+    session['user_type'] = user.user_type.value
     return redirect('/student_dashboard')
 
 
