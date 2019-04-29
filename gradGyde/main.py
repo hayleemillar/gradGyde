@@ -153,15 +153,17 @@ def lacs():
     return render_template('lac.html', lac=lac)
 
 
-@app.route('/student_dashboard/lacs/post', methods=['POST'])
+@app.route('/student_dashboard/lacs/post', methods=['GET', 'POST'])
 def lacs_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    print(request.get.args)
+    print(request.form)
     old_json = request.args.get("old")
     new_json = request.args.get("new")
+    print(old_json)
+    print(new_json)
     return redirect('/student_dashboard/lacs')
 
 
