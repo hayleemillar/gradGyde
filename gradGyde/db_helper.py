@@ -199,9 +199,9 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
     if da_tag_id is not None:
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter(
             ClassTaken.student_id==user.user_id).join(
-                Classes).filter(
+                ClassTaken, Classes.class_taken).filter(
                     *filters).join(
-                        ClassTags).filter(
+                        ClassTags, Classes.class_tags).filter(
                             ClassTags.tag_id == da_tag_id).all()
     else:
         class_taken_query = SESSION.query(ClassTaken, Classes,).filter_by(
