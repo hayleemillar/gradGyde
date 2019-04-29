@@ -400,7 +400,14 @@ function getResults(searchType, event) {
           button.setAttribute("onclick", "addCourse(this.id)");
           button.setAttribute("style", "font-size:14px;");
 
-          text = document.createTextNode("Add Course as Taken");
+          if (course["taken"] == true) {
+            button.disabled = true;
+            text = document.createTextNode("Taken");
+
+          } else {
+            text = document.createTextNode("Add Course as Taken");
+          }
+
           button.appendChild(text);
 
           resultsSection.appendChild(button);
@@ -490,7 +497,13 @@ function getResults(searchType, event) {
           button.setAttribute("onclick", "addAOI(this.id)");
           button.setAttribute("style", "font-size:14px;");
 
-          text = document.createTextNode("Add " + type + " as Area of Interest");
+          if (aoi["added"] == true) {
+            button.disabled = true;
+            text = document.createTextNode("Added");
+          } else {
+            text = document.createTextNode("Add " + type + " as Area of Interest");
+          }
+
           button.appendChild(text);
 
           resultsSection.appendChild(button);

@@ -451,13 +451,15 @@ def explore_results():
                 'name' : 'course0',
                 'year' : 2017,
                 'id' : 327678,
-                'semester' : 'Fall'
+                'semester' : 'Fall',
+                'taken' : True
             },
             'COURSE1' : {
                 'name' : 'course1',
                 'year' : 2017,
                 'id' : 345890,
-                'semester' : 'Spring'
+                'semester' : 'Spring',
+                'taken' : False
             }
         }
     elif search_type == "aocs":
@@ -467,6 +469,7 @@ def explore_results():
                 "name": "Computer Science (Regular)",
                 "type": "aoc",
                 "year": 2017,
+                "added" : True,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -524,6 +527,7 @@ def explore_results():
                 "name": "Computer Science (Regular)",
                 "type": "aoc",
                 "year": 2017,
+                "added" : False,
                 "requirements": {
                     "req0": {
                         "id": 1,
@@ -581,6 +585,7 @@ def explore_results():
                 "name": "Computer Science (Regular)",
                 "type": "aoc",
                 "year": 2017,
+                "added" : False,
                 "requirements": {
                     "req0": {
                         "id": 1,
