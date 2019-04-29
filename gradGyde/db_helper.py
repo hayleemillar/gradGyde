@@ -198,7 +198,7 @@ def get_classes_taken(user, semester=None, da_year=None, da_tag_id=None, da_name
         filters.append(Classes.class_name == da_name)
     if da_tag_id is not None:
         class_taken_query = SESSION.query(ClassTaken, Classes, ClassTags).filter(
-            ClassTaken.student_id==user.user_id).join(
+            ClassTaken.student_id == user.user_id).join(
                 ClassTaken, Classes.class_taken).filter(
                     *filters).join(
                         ClassTags, Classes.class_tags).filter(
