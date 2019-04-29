@@ -124,4 +124,9 @@ def init_database():
         db.create_all()
         from .parse_csv import parse
         parse()
-        
+        from .db_helper import make_user
+        # make_user("erik.ridd16@ncf.edu", "Admin Erik", 2016, UserType.ADMIN)
+        # make_user("haylee.millar17@ncf.edu", "Admin Haylee", 2017, UserType.ADMIN)
+        # make_user("isaac.denner17@ncf.edu", "Admin Isaac", 2017, UserType.ADMIN)
+        # make_user("amilia.macintyre18@ncf.edu", "Admin Amilia", 2018, UserType.ADMIN)
+        # make_user("jordan.deagan17@ncf.edu", "Admin Jordan", 2017, UserType.ADMIN)

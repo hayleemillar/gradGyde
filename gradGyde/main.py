@@ -282,7 +282,7 @@ def admin():
 @app.route('/admin/settings', methods=['GET'])
 def admin_settings():
     if 'google_token' not in session:
-        return redirect('/student_dashboard')
+        return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/admin')
+        return redirect('/student_dashboard')
     return render_template('admin-settings.html')
