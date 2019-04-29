@@ -497,7 +497,7 @@ function getResults(searchType, event) {
           button.setAttribute("onclick", "addAOI(this.id)");
           button.setAttribute("style", "font-size:14px;");
 
-          if (aoi["added"] == true) {
+          if (aoi["assigned"] == true) {
             button.disabled = true;
             text = document.createTextNode("Added");
           } else {

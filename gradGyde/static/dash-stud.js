@@ -4,7 +4,7 @@
  * @param aois some areas of interest, whether that be an AOC, double, or slash
  * @param elementID the ID of the element the progress bars should be appended to
  */
-function addProgressBars(aois, elementID) {
+function addProgressBars(aois, type, elementID) {
   
   var area;
   var reqs;
@@ -19,7 +19,7 @@ function addProgressBars(aois, elementID) {
   // for each area of interest (aoi)
   for (aoi in aois) {
 
-    area = aois[aoi]["name"];
+    area = aois[aoi]["name"] + " " + type + " " + aois[aoi]["year"];
 
     reqs = aois[aoi]["requirements"];
 
@@ -90,7 +90,7 @@ function populateAOIList(aois, elementID) {
   // for each area of interest (aoi)
   for (aoi in aois) {
     // get name of aoi
-    aoiArray.push(aois[aoi]["name"]);
+    aoiArray.push(aois[aoi]["name"] + " " + aois[aoi]["year"]);
   }
 
   // for each aoi name
@@ -121,10 +121,10 @@ function populateAOIList(aois, elementID) {
  *  associated with the tab and should be displayed when the tab is clicked.
  * @param aois areas of interest
  * @param tabElementID element ID the tab will be appended to
- * @param bodyElementID element ID the form will be appended to
+ * @param activeFirst boolean
  * @returns array of element IDs that are associated with the tabs
  */
-function populateAoiTabs(aois, tabElementID) {
+function populateAoiTabs(activeFirst, aois, tabElementID) {
 
   // get element the tab will be appended to
   var tabElement = document.getElementById(tabElementID);
@@ -143,7 +143,7 @@ function populateAoiTabs(aois, tabElementID) {
   for (aoi in aois) {
 
     // get aoi name
-    area = aois[aoi]["name"];
+    area = aois[aoi]["name"] ;
     type = aois[aoi]["type"];
     year = aois[aoi]["year"];
 
@@ -152,15 +152,15 @@ function populateAoiTabs(aois, tabElementID) {
     tab.className = "nav-item";
 
     button = document.createElement("button");
-    button.setAttribute("id", "aoc-" + index.toString());
+    button.setAttribute("id", "tab-" + aois[aoi]["id"]);
     button.setAttribute("data-toggle", "tab");
     button.setAttribute("role", "tab");
     button.setAttribute("aria-controls", "dashboard");
     button.setAttribute("style", "font-size:16px;");
-    button.setAttribute("onclick", "switchRequirements(aois, '" + area + "', 'summary')");
+    button.setAttribute("onclick", "switchRequirements(aocs, doubles, slashes, '" + area + "', '" + type + "', 'summary')");
 
     // if the tab is the first one made, make it active by default
-    if (index == 0) {
+    if (index == 0 && activeFirst) {
       button.className = "nav-link active";
       button.setAttribute("aria-selected", "true");
     // if the tab is not the first one, do not make active
@@ -171,7 +171,7 @@ function populateAoiTabs(aois, tabElementID) {
 
     // append elements together to create tab
     switch (type) {
-      case "aoc":
+      case "divisional":
         text = document.createTextNode(area + " AOC " + year);
         break;
       case "double":
@@ -197,7 +197,7 @@ function populateAoiTabs(aois, tabElementID) {
  * Generates HTML form of requirements based on area of interest.
  * @param aoi
  */
-function generateRequirementsHTML(aoiName, aois) {
+function generateRequirementsHTML(aoiName, aois, aoiType) {
   var html = "";
   var title;
 
@@ -210,18 +210,7 @@ function generateRequirementsHTML(aoiName, aois) {
     if (aois[aoi]["name"] == aoiName) {
       // generate HTML for it
 
-      switch (aois[aoi]["type"]) {
-        case "aoc":
-          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " AOC " + aois[aoi]["year"].toString() + "</b></center></h3>";
-          break;
-        case "double":
-          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " Double " + aois[aoi]["year"].toString() + "</b></center></h3>";
-          break;
-        case "slash":
-          html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " Slash " + aois[aoi]["year"].toString() + "</b></center></h3>";
-          break;
-      }
-
+      html += "<h3><center><b id='reqTitle'>Requirements for " + aoiName + " " + aoiType + " " + aois[aoi]["year"].toString() + "</b></center></h3>";
 
       var reqs = aois[aoi]["requirements"];
 
@@ -292,12 +281,68 @@ function generateRequirementsHTML(aoiName, aois) {
 /**
  * Switches the form HTML according to aoi
  */
-function switchRequirements(aois, aoiName, elementID) {
-
-  console.log(aoiName);
+function switchRequirements(aocs, doubles, slashes, aoiName, aoiType, elementID) {
 
   element = document.getElementById(elementID);
   // aoi = document.getElementById(aoiID).innerHTML;
 
-  element.innerHTML = generateRequirementsHTML(aoiName, aois);
+  var oldTab;
+
+  for (var i in aocs) {
+    oldTab = document.getElementById("tab-" + aocs[i]["id"]);
+    if (oldTab.getAttribute("aria-selected") == "true") {
+      oldTab.setAttribute("aria-selected", "false");
+      oldTab.setAttribute("class", "nav-link");
+    }
+  }
+  for (var i in doubles) {
+    oldTab = document.getElementById("tab-" + doubles[i]["id"]);
+    if (oldTab.getAttribute("aria-selected") == "true") {
+      oldTab.setAttribute("aria-selected", "false");
+      oldTab.setAttribute("class", "nav-link");
+    }
+  }
+  for (var i in slashes) {
+    oldTab = document.getElementById("tab-" + slashes[i]["id"]);
+    if (oldTab.getAttribute("aria-selected") == "true") {
+      oldTab.setAttribute("aria-selected", "false");
+      oldTab.setAttribute("class", "nav-link");
+    }
+  }
+
+  var newTab;
+
+  if (aoiType == "divisional") {
+
+    for (var i in aocs) {
+      if (aocs[i]["name"] == aoiName) {
+        newTab = document.getElementById("tab-" + aocs[i]["id"]);
+        newTab.setAttribute("aria-selected", "true");
+        newTab.setAttribute("class", "nav-link active");
+      }
+    }
+    element.innerHTML = generateRequirementsHTML(aoiName, aocs, "AOC");
+
+  } else if (aoiType == "double") {
+
+    for (var i in doubles) {
+      if (doubles[i]["name"] == aoiName) {
+        newTab = document.getElementById("tab-" + doubles[i]["id"]);
+        newTab.setAttribute("aria-selected", "true");
+        newTab.setAttribute("class", "nav-link active");
+      }
+    }
+    element.innerHTML = generateRequirementsHTML(aoiName, doubles, "Double");
+
+  } else if (aoiType == "slash") {
+
+    for (var i in slashes) {
+      if (slashes[i]["name"] == aoiName) {
+        newTab = document.getElementById("tab-" + slashes[i]["id"]);
+        newTab.setAttribute("aria-selected", "true");
+        newTab.setAttribute("class", "nav-link active");
+      }
+    }
+    element.innerHTML = generateRequirementsHTML(aoiName, slashes, "Slash");
+  }
 }
