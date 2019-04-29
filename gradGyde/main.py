@@ -23,10 +23,7 @@ from .db_helper import (assign_aoc,
                         search_classes_json,
                         take_class,
                         update_user)
-from .db_helper_test import db_helper_test
 from .models import UserType, SemesterType
-
-#db_helper_test()
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
                           consumer_key=os.getenv('GOOGLE_CONS_KEY'),
