@@ -100,17 +100,36 @@ function generateForm(tab, elementID, oldFormID) {
 
     form.appendChild(label);
 
-    // input
-    input = document.createElement("input");
-    input.setAttribute("name", "year");
-    input.setAttribute("type", "number");
-    input.setAttribute("class", "form-control");
-    input.setAttribute("id", "inputYear");
-    input.setAttribute("placeholder", "Enter year");
+    form.appendChild(document.createElement("br"));
 
-    form.appendChild(input);
+    // input
+    select = document.createElement("select");
+    select.setAttribute("name", "year");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
+    select.setAttribute("id", "inputYear");
+    select.setAttribute("for", "inputYear");
+
+    // populate select for year
+    var currentYear = new Date().getFullYear(), years = [];
+    startYear = 2010;
+
+    var el;
+    var opt;
+
+    while (startYear <= currentYear) {
+      opt = startYear;
+      el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      select.appendChild(el);
+
+      startYear++;
+    }
+
+    form.appendChild(select);
 
     // line break
+    form.appendChild(document.createElement("br"));
     form.appendChild(document.createElement("br"));
 
 
@@ -235,15 +254,33 @@ function generateForm(tab, elementID, oldFormID) {
 
     form.appendChild(label);
 
-    // input
-    input = document.createElement("input");
-    input.setAttribute("name", "year");
-    input.setAttribute("type", "number");
-    input.setAttribute("class", "form-control");
-    input.setAttribute("id", "inputYear");
-    input.setAttribute("placeholder", "Enter year");
+    form.appendChild(document.createElement("br"));
 
-    form.appendChild(input);
+    // input
+    select = document.createElement("select");
+    select.setAttribute("name", "year");
+    select.setAttribute("class", "mdb-select colorful-select dropdown-primary md-form");
+    select.setAttribute("id", "inputYear");
+    select.setAttribute("for", "inputYear");
+
+    // populate select for year
+    var currentYear = new Date().getFullYear(), years = [];
+    startYear = 2010;
+
+    var el;
+    var opt;
+
+    while (startYear <= currentYear) {
+      opt = startYear;
+      el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      select.appendChild(el);
+
+      startYear++;
+    }
+
+    form.appendChild(select);
 
     // 2 line breaks
     form.appendChild(document.createElement("br"));
