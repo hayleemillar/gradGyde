@@ -1,6 +1,8 @@
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods, invalid-name, wrong-import-position
 import enum
+import sqlalchemy
 from gradGyde import db
+
 
 
 class SemesterType(enum.Enum):
@@ -118,4 +120,7 @@ class Requirements(db.Model):
 
 
 def init_database():
-    db.create_all()
+    if sqlalchemy.inspect(db.engine).get_table_names() == []:
+        db.create_all()
+        from .parse_csv import parse
+        parse()
