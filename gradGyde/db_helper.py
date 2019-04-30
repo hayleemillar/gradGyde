@@ -595,10 +595,10 @@ def add_aoc(da_type, form, r_f):
         index = index+1
     create_aoc([name, da_type, da_year], tags, amounts)
     index = 1
-    assign_classes(tags, r_f)
+    assign_classes(tags, limit, r_f)
     #print(get_aoc(name, da_type))
 
-def assign_classes(tags, r_f):
+def assign_classes(tags, limit, r_f):
     index = 1
     while index < limit+1:
         req_class_key = "req"+str(index)+"courses"
