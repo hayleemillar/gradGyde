@@ -140,3 +140,11 @@ button:hover:enabled {
 .tab {
   margin-left: 40px;
 }
+
+.select2-container {
+  color:black;
+}
+
+select2-selection__choice {
+  color:black;
+}

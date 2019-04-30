@@ -292,8 +292,8 @@ def add_aoi():
 def admin():
     if 'google_token' not in session:
         return redirect('/login')
-    if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/student_dashboard')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
 
     tags = ['Russian Language',
         'Russian Literature',
@@ -313,8 +313,14 @@ def admin():
         'Math Seminar',
         'Foundations Art Course']
 
+    requirements = []
+
+    courses = []
+
     return render_template('admin.html',
-        tags=tags)
+        tags=tags,
+        requirements=requirements,
+        courses=courses)
 
 
 
@@ -551,8 +557,8 @@ def admin_removeaoi():
 def admin_addcourse():
     if 'google_token' not in session:
         return redirect('/login')
-    if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/student_dashboard')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
 
     name = request.form['name']
     year = request.form['year']
@@ -568,8 +574,8 @@ def admin_addcourse():
 def admin_addaoc():
     if 'google_token' not in session:
         return redirect('/login')
-    if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/student_dashboard')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
 
     name = request.form['name']
     year = request.form['year']
