@@ -104,4 +104,15 @@ External 2099	Term	Humanities Non-Class	Humanities LAC	LAC course
 External 2099	Term	Social Sciences Non-Class	Social Sciences LAC	LAC course
 External 2099	Term	Natural Sciences Non-Class	Natural Sciences LAC	LAC course
 External 2099	Term	Diverse Perspectives Non-Class	Diverse Perspectives LAC	LAC course
-External 2099	Term	Mathematics Non-Class	Mathematics LAC	LAC course
+External 2099	Term	Mathematics Non-Class	Mathematics LAC	LAC course					
+Fall 2018	Term	Introduction to Computer Systems, Architecture, and Digital Hardware		Technical Computer Science Electives				
+Fall 2018	Term	Foundations of Human Centered Computing	Technical Computer Science Electives					
+Fall 2018	Term	Dating Mining and Machine Learning	Data Mining	Technical Computer Science Electives				
+Fall 2018	Term	Object Oriented Design	Software Design Course					
+Spring 2018	Term	High Performance Computing	Technical Computer Science Electives					
+Spring 2018	Term	Object Oriented Programming	Software Design Course					
+Spring 2018	Term	Databases and Web Applications	Technical Computer Science Electives	Databases				
+Spring 2018	Term	Functional Problem Solving with Scheme						
+Spring 2018	Term	Natural Language Processing	Technical Computer Science Electives					
+Spring 2018	Term	Software Engineering	Software Design Course					
+Spring 2018	Term	Topics in Algorithms	Algorithms					
