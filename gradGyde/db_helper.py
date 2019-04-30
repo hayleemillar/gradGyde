@@ -12,20 +12,40 @@ from .models import (Aocs,
                      Prereqs,
                      Requirements)
 
-def make_aoc(name, passed_type, year):
+def make_aoc(name, passed_type, da_year):
     new_aoc = Aocs(aoc_name=name,
                    aoc_type=passed_type,
-                   aoc_year=year)
+                   aoc_year=da_year)
     SESSION.add(new_aoc)
     SESSION.commit()
 
-def make_class(name, semester, year, credit):
+def update_aoc(aoc_id, name, passed_type, da_year):
+    aoc = get_aoc_by_id(aoc_id=aoc_id)
+    if aoc is not None:
+        aoc.aoc_name = name,
+        aoc.aoc_type = passed_type,
+        aoc.aoc_year = da_year
+        SESSION.commit()
+
+def make_class(name, semester, da_year, credit):
     new_class = Classes(class_name=name,
                         class_semester=semester,
-                        class_year=year,
+                        class_year=da_year,
                         credit_type=credit)
     SESSION.add(new_class)
     SESSION.commit()
+
+def update_class(class_id, name, semester, da_year, credit):
+    course = get_class_by_id(class_id)
+    if course is not None:
+        course.class_name = name
+        course.class_year = da_year
+        course.credit_type = credit
+        semester_enums = {'Spring' : SemesterType.SPRING,
+                          'Summer' : SemesterType.SUMMER,
+                          'Fall' : SemesterType.FALL}
+        course.class_semester = semester_enums[search_semester]
+        SESSION.commit
 
 def make_user(email, name, da_year, u_type):
     if get_user(email) is None:
@@ -38,7 +58,7 @@ def make_user(email, name, da_year, u_type):
 
 def update_user(email, name, da_year):
     user = get_user(email)
-    if get_user(email) is not None:
+    if user is not None:
         user.user_name = name
         user.year_started = da_year
         SESSION.commit()
@@ -49,6 +69,11 @@ def make_tag(name):
     SESSION.add(new_tag)
     SESSION.commit()
 
+def update_tag(name):
+    tag = get_tag(name)
+    if tag is not None:
+        tag.tag_name = name
+        SESSION.commit()
 
 def make_requirement(da_aoc_id, da_tag_id, required):
     new_req = Requirements(aoc_id=da_aoc_id,
@@ -56,6 +81,12 @@ def make_requirement(da_aoc_id, da_tag_id, required):
                            num_req=required)
     SESSION.add(new_req)
     SESSION.commit()
+
+def update_requirement(req_id, required):
+    req = get_requirement(req_id)
+    if req is not None:
+        req.num_req=required
+        SESSION.commit()
 
 
 def assign_prereqs(prereq, chosen):
@@ -112,6 +143,8 @@ def create_aoc(aoc_info, tags, amounts):
         da_tag = get_tag(tag)
         make_requirement(aoc.aoc_id, da_tag.tag_id, amounts[tags.index(tag)])
 
+def update_aoc_and_reqs():
+    pass
 
 def get_user(email):
     user_query = Users.query.filter_by(user_email=email).first()
@@ -245,6 +278,11 @@ def get_prereqs(chosen_id):
     #Takes the chosen tag's id as an input
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
+
+def get_requirement(req_id):
+    #Takes an aoc id as input, outputs a list of requirement objects that match it
+    req_query = Requirements.query.filter_by(req_id=req_id).first()
+    return req_query
 
 def get_requirement_with_tag(req_id):
     req_query = SESSION.query(Requirements, Tags).filter_by(req_id=req_id).join(Tags).first()

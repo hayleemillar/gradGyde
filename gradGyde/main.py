@@ -269,8 +269,7 @@ def remove_course():
     course = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_class_taken(user.user_id, course)
-    if session['user_type'] == UserType.ADMIN.value:
-        delete_class(course)
+    
     return "Successfully removed course " + course
 
 
@@ -280,8 +279,7 @@ def remove_aoi():
     aoi = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_pref_aoc(user.user_id, aoi)
-    if session['user_type'] == UserType.ADMIN.value:
-        delete_aoc(aoi)
+    
     return "Successfully removed AOI " + aoi
 
 
@@ -352,8 +350,10 @@ def admin_removecourse():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
     course = request.form['id']
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_class(get_class_by_id(course))
+    
 
     return "Successfully removed course " + course
 
@@ -366,5 +366,6 @@ def admin_removeaoi():
         return redirect('/student_dashboard')
 
     aoi = request.form['id']
-
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_aoc(get_aoc_by_id(aoi))
     return "Successfully removed AOI " + aoi
