@@ -1,6 +1,7 @@
 import os
 import csv
 from .db_helper import create_aoc, create_class
+from .models import SemesterType
 
 def parse_aocs(file_path):
     with open(file_path, 'r') as file:
@@ -32,17 +33,31 @@ def parse_class(file_path):
         class_info = []
         tags = []
         for line in classes:
-            if line[0] != "Name":
-                class_info = [line[0], line[1], int(line[2], 10), int(line[3], 10)]
-                tags = []
-                count = 4
-                while count < len(line) and line[count] != "":
-                    tags.append(line[count])
-                    count += 1
-                create_class(class_info, tags)
+            period = line[0].split(" ")
+            if period[0].lower() == "spring":
+                term = SemesterType.SPRING
+            elif period[0].lower() == "fall":
+                term = SemesterType.FALL
+            elif period[0].lower() == "summer":
+                term = SemesterType.SUMMER
+            elif period[0].lower() == "isp":
+                term = SemesterType.ISP
+            elif period[0].lower() == "external":
+                term = SemesterType.EXTERNAL
+            if line[1] == "Term":
+                credit = 1
+            else:
+                credit = .5
+            class_info = [line[2], term, int(period[1], 10), credit]
+            tags = []
+            count = 3
+            while count < len(line) and line[count] != "":
+                tags.append(line[count])
+                count += 1
+            create_class(class_info, tags)
 
 def parse():
     aoc_file = os.getcwd() + "/gradGyde/tsv_resources/aocs.tsv"
     parse_aocs(aoc_file)
-    # class_file = os.getcwd() + "/gradGyde/tsv_resources/classes.tsv"
-    # parse_class(class_file)
+    class_file = os.getcwd() + "/gradGyde/tsv_resources/classes.tsv"
+    parse_class(class_file)
