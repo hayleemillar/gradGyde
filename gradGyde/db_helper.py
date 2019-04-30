@@ -44,7 +44,7 @@ def update_class(class_id, name, semester, da_year, credit):
         semester_enums = {'Spring' : SemesterType.SPRING,
                           'Summer' : SemesterType.SUMMER,
                           'Fall' : SemesterType.FALL}
-        course.class_semester = semester_enums[search_semester]
+        course.class_semester = semester_enums[semester]
         SESSION.commit
 
 def make_user(email, name, da_year, u_type):
