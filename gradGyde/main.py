@@ -1,4 +1,4 @@
-# pylint: disable=R1714
+# pylint: disable=R1714,C0330,W0612
 import os
 import json
 from flask import render_template, request, session, url_for
@@ -559,6 +559,6 @@ def admin_addcourse():
     semester = request.form['semester']
     credit = request.form['credit']
     tags = request.form['tags']
-    print(tags);
+    print(tags)
 
     return redirect('/admin')
