@@ -165,7 +165,7 @@ def lacs_form_submit():
     old_json = json.loads(request.form['old'])
     new_json = json.loads(request.form["new"])
     for old_lac, new_lac in zip(old_json, new_json):
-        if old_json[old_lac]['fulfilled']== False and new_json[new_lac]['fulfilled'] == True:
+        if old_json[old_lac]['fulfilled'] == False and new_json[new_lac]['fulfilled'] == True:
             take_lac_default(user, new_json[new_lac]['id'])
     return redirect('/student_dashboard/lacs')
 
