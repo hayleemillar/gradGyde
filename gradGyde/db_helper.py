@@ -515,15 +515,15 @@ def take_lac_default(student, lac_id):
     print(lac_id)
     lac = get_requirement_with_tag(lac_id)
     name = lac.Tags.tag_name
-    if(name == 'LAC course'):
+    if name == 'LAC course':
         take_class(get_class("Basic Non-Class"), student)
-    if(name == 'Humanities LAC'):
+    if name == 'Humanities LAC':
         take_class(get_class("Humanities Non-Class"), student)
-    if(name == 'Social Sciences LAC'):
+    if name == 'Social Sciences LAC':
         take_class(get_class("Social Sciences Non-Class"), student)
-    if(name == 'Natural Sciences LAC'):
+    if name == 'Natural Sciences LAC':
         take_class(get_class("Natural Sciences Non-Class"), student)
-    if(name == 'Diverse Perspectives LAC'):
+    if name == 'Diverse Perspectives LAC':
         take_class(get_class("Diverse Perspectives Non-Class"), student)
-    if(name == 'Mathematics LAC'):
+    if name == 'Mathematics LAC':
         take_class(get_class("Mathematics Non-Class"), student)

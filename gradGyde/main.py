@@ -1,4 +1,4 @@
-# pylint: disable=R1714
+# pylint: disable=R1714,C0121
 import os
 import json
 from flask import render_template, request, session, url_for
@@ -165,7 +165,7 @@ def lacs_form_submit():
     old_json = json.loads(request.form['old'])
     new_json = json.loads(request.form["new"])
     for old_lac, new_lac in zip(old_json, new_json):
-        if old_json[old_lac]['fulfilled'] == False and new_json[new_lac]['fulfilled'] == True:
+        if old_json[old_lac]['fulfilled']== False and new_json[new_lac]['fulfilled'] == True:
             take_lac_default(user, new_json[new_lac]['id'])
     return redirect('/student_dashboard/lacs')
 
@@ -316,7 +316,7 @@ def admin_results():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
+    user = get_user(session['user_email'])
     search_type = request.args.get('type')
     search_name = request.args.get('name')
     search_year = request.args.get('year')
