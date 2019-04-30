@@ -66,7 +66,7 @@ function generateForm(tab, elementID, oldFormID) {
   button.setAttribute("style", "margin: 0 auto");
 
   if (tab == "courses") {
-    button.setAttribute("data-target", "courseModal");
+    button.setAttribute("href", "#courseModal");
 
     text = document.createTextNode("Add Course");
     button.appendChild(text);
@@ -219,7 +219,7 @@ function generateForm(tab, elementID, oldFormID) {
     switch (tab) {
       case "aocs":
 
-        button.setAttribute("data-target", "aocModal");
+        button.setAttribute("href", "#aocModal");
 
         text = document.createTextNode("Add AOC");
 
@@ -232,7 +232,7 @@ function generateForm(tab, elementID, oldFormID) {
         break;
       case "doubles":
 
-        button.setAttribute("data-target", "doubleModal");
+        button.setAttribute("href", "#doubleModal");
 
         text = document.createTextNode("Add Double");
 
@@ -245,7 +245,7 @@ function generateForm(tab, elementID, oldFormID) {
         break;
       case "slashes":
 
-        button.setAttribute("data-target", "slashModal");
+        button.setAttribute("href", "#slashModal");
 
         text = document.createTextNode("Add Slash");
 
@@ -388,6 +388,7 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
+        resultsSection.innerHTML = ""
 
         var text;
         var h;
