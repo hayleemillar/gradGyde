@@ -449,7 +449,7 @@ def admin_addcourse():
     semester = request.form['semester']
     credit = request.form['credit']
     tags = request.form.getlist('tags')
-    print(tags);
+    print(tags)
 
     return redirect('/admin')
 
@@ -480,7 +480,7 @@ def admin_adddouble():
     name = request.form['name']
     year = request.form['year']
 
-    print(request.form);
+    print(request.form)
 
     return redirect('/admin')
 
