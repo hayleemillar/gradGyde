@@ -304,8 +304,8 @@ def add_aoi():
 def admin():
     if 'google_token' not in session:
         return redirect('/login')
-    if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/student_dashboard')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
 
     tags = ['Russian Language',
         'Russian Literature',
@@ -325,8 +325,55 @@ def admin():
         'Math Seminar',
         'Foundations Art Course']
 
+    requirements = [
+        {
+            "name": "req0",
+            "id": 0,
+            "courses": [{
+                "name": "class2",
+                "id": 4
+            }]
+        },
+        {
+            "name": "req1",
+            "id": 1,
+            "courses": [{
+                "name": "class0",
+                "id": 2
+            },
+            {
+                "name": "class1",
+                "id": 3
+            }]
+        }
+    ]
+
+    courses = [
+        {
+            "text": "class0",
+            "id": 2
+        },
+        {
+            "text": "class1",
+            "id": 3
+        },
+        {
+            "text": "class2",
+            "id": 4
+        },
+        {
+            "text": "class3",
+            "id": 5
+        }
+    ]
+
+    requirements = json.dumps(requirements)
+    courses = json.dumps(courses)
+
     return render_template('admin.html',
-        tags=tags)
+        tags=tags,
+        requirements=requirements,
+        courses=courses)
 
 
 
@@ -394,14 +441,60 @@ def admin_removeaoi():
 def admin_addcourse():
     if 'google_token' not in session:
         return redirect('/login')
-    if session['user_type'] == UserType.STUDENT.value:
-        return redirect('/student_dashboard')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
 
     name = request.form['name']
     year = request.form['year']
     semester = request.form['semester']
     credit = request.form['credit']
-    tags = request.form['tags']
+    tags = request.form.getlist('tags')
     print(tags)
+
+    return redirect('/admin')
+
+
+@app.route('/admin/addaoc', methods=['POST'])
+def admin_addaoc():
+    if 'google_token' not in session:
+        return redirect('/login')
+    # if session['user_type'] == UserType.STUDENT.value:
+    #     return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+
+    form = request.form.to_dict()
+    print(form)
+
+    return redirect('/admin')
+
+
+@app.route('/admin/adddouble', methods=['POST'])
+def admin_adddouble():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+
+    print(request.form)
+
+    return redirect('/admin')
+
+
+@app.route('/admin/addslash', methods=['POST'])
+def admin_addslash():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+
+    print(request.form)
 
     return redirect('/admin')

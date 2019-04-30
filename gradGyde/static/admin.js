@@ -663,3 +663,129 @@ function removeAOI(aoiID, name) {
     h.parentElement.removeChild(h);
   }
 }
+
+
+var aocIndex = 1;
+var doubleIndex = 1;
+var slashIndex = 1;
+
+/**
+ * 
+ */
+function addRequirement(elementID, type) {
+  if (type == "AOC") {
+    index = aocIndex;
+  } else if (type == "Double") {
+    index = doubleIndex;
+  } else {
+    index = slashIndex;
+  }
+
+  form = document.getElementById(elementID);
+
+  form.appendChild(document.createElement("br"));
+  form.appendChild(document.createElement("br"));
+
+  // requirement
+  var label = document.createElement("label");
+  label.setAttribute("for", "select" + type + "Req" + index);
+
+  var text = document.createTextNode("Requirement " + index);
+  label.appendChild(text);
+
+  form.appendChild(label);
+  form.appendChild(document.createElement("br"));
+
+  var select = document.createElement("select");
+  select.setAttribute("class", type.toLowerCase() + "req" + index + " form-control");
+  select.setAttribute("name", "req" + index);
+  select.setAttribute("style", "width:100%;");
+  select.setAttribute("id", "select" + type + "Req" + index);
+
+  form.appendChild(select);
+  form.appendChild(document.createElement("br"));
+  form.appendChild(document.createElement("br"));
+
+  // credits and courses
+  var div = document.createElement("div");
+  div.setAttribute("class", "tab");
+
+  label = document.createElement("label");
+  label.setAttribute("for", "input" + type + "Req" + index + "Credit");
+
+  text = document.createTextNode("Number Credits Required for Requirement " + index);
+  label.appendChild(text);
+
+  div.appendChild(label);
+  div.appendChild(document.createElement("br"));
+
+  var input = document.createElement("input");
+  input.setAttribute("name", "req" + index + "Credit");
+  input.setAttribute("type", "number");
+  input.setAttribute("class", "form-control");
+  input.setAttribute("id", "input" + type + "Req" + index + "Credit");
+  input.setAttribute("placeholder", "Enter number credits required");
+  input.setAttribute("min", "0");
+
+  div.appendChild(input);
+  div.appendChild(document.createElement("br"));
+
+  label = document.createElement("label");
+  label.setAttribute("for", "select" + type + "Req" + index + "Courses");
+
+  text = document.createTextNode("Courses for Requirement " + index);
+  label.appendChild(text);
+
+  div.appendChild(label);
+  div.appendChild(document.createElement("br"));
+
+  select = document.createElement("select");
+  select.setAttribute("class", type.toLowerCase() + "req" + index + "courses form-control");
+  select.setAttribute("name", "req" + index + "courses");
+  select.setAttribute("style", "width:100%;");
+  select.setAttribute("id", "select" + type + "Req" + index + "Courses");
+  select.setAttribute("multiple", "multiple");
+  select.disabled = true;
+
+  div.appendChild(select);
+
+  form.appendChild(div);
+
+  $("." + type.toLowerCase() + "req" + index).select2({
+    data: reqs,
+    tags: true,
+    createTag: function (params) {
+      var term = $.trim(params.term);
+
+
+      if (term === '') {
+        return null;
+      }
+
+      document.getElementById("select" + type + "Req" + index + "Courses").disabled = false;
+
+      return {
+        id: term,
+        text: term,
+        newTag: true, // add additional parameters
+      }
+    }
+  });
+
+  $("." + type.toLowerCase() + "req" + index + "courses").select2({
+    data: courses,
+    tags: true,
+    createTag: function(params) {
+      return undefined;
+    }
+  });
+
+
+  if (type == "AOC") {
+    aocIndex++;
+  } else if (type == "Double") {
+    doubleIndex++;
+  } else {
+    slashIndex++;
+  }
+}
