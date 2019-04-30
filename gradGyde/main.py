@@ -145,7 +145,7 @@ def lacs():
     }
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    # user = get_user(session['user_email'])
+    user = get_user(session['user_email'])
     lac = get_lacs_json(user)
     #print(lac)
     return render_template('lac.html', lac=lac)
