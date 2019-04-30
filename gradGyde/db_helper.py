@@ -143,9 +143,6 @@ def create_aoc(aoc_info, tags, amounts):
         da_tag = get_tag(tag)
         make_requirement(aoc.aoc_id, da_tag.tag_id, amounts[tags.index(tag)])
 
-def update_aoc_and_reqs():
-    pass
-
 def get_user(email):
     user_query = Users.query.filter_by(user_email=email).first()
     return user_query
