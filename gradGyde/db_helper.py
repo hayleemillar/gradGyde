@@ -81,10 +81,11 @@ def assign_aoc(aoc, user):
 
 
 def take_class(class_taken, student):
-    new_pass = ClassTaken(student_id=student.user_id,
-                          class_id=class_taken.class_id)
-    SESSION.add(new_pass)
-    SESSION.commit()
+    if class_taken is not None:
+        new_pass = ClassTaken(student_id=student.user_id,
+                              class_id=class_taken.class_id)
+        SESSION.add(new_pass)
+        SESSION.commit()
 
 
 def create_class(class_info, tags):
@@ -92,7 +93,11 @@ def create_class(class_info, tags):
     new_class = Classes.query.filter_by(class_name=class_info[0]).filter_by(
         class_semester=class_info[1]).filter_by(class_year=class_info[2]).first()
     for tag in tags:
-        da_tag = get_tag(tag)
+        if tag_exists(tag):
+            da_tag = get_tag(tag)
+        else:
+            make_tag(tag)
+            da_tag = get_tag(tag)
         if da_tag is not None:
             assign_tags(new_class, da_tag)
 
@@ -240,6 +245,10 @@ def get_prereqs(chosen_id):
     #Takes the chosen tag's id as an input
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
+
+def get_requirement_with_tag(req_id):
+    req_query = SESSION.query(Requirements, Tags).filter_by(req_id=req_id).join(Tags).first()
+    return req_query
 
 def get_requirements(da_aoc_id):
     #Takes an aoc id as input, outputs a list of requirement objects that match it
@@ -408,7 +417,8 @@ def get_lacs_json(user):
     lac_list = get_requirements_with_tag(lac.aoc_id)
     for req in lac_list:
         json_lac_key = "LAC"+str(lac_index)
-        lac_info = {'name' : req.Tags.tag_name}
+        lac_info = {'id' : req.Requirements.req_id,
+                    'name' : req.Tags.tag_name}
         classes_fulfilling = get_potential_classes(req.Tags.tag_id, user.year_started)
         classes_taken = check_classes_taken(user.user_id, classes_fulfilling)
         fulfilled = False
@@ -500,3 +510,20 @@ def delete_aoc(aoc):
     for req in reqs:
         merge_and_delete(req)
     merge_and_delete(aoc)
+
+def take_lac_default(student, lac_id):
+    print(lac_id)
+    lac = get_requirement_with_tag(lac_id)
+    name = lac.Tags.tag_name
+    if name == 'LAC course':
+        take_class(get_class("Basic Non-Class"), student)
+    if name == 'Humanities LAC':
+        take_class(get_class("Humanities Non-Class"), student)
+    if name == 'Social Sciences LAC':
+        take_class(get_class("Social Sciences Non-Class"), student)
+    if name == 'Natural Sciences LAC':
+        take_class(get_class("Natural Sciences Non-Class"), student)
+    if name == 'Diverse Perspectives LAC':
+        take_class(get_class("Diverse Perspectives Non-Class"), student)
+    if name == 'Mathematics LAC':
+        take_class(get_class("Mathematics Non-Class"), student)
