@@ -57,18 +57,26 @@ function generateForm(tab, elementID, oldFormID) {
 
   var element = document.getElementById(elementID);
 
-  button = document.createElement("button");
-  button.setAttribute("type", "button");
-  button.setAttribute("data-toggle", "modal");
-  button.setAttribute("data-target", "courseModal");
-
-  text = document.createTextNode("")
-
   var form = document.createElement("form");
   // form.setAttribute("action", "/student_dashboard/explore-results");
 
+  button = document.createElement("button");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-toggle", "modal");
+  button.setAttribute("style", "margin: 0 auto");
+
   if (tab == "courses") {
+    button.setAttribute("data-target", "courseModal");
+
+    text = document.createTextNode("Add Course");
+    button.appendChild(text);
+    form.appendChild(button);
+
     form.setAttribute("id", "form-courses");
+
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
 
     /***************
      * COURSE NAME *
@@ -210,18 +218,49 @@ function generateForm(tab, elementID, oldFormID) {
 
     switch (tab) {
       case "aocs":
+
+        button.setAttribute("data-target", "aocModal");
+
+        text = document.createTextNode("Add AOC");
+
+        button.appendChild(text);
+        form.appendChild(button);
+
         form.setAttribute("id", "form-aocs");
         text = document.createTextNode("AOC Name");
+
         break;
       case "doubles":
+
+        button.setAttribute("data-target", "doubleModal");
+
+        text = document.createTextNode("Add Double");
+
+        button.appendChild(text);
+        form.appendChild(button);
+
         form.setAttribute("id", "form-doubles");
         text = document.createTextNode("Double Name");
+
         break;
       case "slashes":
+
+        button.setAttribute("data-target", "slashModal");
+
+        text = document.createTextNode("Add Slash");
+
+        button.appendChild(text);
+        form.appendChild(button);
+
         form.setAttribute("id", "form-slashes");
         text = document.createTextNode("Slash Name");
+
         break;
     }
+
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
 
     label.appendChild(text);
 
@@ -377,12 +416,14 @@ function getResults(searchType, event) {
 
           h = document.createElement("h5");
           h.appendChild(b);
+          h.setAttribute("id", "h-" + course["id"]);
           resultsSection.appendChild(h);
 
           // info portion
           // create p element, style for indentation
           p = document.createElement("p");
           p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+          p.setAttribute("id", "p-" + course["id"]);
 
           text = document.createTextNode("Year: " + course["year"]);
           p.appendChild(text);
@@ -395,10 +436,10 @@ function getResults(searchType, event) {
 
           button = document.createElement("button");
           button.setAttribute("id", course["id"]);
-          button.setAttribute("onclick", "addCourse(this.id)");
+          button.setAttribute("onclick", "removeCourse(this.id)");
           button.setAttribute("style", "font-size:14px;");
 
-          text = document.createTextNode("Add Course as Taken");
+          text = document.createTextNode("Remove");
           button.appendChild(text);
 
           resultsSection.appendChild(button);
@@ -468,6 +509,7 @@ function getResults(searchType, event) {
           b.appendChild(text);
 
           h = document.createElement("h5");
+          h.setAttribute("id", "h-" + aoi["id"]);
           h.appendChild(b);
           resultsSection.appendChild(h);
 
@@ -475,6 +517,7 @@ function getResults(searchType, event) {
           // create p element, style for indentation
           p = document.createElement("p");
           p.setAttribute("style", "margin-left: 40px;font-size:16px;");
+          p.setAttribute("id", "p-" + aoi["id"]);
 
           html = generateRequirementsHTML(aoi["name"], aoi); 
 
@@ -484,10 +527,10 @@ function getResults(searchType, event) {
 
           button = document.createElement("button");
           button.setAttribute("id", aoi["id"]);
-          button.setAttribute("onclick", "addAOI(this.id)");
+          button.setAttribute("onclick", "removeAOI(this.id, '" + aoi["name"] + " " + type + " " + year + "')");
           button.setAttribute("style", "font-size:14px;");
 
-          text = document.createTextNode("Add " + type + " as Area of Interest");
+          text = document.createTextNode("Remove");
           button.appendChild(text);
 
           resultsSection.appendChild(button);
@@ -575,27 +618,47 @@ function generateRequirementsHTML(aoiName, aoi) {
 /**
  * Post request to add course as taken by user.
  */
-function removeCourse(courseID) {
-  $.post("/removecourse", {
+function removeCourse(courseID, name) {
+  retVal = confirm("Are you sure you want to remove " + name + "?");
+
+  if (retVal == true) {
+    $.post("/admin/removecourse", {
       id: courseID
-  });
+    });
 
-  var button = document.getElementById(courseID);
-  var text = document.getElementById("text" + courseID);
+    var button = document.getElementById(courseID);
+    var text = document.getElementById("text" + courseID);
 
-  button.parentElement.removeChild(button);
+    button.parentElement.removeChild(button);
+
+    var p = document.getElementById("p-" + courseID);
+    p.parentElement.removeChild(p);
+
+    var h = document.getElementById("h-" + courseID);
+    h.parentElement.removeChild(h);
+  }
 }
 
 /**
  * Post request to add AOI as taken by user.
  */
-function removeAOI(aoiID) {
-  $.post("/removeaoi", {
+function removeAOI(aoiID, name) {
+  retVal = confirm("Are you sure you want to remove " + name + "?");
+
+  if (retVal == true) {
+    $.post("/admin/removeaoi", {
       id: aoiID
-  });
+    });
 
-  var button = document.getElementById(aoiID);
-  var text = document.getElementById("text" + aoiID);
+    var button = document.getElementById(aoiID);
+    var text = document.getElementById("text" + aoiID);
 
-  button.parentElement.removeChild(button);
+    button.parentElement.removeChild(button);
+
+    var p = document.getElementById("p-" + aoiID);
+    p.parentElement.removeChild(p);
+
+    var h = document.getElementById("h-" + aoiID);
+    h.parentElement.removeChild(h);
+  }
 }

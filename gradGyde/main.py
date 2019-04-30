@@ -129,20 +129,20 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
-#     lac = {
-#         'LAC0' : {
-#             'name' : 'Diverse Perspectives',
-#             'fulfilled' : True,
-#             'courses' : ['External Credit'],
-#             'id' : 0
-#             },
-#         'LAC1' : {
-#             'name' : 'Social Science',
-#             'fulfilled' : False,
-#             'courses' : None,
-#             'id' : 1
-#             }
-#     }
+    lac = {
+        'LAC0' : {
+            'name' : 'Diverse Perspectives',
+            'fulfilled' : True,
+            'courses' : ['External Credit'],
+            'id' : 0
+            },
+        'LAC1' : {
+            'name' : 'Social Science',
+            'fulfilled' : False,
+            'courses' : None,
+            'id' : 1
+            }
+    }
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
     user = get_user(session['user_email'])
@@ -157,9 +157,11 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    # old_json = request.args.get("old")
-    # new_json = request.args.get("new")
-    return redirect('/student_dashboard/lacs')
+
+    print(request.form)
+    # old_json = data["old"]
+    # new_json = data["new"]
+    return render_template('lac.html')
 
 
 @app.route('/student_dashboard/settings')
@@ -500,10 +502,26 @@ def admin_results():
 
     return results
 
-@app.route('/admin/settings', methods=['GET'])
-def admin_settings():
+
+@app.route('/admin/removecourse', methods=['POST'])
+def admin_removecourse():
     if 'google_token' not in session:
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-    return render_template('admin-settings.html')
+
+    course = request.form['id']
+
+    return "Successfully removed course " + course
+
+
+@app.route('/admin/removeaoi', methods=['POST'])
+def admin_removeaoi():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    aoi = request.form['id']
+
+    return "Successfully removed AOI " + aoi
