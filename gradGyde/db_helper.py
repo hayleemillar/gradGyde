@@ -246,6 +246,10 @@ def get_prereqs(chosen_id):
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
 
+def get_requirement_with_tag(req_id):
+    req_query = SESSION.query(Requirements, Tags).filter_by(req_id=req_id).join(Tags).first()
+    return req_query
+
 def get_requirements(da_aoc_id):
     #Takes an aoc id as input, outputs a list of requirement objects that match it
     req_query = Requirements.query.filter_by(aoc_id=da_aoc_id).all()
@@ -507,18 +511,19 @@ def delete_aoc(aoc):
         merge_and_delete(req)
     merge_and_delete(aoc)
 
-def take_lac_default(user, lac_id):
-    lac = get_tag_by_id(lac_id)
-    name = lac.tag_name
+def take_lac_default(student, lac_id):
+    print(lac_id)
+    lac = get_requirement_with_tag(lac_id)
+    name = lac.Tags.tag_name
     if(name == 'LAC course'):
-        take_class(get_class(), student)
+        take_class(get_class("Basic Non-Class"), student)
     if(name == 'Humanities LAC'):
-        take_class(get_class(), student)
+        take_class(get_class("Humanities Non-Class"), student)
     if(name == 'Social Sciences LAC'):
-        take_class(get_class(), student)
+        take_class(get_class("Social Sciences Non-Class"), student)
     if(name == 'Natural Sciences LAC'):
-        take_class(get_class(), student)
+        take_class(get_class("Natural Sciences Non-Class"), student)
     if(name == 'Diverse Perspectives LAC'):
-        take_class(get_class(), student)
+        take_class(get_class("Diverse Perspectives Non-Class"), student)
     if(name == 'Mathematics LAC'):
-        take_class(get_class(), student)
+        take_class(get_class("Mathematics Non-Class"), student)

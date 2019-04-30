@@ -42,7 +42,7 @@
       <a href="/student_dashboard/settings" class="img-link">
         <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
       </a>
-      <button type="button" onclick="location.href='/logout';">Logout</button>
+      <button type="submit" onclick="location.href='/logout';">Logout</button>
     </ul>
   </ul>
 
@@ -174,9 +174,15 @@
       }
     }
 
-    $.post("/student_dashboard/lacs/post", {
-      old: JSON.stringify(oldJSON),
-      new: JSON.stringify(newJSON)
+    $.post({
+      url: "/student_dashboard/lacs/post", 
+      data: {
+        old: JSON.stringify(oldJSON),
+        new: JSON.stringify(newJSON)
+      },
+      success: function() {
+        window.location.href = "/student_dashboard/lacs";
+      }
     });
   }
 </script>

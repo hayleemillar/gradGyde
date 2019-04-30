@@ -154,7 +154,7 @@ def lacs():
     return render_template('lac.html', lac=lac)
 
 
-@app.route('/student_dashboard/lacs/post', methods=['GET', 'POST'])
+@app.route('/student_dashboard/lacs/post', methods=['POST'])
 def lacs_form_submit():
     if 'google_token' not in session:
         return redirect('/login')
@@ -164,11 +164,9 @@ def lacs_form_submit():
     user = get_user(session['user_email'])
     old_json = json.loads(request.form['old'])
     new_json = json.loads(request.form["new"])
-    #print(old_json)
-    #print(new_json)
-    for old_lac, new_lac in zip(range(old_json), range(new_json)):
-        if old_lac['fulfilled'] == False and new_lac['fulfilled'] == True:
-            take_lac_default(user, new_lac['id'])
+    for old_lac, new_lac in zip(old_json, new_json):
+        if old_json[old_lac]['fulfilled'] == False and new_json[new_lac]['fulfilled'] == True:
+            take_lac_default(user, new_json[new_lac]['id'])
     return redirect('/student_dashboard/lacs')
 
 
