@@ -294,7 +294,27 @@ def admin():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-    return render_template('admin.html')
+
+    tags = ['Russian Language',
+        'Russian Literature',
+        'Intro Anthro',
+        'Intro Archeology',
+        'Upper Level or Thematic Anthro Course',
+        'History of Anthro Theory ',
+        'Linguistic or Physical Anthro',
+        'Method and Theory In Archeology ',
+        'Foreign Lanuguage ',
+        'Calculus',
+        'Linear Algebra',
+        'Differential Equations',
+        'Abstract Algebra',
+        'Real Analysis',
+        'Complex Analysis',
+        'Math Seminar',
+        'Foundations Art Course']
+
+    return render_template('admin.html',
+        tags=tags)
 
 
 
@@ -525,3 +545,20 @@ def admin_removeaoi():
     aoi = request.form['id']
 
     return "Successfully removed AOI " + aoi
+
+
+@app.route('/admin/addcourse', methods=['POST'])
+def admin_addcourse():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+    semester = request.form['semester']
+    credit = request.form['credit']
+    tags = request.form['tags']
+    print(tags);
+
+    return redirect('/admin')
