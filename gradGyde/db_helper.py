@@ -469,6 +469,14 @@ def get_lacs_json(user):
         lac_index = lac_index+1
     return json_base
 
+def get_all_tags():
+    tags = Tags.query.all()
+    tag_names = []
+    for tag in tags:
+        tag_names.append(tag.tag_name)
+    return tag_names
+
+
 def get_all_classes():
     class_query = Classes.query.all()
     return class_query
