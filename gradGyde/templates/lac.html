@@ -166,7 +166,7 @@
       isChecked = document.getElementById("lac-" + current["id"]);
       console.log("lac-" + current["id"]);
       isChecked = isChecked.checked;
-      newJSON["LAC" + i] = {
+      newJSON[i] = {
         name: current["name"],
         id: current["id"],
         course: current["courses"],
@@ -175,8 +175,8 @@
     }
 
     $.post("/student_dashboard/lacs/post", {
-      old: oldJSON,
-      new: newJSON
+      old: JSON.stringify(oldJSON),
+      new: JSON.stringify(newJSON)
     });
   }
 </script>

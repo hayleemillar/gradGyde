@@ -81,10 +81,11 @@ def assign_aoc(aoc, user):
 
 
 def take_class(class_taken, student):
-    new_pass = ClassTaken(student_id=student.user_id,
-                          class_id=class_taken.class_id)
-    SESSION.add(new_pass)
-    SESSION.commit()
+    if class_taken is not None:
+        new_pass = ClassTaken(student_id=student.user_id,
+                              class_id=class_taken.class_id)
+        SESSION.add(new_pass)
+        SESSION.commit()
 
 
 def create_class(class_info, tags):
@@ -501,3 +502,19 @@ def delete_aoc(aoc):
     for req in reqs:
         merge_and_delete(req)
     merge_and_delete(aoc)
+
+def take_lac_default(user, lac_id):
+    lac = get_tag_by_id(lac_id)
+    name = lac.tag_name
+    if(name == 'LAC course'):
+        take_class(get_class(), student)
+    if(name == 'Humanities LAC'):
+        take_class(get_class(), student)
+    if(name == 'Social Sciences LAC'):
+        take_class(get_class(), student)
+    if(name == 'Natural Sciences LAC'):
+        take_class(get_class(), student)
+    if(name == 'Diverse Perspectives LAC'):
+        take_class(get_class(), student)
+    if(name == 'Mathematics LAC'):
+        take_class(get_class(), student)

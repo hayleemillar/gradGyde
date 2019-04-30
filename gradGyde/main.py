@@ -21,6 +21,7 @@ from .db_helper import (assign_aoc,
                         search_aoc_json,
                         search_classes_json,
                         take_class,
+                        take_lac_default,
                         update_user)
 from .models import UserType, SemesterType
 OAUTH = OAuth()
@@ -159,11 +160,15 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    print(request.form)
-    old_json = request.args.get("old")
-    new_json = request.args.get("new")
-    print(old_json)
-    print(new_json)
+    #print(request.form)
+    user = get_user(session['user_email'])
+    old_json = json.loads(request.form['old'])
+    new_json = json.loads(request.form["new"])
+    #print(old_json)
+    #print(new_json)
+    for old_lac, new_lac in zip(range(old_json), range(new_json)):
+        if old_lac['fulfilled'] == False and new_lac['fulfilled'] == True:
+            take_lac_default(user, new_lac['id'])
     return redirect('/student_dashboard/lacs')
 
 
@@ -313,7 +318,7 @@ def admin_results():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-        
+
     search_type = request.args.get('type')
     search_name = request.args.get('name')
     search_year = request.args.get('year')
