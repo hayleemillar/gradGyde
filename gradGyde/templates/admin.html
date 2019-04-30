@@ -97,7 +97,7 @@
           <select name='semester' id="selectCourseSemester" class="mdb-select colorful-select dropdown-primary md-form" required>
             <option value="fall">Fall</option>
             <option value="spring">Spring</option>
-            <option value="">Summer</option>
+            <option value="summer">Summer</option>
           </select>
 
           <br/>
@@ -133,50 +133,100 @@
     </div>
 
     <!-- AOC Modal -->
-    <div class="modal hide summary" id="aocModal" style="max-width: 500px;max-height: 500px;">
+    <div class="modal hide" id="aocModal" style="background-color: #222222;">
       <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
-        <h3>Modal header</h3>
+        <h3>Add AOC</h3>
       </div>
       <div class="modal-body">
-        <p>One fine body…</p>
+        <form id="form-addaoc" action="/admin/addaoc" method="post">
+          <!-- preferred name -->
+          <label for="inputAOCName">Name</label>
+          <input name='name' type="text" class="form-control" id="inputAOCName" placeholder="Enter AOC name" required>
+
+          <br/>
+
+          <label for="inputAOCYear">Year</label><br/>
+          <select name='year' id="inputAOCYear" class="mdb-select colorful-select dropdown-primary md-form" required>
+          </select>
+
+          <br/>
+          <br/>
+          <br/>
+
+          <button type="submit" style="border-radius:3px">Add</button>
+
+        </form>
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
+        <a href="#" class="btn" style="background-color: #aeb4b7;"data-dismiss="modal">Cancel
+
+          <br/></a>
       </div>
     </div>
 
     <!-- Double Modal -->
-    <div class="modal hide summary" id="doubleModal" style="max-width: 500px;max-height: 500px;">
+    <div class="modal hide" id="doubleModal" style="background-color: #222222;">
       <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
-        <h3>Modal header</h3>
+        <h3>Add Course</h3>
       </div>
       <div class="modal-body">
-        <p>One fine body…</p>
+        <form id="form-addcourse" action="/admin/adddouble" method="post">
+          <!-- preferred name -->
+          <label for="inputDoubleName">Name</label>
+          <input name='name' type="text" class="form-control" id="inputDoubleName" placeholder="Enter double name" required>
+
+          <br/>
+
+          <label for="inputDoubleYear">Year</label><br/>
+          <select name='year' id="inputDoubleYear" class="mdb-select colorful-select dropdown-primary md-form" required>
+          </select>
+
+          <br/>
+          <br/>
+          <br/>
+
+          <button type="submit" style="border-radius:3px">Add</button>
+
+        </form>
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
+        <a href="#" class="btn" style="background-color: #aeb4b7;"data-dismiss="modal">Cancel
+
+          <br/></a>
       </div>
     </div>
 
     <!-- Slash Modal -->
-    <div class="modal hide summary" id="slashModal" style="max-width: 500px;max-height: 500px;">
+    <div class="modal hide" id="slashModal" style="background-color: #222222;">
       <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
-        <h3>Modal header</h3>
+        <h3>Add Slash</h3>
       </div>
       <div class="modal-body">
-        <p>One fine body…</p>
+        <form id="form-addslash" action="/admin/addslash" method="post">
+          <!-- preferred name -->
+          <label for="inputSlashName">Name</label>
+          <input name='name' type="text" class="form-control" id="inputSlashName" placeholder="Enter slash name" required>
+
+          <br/>
+
+          <label for="inputSlashYear">Year</label><br/>
+          <select name='year' id="inputSlashYear" class="mdb-select colorful-select dropdown-primary md-form" required>
+          </select>
+
+          <br/>
+          <br/>
+          <br/>
+
+          <button type="submit" style="border-radius:3px">Add</button>
+
+        </form>
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
+        <a href="#" class="btn" style="background-color: #aeb4b7;"data-dismiss="modal">Cancel
+
+          <br/></a>
       </div>
     </div>
-
   </div>
 </body>
 
@@ -208,9 +258,9 @@
   }
 
   populateSelect("inputCourseYear", years);
-  // populateSelect("inputAOCYear", years);
-  // populateSelect("inputDoubleYear", years);
-  // populateSelect("inputSlashYear", years);
+  populateSelect("inputAOCYear", years);
+  populateSelect("inputDoubleYear", years);
+  populateSelect("inputSlashYear", years);
 
 
   $(".js-example-tags").select2({

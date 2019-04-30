@@ -558,7 +558,46 @@ def admin_addcourse():
     year = request.form['year']
     semester = request.form['semester']
     credit = request.form['credit']
-    tags = request.form['tags']
+    tags = request.form.getlist('tags')
     print(tags);
+
+    return redirect('/admin')
+
+
+@app.route('/admin/addaoc', methods=['POST'])
+def admin_addaoc():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+
+    return redirect('/admin')
+
+
+@app.route('/admin/adddouble', methods=['POST'])
+def admin_adddouble():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+
+    return redirect('/admin')
+
+
+@app.route('/admin/addslash', methods=['POST'])
+def admin_addslash():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
 
     return redirect('/admin')
