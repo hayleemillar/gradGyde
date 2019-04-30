@@ -93,7 +93,11 @@ def create_class(class_info, tags):
     new_class = Classes.query.filter_by(class_name=class_info[0]).filter_by(
         class_semester=class_info[1]).filter_by(class_year=class_info[2]).first()
     for tag in tags:
-        da_tag = get_tag(tag)
+        if tag_exists(tag):
+            da_tag = get_tag(tag)
+        else:
+            make_tag(tag)
+            da_tag = get_tag(tag)
         if da_tag is not None:
             assign_tags(new_class, da_tag)
 

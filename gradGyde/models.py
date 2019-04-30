@@ -10,6 +10,7 @@ class SemesterType(enum.Enum):
     SUMMER = "Summer"
     FALL = "Fall"
     ISP = "Isp"
+    EXTERNAL = "External"
 
 
 class UserType(enum.Enum):
