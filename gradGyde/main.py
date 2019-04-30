@@ -4,17 +4,21 @@ import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import (assign_aoc,
+from .db_helper import (add_aoc,
+                        assign_aoc,
                         create_class,
                         delete_aoc,
                         delete_class,
                         delete_class_taken,
                         delete_pref_aoc,
+                        get_all_classes_json,
+                        get_all_requirements_json,
                         get_all_tags,
                         get_aoc_by_id,
                         get_aoc_json,
                         get_class_by_id,
                         get_classes,
+                        get_classes_json,
                         get_classes_taken,
                         get_classes_taken_json,
                         get_lacs_json,
@@ -309,51 +313,11 @@ def admin():
 
     tags = get_all_tags()
 
-    requirements = [
-        {
-            "name": "req0",
-            "id": 0,
-            "courses": [{
-                "name": "class2",
-                "id": 4
-            }]
-        },
-        {
-            "name": "req1",
-            "id": 1,
-            "courses": [{
-                "name": "class0",
-                "id": 2
-            },
-            {
-                "name": "class1",
-                "id": 3
-            }]
-        }
-    ]
+    requirements = get_all_requirements_json()
 
-    courses = [
-        {
-            "text": "class0",
-            "id": 2
-        },
-        {
-            "text": "class1",
-            "id": 3
-        },
-        {
-            "text": "class2",
-            "id": 4
-        },
-        {
-            "text": "class3",
-            "id": 5
-        }
-    ]
-
-    requirements = json.dumps(requirements)
-    courses = json.dumps(courses)
-
+    courses = get_all_classes_json()
+    # print(requirements)
+    # print(courses)
     return render_template('admin.html',
         tags=tags,
         requirements=requirements,
@@ -441,6 +405,7 @@ def admin_addcourse():
     credit = request.form['credit']
     tags = request.form.getlist('tags')
     create_class([name, semester, da_year, credit], tags)
+    print(tags)
     return redirect('/admin')
 
 
@@ -450,13 +415,10 @@ def admin_addaoc():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
     form = request.form.to_dict()
-    print(form)
-
+    # print(request.form.getlist("req1courses"))
+    # print(form)
+    add_aoc("divisional", form, request.form)
     return redirect('/admin')
 
 
@@ -466,12 +428,9 @@ def admin_adddouble():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
-    print(request.form)
-
+    form = request.form.to_dict()
+    print(form)
+    add_aoc("double", form, request.form)
     return redirect('/admin')
 
 
@@ -481,10 +440,7 @@ def admin_addslash():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
-    print(request.form)
-
+    form = request.form.to_dict()
+    print(form)
+    add_aoc("slash", form, request.form)
     return redirect('/admin')

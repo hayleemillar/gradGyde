@@ -570,3 +570,55 @@ def take_lac_default(student, lac_id):
         take_class(get_class("Diverse Perspectives Non-Class"), student)
     if name == 'Mathematics LAC':
         take_class(get_class("Mathematics Non-Class"), student)
+
+def add_aoc(da_type, form, rf):
+    name = form['name']
+    da_year = form['year']
+    index = 1
+    limit = (len(form)-2)/3
+    tags = []
+    amounts = []
+    while index < limit+1:
+        req_key = "req"+str(index)
+        req_num_key = req_key+"Credit"
+        req = form[req_key]
+        if req is not None:
+            tags.append(req)
+            print(req)
+        num = form[req_num_key]
+        if num == "":
+            num = 0
+        if num is not None:
+            amounts.append(num)
+            print(num)
+        index=index+1
+    create_aoc([name, da_type, da_year], tags, amounts)
+    index = 1
+    while index < limit+1:
+        req_class_key = "req"+str(index)+"courses"
+        req_class_list = rf.getlist(req_class_key)
+        if req_class_list is not None:
+            for da_class in req_class_list:
+                assign_tags(get_class_by_id(da_class), get_tag(tags[index-1]))
+                print(get_class_tags(da_class))
+        index=index+1
+    print(get_aoc(name, da_type))
+
+def get_all_classes_json():
+    class_query = get_all_classes()
+    classes = []
+    for da_class in class_query:
+        classes.append({"text": da_class.class_name,
+                        "id": da_class.class_id, "year" : da_class.class_year})
+    return json.dumps(classes)
+
+def get_all_requirements():
+    req_query = SESSION.query(Requirements, Tags).join(Tags).all()
+    return req_query
+    
+def get_all_requirements_json():
+    req_query = get_all_requirements()
+    requirements = []
+    for req in req_query:
+        requirements.append({'name' : req.Tags.tag_name, 'id' : req.Requirements.req_id})
+    return json.dumps(requirements)
