@@ -42,6 +42,8 @@ def parse_class(file_path):
                 term = SemesterType.SUMMER
             elif period[0].lower() == "isp":
                 term = SemesterType.ISP
+            elif period[0].lower() == "external":
+                term = SemesterType.EXTERNAL
             if line[1] == "Term":
                 credit = 1
             else:
