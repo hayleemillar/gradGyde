@@ -388,7 +388,7 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
-        resultsSection.innerHTML = ""
+        resultsSection.innerHTML = "";
 
         var text;
         var h;
@@ -468,6 +468,7 @@ function getResults(searchType, event) {
         // display results
 
         var resultsSection = document.getElementById("results");
+        resultsSection.innerHTML = ""
 
         // results title
         h = document.createElement("h3");
@@ -754,6 +755,7 @@ function addRequirement(elementID, type) {
   $("." + type.toLowerCase() + "req" + index).select2({
     data: reqs,
     tags: true,
+    tokenSeparators: [','],
     createTag: function (params) {
       var term = $.trim(params.term);
 
@@ -775,6 +777,7 @@ function addRequirement(elementID, type) {
   $("." + type.toLowerCase() + "req" + index + "courses").select2({
     data: courses,
     tags: true,
+    tokenSeparators: [','],
     createTag: function(params) {
       return undefined;
     }

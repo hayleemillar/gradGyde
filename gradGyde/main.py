@@ -1,14 +1,19 @@
-# pylint: disable=R1714,C0121,C0330,W0612
+# pylint: disable=R1714,C0121
 import os
 import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
-from .db_helper import (assign_aoc,
+from .db_helper import (add_aoc,
+                        assign_aoc,
+                        create_class,
                         delete_aoc,
                         delete_class,
                         delete_class_taken,
                         delete_pref_aoc,
+                        get_all_classes_json,
+                        get_all_requirements_json,
+                        get_all_tags,
                         get_aoc_by_id,
                         get_aoc_json,
                         get_class_by_id,
@@ -118,9 +123,9 @@ def dash_stud():
     aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
     slashes = get_aoc_json(user, 'slash')
-    #print(aocs)
-    #print(doubles)
-    #print(slashes)
+    ##print(aocs)
+    ##print(doubles)
+    ##print(slashes)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs,
@@ -150,7 +155,7 @@ def lacs():
         return redirect('/admin')
     user = get_user(session['user_email'])
     lac = get_lacs_json(user)
-    #print(lac)
+    ##print(lac)
     return render_template('lac.html', lac=lac)
 
 
@@ -160,7 +165,7 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    #print(request.form)
+    ##print(request.form)
     user = get_user(session['user_email'])
     old_json = json.loads(request.form['old'])
     new_json = json.loads(request.form["new"])
@@ -210,9 +215,9 @@ def my_courses():
         return redirect('/admin')
     user = get_user(session['user_email'])
     course_list = get_classes_taken(user)
-    #print(course_list)
+    ##print(course_list)
     courses = get_classes_taken_json(course_list)
-    #print(courses)
+    ##print(courses)
     return render_template('courses.html',
                            courses=courses)
 
@@ -239,7 +244,7 @@ def explore_results():
         search_name = None
     if search_year == "" or search_year == "Any":
         search_year = None
-    #print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
+    ##print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
     # query db to get results based on user input.
     # NOTE: the user isn't required to fill in every field
     if search_type == "courses":
@@ -269,8 +274,7 @@ def remove_course():
     course = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_class_taken(user.user_id, course)
-    if session['user_type'] == UserType.ADMIN.value:
-        delete_class(course)
+
     return "Successfully removed course " + course
 
 
@@ -280,8 +284,7 @@ def remove_aoi():
     aoi = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_pref_aoc(user.user_id, aoi)
-    if session['user_type'] == UserType.ADMIN.value:
-        delete_aoc(aoi)
+
     return "Successfully removed AOI " + aoi
 
 
@@ -307,73 +310,17 @@ def admin():
     # if session['user_type'] == UserType.STUDENT.value:
     #     return redirect('/student_dashboard')
 
-    tags = ['Russian Language',
-        'Russian Literature',
-        'Intro Anthro',
-        'Intro Archeology',
-        'Upper Level or Thematic Anthro Course',
-        'History of Anthro Theory ',
-        'Linguistic or Physical Anthro',
-        'Method and Theory In Archeology ',
-        'Foreign Lanuguage ',
-        'Calculus',
-        'Linear Algebra',
-        'Differential Equations',
-        'Abstract Algebra',
-        'Real Analysis',
-        'Complex Analysis',
-        'Math Seminar',
-        'Foundations Art Course']
+    tags = get_all_tags()
 
-    requirements = [
-        {
-            "name": "req0",
-            "id": 0,
-            "courses": [{
-                "name": "class2",
-                "id": 4
-            }]
-        },
-        {
-            "name": "req1",
-            "id": 1,
-            "courses": [{
-                "name": "class0",
-                "id": 2
-            },
-            {
-                "name": "class1",
-                "id": 3
-            }]
-        }
-    ]
+    requirements = get_all_requirements_json()
 
-    courses = [
-        {
-            "text": "class0",
-            "id": 2
-        },
-        {
-            "text": "class1",
-            "id": 3
-        },
-        {
-            "text": "class2",
-            "id": 4
-        },
-        {
-            "text": "class3",
-            "id": 5
-        }
-    ]
-
-    requirements = json.dumps(requirements)
-    courses = json.dumps(courses)
-
+    courses = get_all_classes_json()
+    # #print(requirements)
+    # #print(courses)
     return render_template('admin.html',
-        tags=tags,
-        requirements=requirements,
-        courses=courses)
+                           tags=tags,
+                           requirements=requirements,
+                           courses=courses)
 
 
 
@@ -419,8 +366,10 @@ def admin_removecourse():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
     course = request.form['id']
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_class(get_class_by_id(course))
+
 
     return "Successfully removed course " + course
 
@@ -433,7 +382,8 @@ def admin_removeaoi():
         return redirect('/student_dashboard')
 
     aoi = request.form['id']
-
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_aoc(get_aoc_by_id(aoi))
     return "Successfully removed AOI " + aoi
 
 
@@ -441,16 +391,20 @@ def admin_removeaoi():
 def admin_addcourse():
     if 'google_token' not in session:
         return redirect('/login')
-    # if session['user_type'] == UserType.STUDENT.value:
-    #     return redirect('/student_dashboard')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
 
     name = request.form['name']
-    year = request.form['year']
+    da_year = request.form['year']
     semester = request.form['semester']
+    semester_enums = {'spring' : SemesterType.SPRING,
+                      'summer' : SemesterType.SUMMER,
+                      'fall' : SemesterType.FALL}
+    semester = semester_enums[semester]
     credit = request.form['credit']
     tags = request.form.getlist('tags')
-    print(tags)
-
+    create_class([name, semester, da_year, credit], tags)
+    #print(tags)
     return redirect('/admin')
 
 
@@ -458,15 +412,12 @@ def admin_addcourse():
 def admin_addaoc():
     if 'google_token' not in session:
         return redirect('/login')
-    # if session['user_type'] == UserType.STUDENT.value:
-    #     return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
     form = request.form.to_dict()
-    print(form)
-
+    # #print(request.form.getlist("req1courses"))
+    # #print(form)
+    add_aoc("divisional", form, request.form)
     return redirect('/admin')
 
 
@@ -476,12 +427,9 @@ def admin_adddouble():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
-    print(request.form)
-
+    form = request.form.to_dict()
+    #print(form)
+    add_aoc("double", form, request.form)
     return redirect('/admin')
 
 
@@ -491,10 +439,7 @@ def admin_addslash():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-
-    name = request.form['name']
-    year = request.form['year']
-
-    print(request.form)
-
+    form = request.form.to_dict()
+    #print(form)
+    add_aoc("slash", form, request.form)
     return redirect('/admin')

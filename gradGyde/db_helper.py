@@ -1,4 +1,4 @@
-# pylint: disable=E1101
+# pylint: disable=E1101,W0104
 import datetime
 import json
 from . import SESSION
@@ -10,22 +10,43 @@ from .models import (Aocs,
                      Tags,
                      ClassTags,
                      Prereqs,
-                     Requirements)
+                     Requirements,
+                     SemesterType)
 
-def make_aoc(name, passed_type, year):
+def make_aoc(name, passed_type, da_year):
     new_aoc = Aocs(aoc_name=name,
                    aoc_type=passed_type,
-                   aoc_year=year)
+                   aoc_year=da_year)
     SESSION.add(new_aoc)
     SESSION.commit()
 
-def make_class(name, semester, year, credit):
+def update_aoc(aoc_id, name, passed_type, da_year):
+    aoc = get_aoc_by_id(aoc_id)
+    if aoc is not None:
+        aoc.aoc_name = name
+        aoc.aoc_type = passed_type
+        aoc.aoc_year = da_year
+        SESSION.commit()
+
+def make_class(name, semester, da_year, credit):
     new_class = Classes(class_name=name,
                         class_semester=semester,
-                        class_year=year,
+                        class_year=da_year,
                         credit_type=credit)
     SESSION.add(new_class)
     SESSION.commit()
+
+def update_class(class_id, name, semester, da_year, credit):
+    course = get_class_by_id(class_id)
+    if course is not None:
+        course.class_name = name
+        course.class_year = da_year
+        course.credit_type = credit
+        semester_enums = {'Spring' : SemesterType.SPRING,
+                          'Summer' : SemesterType.SUMMER,
+                          'Fall' : SemesterType.FALL}
+        course.class_semester = semester_enums[semester]
+        SESSION.commit
 
 def make_user(email, name, da_year, u_type):
     if get_user(email) is None:
@@ -38,7 +59,7 @@ def make_user(email, name, da_year, u_type):
 
 def update_user(email, name, da_year):
     user = get_user(email)
-    if get_user(email) is not None:
+    if user is not None:
         user.user_name = name
         user.year_started = da_year
         SESSION.commit()
@@ -49,6 +70,11 @@ def make_tag(name):
     SESSION.add(new_tag)
     SESSION.commit()
 
+def update_tag(name):
+    tag = get_tag(name)
+    if tag is not None:
+        tag.tag_name = name
+        SESSION.commit()
 
 def make_requirement(da_aoc_id, da_tag_id, required):
     new_req = Requirements(aoc_id=da_aoc_id,
@@ -56,6 +82,12 @@ def make_requirement(da_aoc_id, da_tag_id, required):
                            num_req=required)
     SESSION.add(new_req)
     SESSION.commit()
+
+def update_requirement(req_id, required):
+    req = get_requirement(req_id)
+    if req is not None:
+        req.num_req = required
+        SESSION.commit()
 
 
 def assign_prereqs(prereq, chosen):
@@ -112,7 +144,6 @@ def create_aoc(aoc_info, tags, amounts):
         da_tag = get_tag(tag)
         make_requirement(aoc.aoc_id, da_tag.tag_id, amounts[tags.index(tag)])
 
-
 def get_user(email):
     user_query = Users.query.filter_by(user_email=email).first()
     return user_query
@@ -141,7 +172,7 @@ def get_aocs(pref_type, name, da_year):
     if name is not None:
         filters.append(Aocs.aoc_name == name)
     filters.append(Aocs.aoc_type == pref_type)
-    print(filters)
+    #print(filters)
     return SESSION.query(Aocs).filter(*filters).all()
 
 def get_preffered_aocs(user, pref_type):
@@ -246,6 +277,11 @@ def get_prereqs(chosen_id):
     #and outputs a list of associated prereq objects
     return Prereqs.query.filter_by(chosen_tag_id=chosen_id).all()
 
+def get_requirement(req_id):
+    #Takes an aoc id as input, outputs a list of requirement objects that match it
+    req_query = Requirements.query.filter_by(req_id=req_id).first()
+    return req_query
+
 def get_requirement_with_tag(req_id):
     req_query = SESSION.query(Requirements, Tags).filter_by(req_id=req_id).join(Tags).first()
     return req_query
@@ -292,7 +328,7 @@ def get_classes_taken_json(classes_taken):
     if classes_taken is not None:
         classes = {}
         class_index = 0
-        print(classes_taken)
+        #print(classes_taken)
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
@@ -308,7 +344,7 @@ def search_classes_json(user, classes_taken):
     if classes_taken is not None:
         classes = {}
         class_index = 0
-        print(classes_taken)
+        #print(classes_taken)
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
@@ -434,6 +470,14 @@ def get_lacs_json(user):
         lac_index = lac_index+1
     return json_base
 
+def get_all_tags():
+    tags = Tags.query.all()
+    tag_names = []
+    for tag in tags:
+        tag_names.append(tag.tag_name)
+    return tag_names
+
+
 def get_all_classes():
     class_query = Classes.query.all()
     return class_query
@@ -512,7 +556,7 @@ def delete_aoc(aoc):
     merge_and_delete(aoc)
 
 def take_lac_default(student, lac_id):
-    print(lac_id)
+    #print(lac_id)
     lac = get_requirement_with_tag(lac_id)
     name = lac.Tags.tag_name
     if name == 'LAC course':
@@ -527,3 +571,59 @@ def take_lac_default(student, lac_id):
         take_class(get_class("Diverse Perspectives Non-Class"), student)
     if name == 'Mathematics LAC':
         take_class(get_class("Mathematics Non-Class"), student)
+
+def add_aoc(da_type, form, r_f):
+    name = form['name']
+    da_year = form['year']
+    index = 1
+    limit = (len(form)-2)/3
+    tags = []
+    amounts = []
+    while index < limit+1:
+        req_key = "req"+str(index)
+        req_num_key = req_key+"Credit"
+        req = form[req_key]
+        if req is not None:
+            tags.append(req)
+            #print(req)
+        num = form[req_num_key]
+        if num == "":
+            num = 0
+        if num is not None:
+            amounts.append(num)
+            #print(num)
+        index = index+1
+    create_aoc([name, da_type, da_year], tags, amounts)
+    index = 1
+    assign_classes(tags, limit, r_f)
+    #print(get_aoc(name, da_type))
+
+def assign_classes(tags, limit, r_f):
+    index = 1
+    while index < limit+1:
+        req_class_key = "req"+str(index)+"courses"
+        req_class_list = r_f.getlist(req_class_key)
+        if req_class_list is not None:
+            for da_class in req_class_list:
+                assign_tags(get_class_by_id(da_class), get_tag(tags[index-1]))
+                ##print(get_class_tags(da_class))
+        index = index+1
+
+def get_all_classes_json():
+    class_query = get_all_classes()
+    classes = []
+    for da_class in class_query:
+        classes.append({"text": da_class.class_name,
+                        "id": da_class.class_id, "year" : da_class.class_year})
+    return json.dumps(classes)
+
+def get_all_requirements():
+    req_query = SESSION.query(Requirements, Tags).join(Tags).all()
+    return req_query
+
+def get_all_requirements_json():
+    req_query = get_all_requirements()
+    requirements = []
+    for req in req_query:
+        requirements.append({'name' : req.Tags.tag_name, 'id' : req.Requirements.req_id})
+    return json.dumps(requirements)
