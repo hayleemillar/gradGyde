@@ -42,7 +42,7 @@
       <a href="/student_dashboard/settings" class="img-link">
         <img src="../static/img/settings.png" Alt="Settings" style="width:47px;height:47px;">
       </a>
-      <button type="button" onclick="location.href='/logout';">Logout</button>
+      <button type="submit" onclick="location.href='/logout';">Logout</button>
     </ul>
   </ul>
 
@@ -72,7 +72,7 @@
 
       <br/>
 
-      <center><button onclick="location.href='/student_dashboard/lacs';" type="button" class="btn btn-primary">Save Changes</button></center><br/><br/>
+      <center><button onclick="saveChanges(lacs)" type="button" class="btn btn-primary">Save Changes</button></center><br/><br/>
 
       <br/>
     </form>
@@ -80,8 +80,10 @@
 </body>
 </html>
 
-
-
+<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
 
 <script>
   var lacs = {{ lac | tojson }};
@@ -95,8 +97,6 @@
   var label;
   var courses;
 
-  var index = 0;
-
   for (lac in lacs) {
 
     // create checkbox with label and input
@@ -106,13 +106,13 @@
     input = document.createElement("input");
     input.class = "form-check-input";
     input.setAttribute("type", "checkbox");
-    input.setAttribute("id", "lac-" + index.toString());
+    input.setAttribute("id", "lac-" + lacs[lac]["id"]);
 
     div.appendChild(input);
 
     label = document.createElement("label");
     label.class = "form-check-label";
-    label.setAttribute("for", "lac-" + index.toString());
+    label.setAttribute("for", "lac-" + lacs[lac]["id"]);
 
     text = document.createTextNode(lacs[lac]["name"]);
 
@@ -155,8 +155,50 @@
         input.checked = true;
       }
     }
+  }
 
-    // increment
-    index++;
+  function saveChanges(oldJSON) {
+    var newJSON = {};
+    var current;
+    var nameVal;
+    var idVal;
+    var courseVal;
+
+    for (var i in lacs) {
+      current = lacs[i];
+      nameVal = current["name"];
+      idVal = current["id"];
+      courseVal = current["courses"];
+
+      isChecked = document.getElementById("lac-" + current["id"]);
+      console.log("lac-" + current["id"]);
+      isChecked = isChecked.checked;
+      newJSON[i] = {
+        name: nameVal,
+        id: idVal,
+        course: courseVal,
+        fulfilled: isChecked
+      }
+    }
+
+    $.post({
+      url: "/student_dashboard/lacs/post", 
+      data: {
+        old: JSON.stringify(oldJSON),
+        new: JSON.stringify(newJSON)
+      },
+      success: function() {
+        window.location.href = "/student_dashboard/lacs";
+      }
+
+    });
+
+    // $.ajax({url: "/student_dashboard/lacs/post", 
+    //   type: "post",
+    //   data: {
+    //     old: JSON.stringify(oldJSON),
+    //     new: JSON.stringify(newJSON)
+    //   }
+    // });
   }
 </script>

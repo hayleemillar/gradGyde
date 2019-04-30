@@ -7,8 +7,17 @@
 
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
-  <link rel="stylesheet" type="text/css" href="../static/style.css" />
   <link rel='shortcut icon' href='../static/favicon.ico'>
+
+  <script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../static/style.css" />
 
 </head>
 
@@ -38,7 +47,6 @@
     <p style="font-size: 18px">
       View, add, remove, and edit courses, AOCs, doubles, and slashes.
     </p>
-
     <br/>
 
     <!-- tabs for either courses, aocs, doubles, slashes -->
@@ -64,18 +72,166 @@
     <div class="summary" id="results" style="margin-left:10px;margin-right:10px;">
 
     </div>
+
+    <!-- Course Modal -->
+    <div class="modal hide" id="courseModal" style="background-color: #222222;">
+      <div class="modal-header">
+        <h3>Add Course</h3>
+      </div>
+      <div class="modal-body">
+        <form id="form-addcourse" action="/admin/addcourse" method="post">
+          <!-- preferred name -->
+          <label for="inputCourseName">Name</label>
+          <input name='name' type="text" class="form-control" id="inputCourseName" placeholder="Enter course name" required>
+
+          <br/>
+
+          <label for="inputCourseYear">Year</label><br/>
+          <select name='year' id="inputCourseYear" class="mdb-select colorful-select dropdown-primary md-form" required>
+          </select>
+
+          <br/>
+          <br/>
+
+          <label for="selectCourseSemester">Semester</label><br/>
+          <select name='semester' id="selectCourseSemester" class="mdb-select colorful-select dropdown-primary md-form" required>
+            <option value="fall">Fall</option>
+            <option value="spring">Spring</option>
+            <option value="">Summer</option>
+          </select>
+
+          <br/>
+          <br/>
+
+          <label for="selectCourseCredit">Credit</label><br/>
+          <select name='credit' id="selectCourseCredit" class="mdb-select colorful-select dropdown-primary md-form" required>
+            <option value=0>0</option>
+            <option value=0.5>0.5</option>
+            <option value=1>1</option>
+          </select>
+
+          <br/>
+          <br/>
+
+          <label for="selectCourseTags">Tags</label><br/>
+          <select class="js-example-tags form-control" multiple="multiple" name="tags" style="width:100%;" id="selectCourseTags" required>
+          </select>
+
+          <br/>
+          <br/>
+          <br/>
+
+          <button type="submit" style="border-radius:3px">Add</button>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" style="background-color: #aeb4b7;"data-dismiss="modal">Cancel
+
+          <br/></a>
+      </div>
+    </div>
+
+    <!-- AOC Modal -->
+    <div class="modal hide summary" id="aocModal" style="max-width: 500px;max-height: 500px;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <p>One fine body…</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+
+    <!-- Double Modal -->
+    <div class="modal hide summary" id="doubleModal" style="max-width: 500px;max-height: 500px;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <p>One fine body…</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+
+    <!-- Slash Modal -->
+    <div class="modal hide summary" id="slashModal" style="max-width: 500px;max-height: 500px;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <p>One fine body…</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+
   </div>
 </body>
 
-<script
+<!-- <script
   src="https://code.jquery.com/jquery-3.4.0.min.js"
   integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script> -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<script src="../static/populate-select.js"></script>
 
 <script src="../static/admin.js"></script>
 
 <script>
+  data = {{ tags | safe }};
+
   switchTab('courses', ['courses', 'aocs', 'doubles', 'slashes'], 'summary');
+
+  // populate select for year
+  var currentYear = new Date().getFullYear(), years = [];
+  startYear = currentYear - 10;
+
+  var el;
+
+  while (startYear <= currentYear + 1) {
+    years.push(startYear);
+    startYear++;
+  }
+
+  populateSelect("inputCourseYear", years);
+  // populateSelect("inputAOCYear", years);
+  // populateSelect("inputDoubleYear", years);
+  // populateSelect("inputSlashYear", years);
+
+
+  $(".js-example-tags").select2({
+    data: data,
+    tags: true,
+    tokenSeparators: [','],
+    createTag: function (params) {
+      var term = $.trim(params.term);
+
+
+      if (term === '') {
+        return null;
+      }
+
+      return {
+        id: term,
+        text: term,
+        newTag: true, // add additional parameters
+      }
+    }
+  });
 </script>
 
 </html>

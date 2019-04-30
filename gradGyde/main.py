@@ -1,10 +1,12 @@
-# pylint: disable=R1714
+# pylint: disable=R1714,C0121,C0330,W0612
 import os
 import json
 from flask import render_template, request, session, url_for
 from flask_oauthlib.client import OAuth, redirect
 from gradGyde import app
 from .db_helper import (assign_aoc,
+                        delete_aoc,
+                        delete_class,
                         delete_class_taken,
                         delete_pref_aoc,
                         get_aoc_by_id,
@@ -19,6 +21,7 @@ from .db_helper import (assign_aoc,
                         search_aoc_json,
                         search_classes_json,
                         take_class,
+                        take_lac_default,
                         update_user)
 from .models import UserType, SemesterType
 OAUTH = OAuth()
@@ -129,6 +132,20 @@ def dash_stud():
 def lacs():
     if 'google_token' not in session:
         return redirect('/login')
+    lac = {
+        'LAC0' : {
+            'name' : 'Diverse Perspectives',
+            'fulfilled' : True,
+            'courses' : ['External Credit'],
+            'id' : 0
+            },
+        'LAC1' : {
+            'name' : 'Social Science',
+            'fulfilled' : False,
+            'courses' : None,
+            'id' : 1
+            }
+    }
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
     user = get_user(session['user_email'])
@@ -143,6 +160,13 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
+    #print(request.form)
+    user = get_user(session['user_email'])
+    old_json = json.loads(request.form['old'])
+    new_json = json.loads(request.form["new"])
+    for old_lac, new_lac in zip(old_json, new_json):
+        if old_json[old_lac]['fulfilled'] == False and new_json[new_lac]['fulfilled'] == True:
+            take_lac_default(user, new_json[new_lac]['id'])
     return redirect('/student_dashboard/lacs')
 
 
@@ -243,7 +267,10 @@ def remove_course():
     user = get_user(session['user_email'])
     # remove from db
     course = request.form['id']
-    delete_class_taken(user.user_id, course)
+    if session['user_type'] == UserType.STUDENT.value:
+        delete_class_taken(user.user_id, course)
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_class(course)
     return "Successfully removed course " + course
 
 
@@ -251,7 +278,10 @@ def remove_course():
 def remove_aoi():
     user = get_user(session['user_email'])
     aoi = request.form['id']
-    delete_pref_aoc(user.user_id, aoi)
+    if session['user_type'] == UserType.STUDENT.value:
+        delete_pref_aoc(user.user_id, aoi)
+    if session['user_type'] == UserType.ADMIN.value:
+        delete_aoc(aoi)
     return "Successfully removed AOI " + aoi
 
 
@@ -276,13 +306,102 @@ def admin():
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-    return render_template('admin.html')
+
+    tags = ['Russian Language',
+        'Russian Literature',
+        'Intro Anthro',
+        'Intro Archeology',
+        'Upper Level or Thematic Anthro Course',
+        'History of Anthro Theory ',
+        'Linguistic or Physical Anthro',
+        'Method and Theory In Archeology ',
+        'Foreign Lanuguage ',
+        'Calculus',
+        'Linear Algebra',
+        'Differential Equations',
+        'Abstract Algebra',
+        'Real Analysis',
+        'Complex Analysis',
+        'Math Seminar',
+        'Foundations Art Course']
+
+    return render_template('admin.html',
+        tags=tags)
 
 
-@app.route('/admin/settings', methods=['GET'])
-def admin_settings():
+
+@app.route('/admin/results', methods=['GET'])
+def admin_results():
     if 'google_token' not in session:
         return redirect('/login')
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
-    return render_template('admin-settings.html')
+    user = get_user(session['user_email'])
+    search_type = request.args.get('type')
+    search_name = request.args.get('name')
+    search_year = request.args.get('year')
+    if search_name == "" or search_name == "Any":
+        search_name = None
+    if search_year == "" or search_year == "Any":
+        search_year = None
+    # query db to get results based on user input.
+    # NOTE: the user isn't required to fill in every field
+    if search_type == "courses":
+        search_semester = request.args.get('semester')
+        semester_enums = {'Spring' : SemesterType.SPRING,
+                          'Summer' : SemesterType.SUMMER,
+                          'Fall' : SemesterType.FALL}
+        search_semester = semester_enums[search_semester]
+        classes = get_classes(search_name, search_year, search_semester)
+        results = search_classes_json(user, classes)
+
+    elif search_type == "aocs":
+        results = search_aoc_json(user, 'divisional', search_name, search_year)
+    elif search_type == "doubles":
+        results = search_aoc_json(user, 'double', search_name, search_year)
+    elif search_type == "slashes":
+        results = search_aoc_json(user, 'slash', search_name, search_year)
+    else:
+        results = None
+    return results
+
+
+@app.route('/admin/removecourse', methods=['POST'])
+def admin_removecourse():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    course = request.form['id']
+
+    return "Successfully removed course " + course
+
+
+@app.route('/admin/removeaoi', methods=['POST'])
+def admin_removeaoi():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    aoi = request.form['id']
+
+    return "Successfully removed AOI " + aoi
+
+
+@app.route('/admin/addcourse', methods=['POST'])
+def admin_addcourse():
+    if 'google_token' not in session:
+        return redirect('/login')
+    if session['user_type'] == UserType.STUDENT.value:
+        return redirect('/student_dashboard')
+
+    name = request.form['name']
+    year = request.form['year']
+    semester = request.form['semester']
+    credit = request.form['credit']
+    tags = request.form['tags']
+    print(tags)
+
+    return redirect('/admin')

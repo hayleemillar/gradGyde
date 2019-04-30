@@ -1,24 +1,24 @@
 Spring 2019	Term	Beginning Russian II	Foreign Language	Russian Language				
 Spring 2019	Term	Third Year Modern Russian II	Foreign Language	Russian Language				
-Spring 2019	Term	Women In Russian Literature	Russian Literature	Cross-Cultural English Class	Diverse Perspectives			
-Spring 2019	Term	Human Origins and Evolutions	Diverse Perspectives	Intro Anthro	Social Sciences LAC			
-Spring 2019	Term	Historical Archaeology of Latin America	Intro Archeaology	Diverse Perspectives				
+Spring 2019	Term	Women In Russian Literature	Russian Literature	Cross-Cultural English Class	Diverse Perspectives LAC	LAC course		
+Spring 2019	Term	Human Origins and Evolutions	Diverse Perspectives LAC	Intro Anthro	Social Sciences LAC	LAC course		
+Spring 2019	Term	Historical Archaeology of Latin America	Intro Archeaology	Diverse Perspectives LAC	LAC course			
 Spring 2019	Term	Approaches to Visual Anthropology	Upper Level or Thematic Anthro Course 	Intro Anthro				
-Spring 2019	Term	Anthropology and Development	Diverse Perspectives	Upper Level or Thematic Anthro Course	Intro Anthro			
-Spring 2019	Term	Conservation and Indigenous Knowledge	Diverse Perspectives	Upper Level or Thematic Anthro Course	Intro Anthro			
-Spring 2019	Term	Colonial Encounters	Diverse Perspectives	Social Sciences LAC	Upper Level or Thematic Anthro Course	Intro Anthro		
-Spring 2019	Term	Landscapes: Past and Present	Diverse Perspectives	Social Sciences LAC	Upper Level or Thematic Anthro Course	Intro Anthro		
-Spring 2019	Term	Anthropology and Literature	Diverse Perspectives	Upper Level or Thematic Anthro Course		Intro Anthro		
+Spring 2019	Term	Anthropology and Development	Diverse Perspectives LAC	Upper Level or Thematic Anthro Course	Intro Anthro	LAC course		
+Spring 2019	Term	Conservation and Indigenous Knowledge	Diverse Perspectives LAC	Upper Level or Thematic Anthro Course	Intro Anthro	LAC course		
+Spring 2019	Term	Colonial Encounters	Diverse Perspectives LAC	Social Sciences LAC	Upper Level or Thematic Anthro Course	Intro Anthro	LAC course	
+Spring 2019	Term	Landscapes: Past and Present	Diverse Perspectives LAC	Social Sciences LAC	Upper Level or Thematic Anthro Course	Intro Anthro	LAC course	
+Spring 2019	Term	Anthropology and Literature	Diverse Perspectives LAC	Upper Level or Thematic Anthro Course	LAC course	Intro Anthro		
 Spring 2019	Term	Approaches to Visual Anthyopology	Upper Level or Thematic Anthro Course 					
 Spring 2019	Term	Calculus II	Calculus					
 Spring 2019	Term	Abstract Algebra II	Abstract Algebra					
-Spring 2019	Term	Theory of Computation III	Mathematics					
-Spring 2019	Term	Linear Programming	Mathematics					
-Spring 2019	Term	Distribution Theory and Harmonic Analysis	Mathematics					
-Spring 2019	Term	Theory of Computation IV	Mathematics					
+Spring 2019	Term	Theory of Computation III	Mathematics LAC	LAC course				
+Spring 2019	Term	Linear Programming	Mathematics LAC	LAC course				
+Spring 2019	Term	Distribution Theory and Harmonic Analysis	Mathematics LAC	LAC course				
+Spring 2019	Term	Theory of Computation IV	Mathematics LAC	LAC course				
 Spring 2019	Term	Mathematics Seminar	Math Seminar					
-Spring 2019	Term	Mechanics of Visual Construction: Introduction to materials and Processes of 2D and 3D Artistic Practice	Humanities LAC					
-Spring 2019	Term	Sculpture I	Humanities LAC	Foundations Art Course				
+Spring 2019	Term	Mechanics of Visual Construction: Introduction to materials and Processes of 2D and 3D Artistic Practice	Humanities LAC	LAC course				
+Spring 2019	Term	Sculpture I	Humanities LAC	Foundations Art Course	LAC course			
 Spring 2019	Term	Painting II	Intermediate Studio Art Course	Foundations Art Course	Studio Art			
 Spring 2019	Term	Scopes and Tropes: Handmade Animation	Intermediate Studio Art Course	Foundations Art Course	Studio Art			
 Spring 2019	Term	Museum Studies: Artist as Curator	Art History Course					
@@ -27,11 +27,81 @@ Spring 2019	Term	Masterpieces: Medieval/Renaissance/Baroque	Art History Course	R
 Spring 2019	Term	The Gothic Cathedral	Art History Course	Ancient Medieval Art	Pre-Modern Art			
 Spring 2019	Term	Representing Difference: Race, Ethnicity, and the Visual Arts	Art History Course	Contemporary Art	Modern and Contemporary Art			
 Spring 2019	Term	Biostatistics						
-Spring 2019	Term	Foundations of Biology II	Foundations of Biology	Natural Sciences LAC				
-Spring 2019	Term	Current Issues in Human Genetics	Organismic Lecture	Natural Sciences LAC				
+Spring 2019	Term	Foundations of Biology II	Foundations of Biology	Natural Sciences LAC	LAC course			
+Spring 2019	Term	Current Issues in Human Genetics	Organismic Lecture	Natural Sciences LAC	LAC course			
+Spring 2019	Term	Introduction to Neuroscience	Natural Sciences LAC	Organismic Lecture	LAC course			
+Spring 2019	Term	Introduction to Oceanography	Ecology Lecture	Natural Sciences LAC	LAC course			
+Spring 2019	Term	Conservation Biology	Ecology Lecture					
+Spring 2019	Term	Animal Behavior laboratory	Biology Lab					
+Spring 2019	Mod	Classical Genetics Techniques Laboratory	Biology Lab					
+Spring 2019	Mod	Fundamentals of Applied Genetics	Organismic Lecture					
+Spring 2019	Term	Introduction to Microbiology	Molecular Lecture					
+Spring 2019	Term	Introduction to Microbiology Laboratory	Biology Lab					
+Spring 2019	Term	Marine Mammal Builogy	Organismic Lecture					
+Spring 2019	Term	Biology of Sharks, Skates, and Rays	Organismic Lecture					
+Spring 2019	Term	Biology of Sharks, Skates, and Rays Laboratory	Biology Lab					
+Spring 2019	Term	Coral Reef Ecology	Ecology Lecture					
+Spring 2019	Term	Principles of Bioinformatics	Statistics					
+Spring 2019	Mod	Principles of Ecological Management	Ecology Lecture					
+Spring 2019	Mod	Topics in Cell Signaling	Molecular Lecture					
+Spring 2019	Term	Neuroethology	Organismic Lecture					
+Spring 2019	Term	General Chemistry II	General Chem					
+Spring 2019	Term	General Chemistry Laboratory	General Chem Lab					
+Spring 2019	Term	Organic Chemistry II: Structure and Reaction	Organic Chem					
+Spring 2019	Term	Instrumental Methods						
+Spring 2019	Term	Nanotechnology in Wastewater Treatment						
+Spring 2019	Term	Biochemistry II: Metabolism and Advanced Topics	Biochemistry					
+Spring 2019	Term	Biochemistry Laboratory						
+Spring 2019	Term	Physical Chemistry: Quantum Mechanics	Physical Chem					
+Spring 2019	Term	Physical Chemistry Laboratory						
+Spring 2019	Term	Computer Networks	Natural Sciences LAC	Networks	LAC course			
+Spring 2019	Term	Object Oriented Programming	Software Design Course					
+Spring 2019	Term	Mobile Application Development	Technical Computer Science Elective					
+Spring 2019	Term	Introduction to Programming in C	Into Programming Language					
+Spring 2019	Term	Software Engineering	Software Design Course					
+Spring 2019	Term	Artificial Intelligence	Technical Computer Science Elective					
+Spring 2019	Term	Introduction to Augmented Reality	Technical Computer Science Elective					
+Spring 2019	Term	Introductory Microeconomics	Social Sciences LAC	LAC course				
+Spring 2019	Term	Introductory Macroeconomics	Social Sciences LAC	LAC course				
+Spring 2019	Term	Introduction to Behavioral Economics	Economics Course	Social Sciences LAC	LAC course			
+Spring 2019	Term	Introduction to International Business	Diverse Perspectives LAC	Social Sciences LAC	Economics Course	LAC course		
+Spring 2019	Term	Money, Banking, And Financial Markets	Economics Course					
+Spring 2019	Term	Corporate Finance	Economics Course					
+Spring 2019	Term	Intermediate Macroeconomics	Intermediate Macro or Micro					
+Spring 2019	Term	Econometrics	Economics Course					
+Spring 2019	Term	Manifestos	Humanities LAC	Criticism or Theory English Course	LAC course			
+Spring 2019	Term	Voices from Outside	Humanities LAC	Cross-Cultural English Course	LAC course			
+Spring 2019	Term	Landscape in Chinese Literature	Diverse Perspectives LAC	Humanities LAC	Chinese Literature and Culture	Cross-Cultural English Course	LAC course	
+Spring 2019	Term	Theater and Society	Diverse Perspectives LAC	Humanities LAC	Historical Engagement English Course	LAC course		
+Spring 2019	Term	Transnational Perspectives in Holocaust Memory	Humanities LAC	Cross-Cultural English Course	Historical Engagement English Course	LAC course		
+Spring 2019	Term	Exploring the Unconscious Mind in Development of the Self: Psychoanalytic Reflections in Film	Textual Analysis					
+Spring 2019	Term	Introduction to World Literature	Diverse Perspectives LAC	Cross-Cultural English Course	LAC course			
+Spring 2019	Term	Gothic Tradition	Historical Engagement English Course					
+Spring 2019	Term	L'amour Interdit	Cross-Cultural English Course	Humanities LAC	LAC course			
+Spring 2019	Term	Representations of Power in Modern Latin American Narrative	Cross-Cultural English Course					
+Spring 2019	Term	The City in American Literature and Film	Historical Engagement English Course					
+Spring 2019	Term	Crossing Cultural Borders in American Literature and Film	Cross-Cultural English Course	Diverse Perspectives LAC	LAC course			
+Spring 2019	Term	All About Love	Humanities LAC	Textual Analysis	LAC course			
+Spring 2019	Term	Giving Voice to Identity: Manifestos and Fiction from Quebec and the Francophone Caribbean	Cross-Cultural English Course	Diverse Perspectives LAC	LAC course			
+Spring 2019	Term	Chaucer and the Medieval Narrative	Historical Engagement English Course					
+Spring 2019	Term	Modern and Contemporary Poetry	Diverse Perspectives LAC	LAC course				
+Spring 2019	Term	Postcolonial Literature and Theory	Criticism or Theory English Course					
+Spring 2019	Term	Linear Algebra	Linear Algebra					
+Spring 2019	Term	Introduction to Number Theory with Applications to Cryptography	Mathematics LAC	LAC course				
+Spring 2019	Term	Theory of Computation IV	Mathematics LAC	LAC course				
+Spring 2019	Term	Elementary Latin II	Greek or Latin					
+Spring 2019	Term	Elementary Homeric Greek II	Greek or Latin					
+Spring 2019	Term	Beginning French II	Foreign Language					
+Spring 2019	Term	Elementary Spanish II	Foreign Language					
+Spring 2019	Term	First Year Modern Chinese II	Chinese Language	Foreign Language	Humanities LAC	LAC course		
+Spring 2019	Term	Advanced Latin: Horace, Satires	Greek or Latin	Greek and Roman Culture				
+Spring 2019	Term	Advanced Greek: Euripides Cyclops	Greek or Latin	Greek and Roman Culture				
+Spring 2019	Term	Third Year Modern Chinese II	Chinese Language	Foreign Language	Humanities LAC	LAC course		
+Spring 2019	Term	The Age of Openness: China before Mao	Chinese Literature and Culture					
+Spring 2019	Term	Introduction to Hinduism	East Asia Course					
 External 2099	Term	Basic Non-Class	LAC course
-External 2099	Term	Humanities Non-Class	Humanities LAC
-External 2099	Term	Social Sciences Non-Class	Social Sciences LAC
-External 2099	Term	Natural Sciences Non-Class	Natural Sciences LAC
-External 2099	Term	Diverse Perspectives Non-Class	Diverse Perspectives LAC
-External 2099	Term	Mathematics Non-Class	Mathematics LAC
+External 2099	Term	Humanities Non-Class	Humanities LAC	LAC course
+External 2099	Term	Social Sciences Non-Class	Social Sciences LAC	LAC course
+External 2099	Term	Natural Sciences Non-Class	Natural Sciences LAC	LAC course
+External 2099	Term	Diverse Perspectives Non-Class	Diverse Perspectives LAC	LAC course
+External 2099	Term	Mathematics Non-Class	Mathematics LAC	LAC course
