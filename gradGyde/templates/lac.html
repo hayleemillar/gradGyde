@@ -160,23 +160,41 @@
   function saveChanges(oldJSON) {
     var newJSON = {};
     var current;
+    var nameVal;
+    var idVal;
+    var courseVal;
 
     for (var i in lacs) {
       current = lacs[i];
+      nameVal = current["name"];
+      idVal = current["id"];
+      courseVal = current["courses"];
+
       isChecked = document.getElementById("lac-" + current["id"]);
       console.log("lac-" + current["id"]);
       isChecked = isChecked.checked;
-      newJSON["LAC" + i] = {
-        name: current["name"],
-        id: current["id"],
-        course: current["courses"],
+      newJSON[i] = {
+        name: nameVal,
+        id: idVal,
+        course: courseVal,
         fulfilled: isChecked
       }
     }
 
+    console.log(oldJSON);
+    console.log(newJSON);
+
     $.post("/student_dashboard/lacs/post", {
-      old: oldJSON,
-      new: newJSON
+      old: JSON.stringify(oldJSON),
+      new: JSON.stringify(newJSON)
     });
+
+    // $.ajax({url: "/student_dashboard/lacs/post", 
+    //   type: "post",
+    //   data: {
+    //     old: JSON.stringify(oldJSON),
+    //     new: JSON.stringify(newJSON)
+    //   }
+    // });
   }
 </script>
