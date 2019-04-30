@@ -18,7 +18,6 @@ from .db_helper import (add_aoc,
                         get_aoc_json,
                         get_class_by_id,
                         get_classes,
-                        get_classes_json,
                         get_classes_taken,
                         get_classes_taken_json,
                         get_lacs_json,
@@ -275,7 +274,7 @@ def remove_course():
     course = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_class_taken(user.user_id, course)
-    
+
     return "Successfully removed course " + course
 
 
@@ -285,7 +284,7 @@ def remove_aoi():
     aoi = request.form['id']
     if session['user_type'] == UserType.STUDENT.value:
         delete_pref_aoc(user.user_id, aoi)
-    
+
     return "Successfully removed AOI " + aoi
 
 
@@ -319,9 +318,9 @@ def admin():
     # print(requirements)
     # print(courses)
     return render_template('admin.html',
-        tags=tags,
-        requirements=requirements,
-        courses=courses)
+                           tags=tags,
+                           requirements=requirements,
+                           courses=courses)
 
 
 
@@ -370,7 +369,7 @@ def admin_removecourse():
     course = request.form['id']
     if session['user_type'] == UserType.ADMIN.value:
         delete_class(get_class_by_id(course))
-    
+
 
     return "Successfully removed course " + course
 
@@ -399,8 +398,8 @@ def admin_addcourse():
     da_year = request.form['year']
     semester = request.form['semester']
     semester_enums = {'spring' : SemesterType.SPRING,
-                          'summer' : SemesterType.SUMMER,
-                          'fall' : SemesterType.FALL}
+                      'summer' : SemesterType.SUMMER,
+                      'fall' : SemesterType.FALL}
     semester = semester_enums[semester]
     credit = request.form['credit']
     tags = request.form.getlist('tags')

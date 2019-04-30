@@ -1,4 +1,4 @@
-# pylint: disable=E1101
+# pylint: disable=E1101,W0104
 import datetime
 import json
 from . import SESSION
@@ -10,7 +10,8 @@ from .models import (Aocs,
                      Tags,
                      ClassTags,
                      Prereqs,
-                     Requirements)
+                     Requirements,
+                     SemesterType)
 
 def make_aoc(name, passed_type, da_year):
     new_aoc = Aocs(aoc_name=name,
@@ -20,10 +21,10 @@ def make_aoc(name, passed_type, da_year):
     SESSION.commit()
 
 def update_aoc(aoc_id, name, passed_type, da_year):
-    aoc = get_aoc_by_id(aoc_id=aoc_id)
+    aoc = get_aoc_by_id(aoc_id)
     if aoc is not None:
-        aoc.aoc_name = name,
-        aoc.aoc_type = passed_type,
+        aoc.aoc_name = name
+        aoc.aoc_type = passed_type
         aoc.aoc_year = da_year
         SESSION.commit()
 
@@ -571,7 +572,7 @@ def take_lac_default(student, lac_id):
     if name == 'Mathematics LAC':
         take_class(get_class("Mathematics Non-Class"), student)
 
-def add_aoc(da_type, form, rf):
+def add_aoc(da_type, form, r_f):
     name = form['name']
     da_year = form['year']
     index = 1
@@ -591,12 +592,12 @@ def add_aoc(da_type, form, rf):
         if num is not None:
             amounts.append(num)
             print(num)
-        index=index+1
+        index = index+1
     create_aoc([name, da_type, da_year], tags, amounts)
     index = 1
     while index < limit+1:
         req_class_key = "req"+str(index)+"courses"
-        req_class_list = rf.getlist(req_class_key)
+        req_class_list = r_f.getlist(req_class_key)
         if req_class_list is not None:
             for da_class in req_class_list:
                 assign_tags(get_class_by_id(da_class), get_tag(tags[index-1]))
@@ -615,7 +616,7 @@ def get_all_classes_json():
 def get_all_requirements():
     req_query = SESSION.query(Requirements, Tags).join(Tags).all()
     return req_query
-    
+
 def get_all_requirements_json():
     req_query = get_all_requirements()
     requirements = []
