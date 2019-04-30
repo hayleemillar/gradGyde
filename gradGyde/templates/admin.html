@@ -321,6 +321,10 @@
   reqsJSON = {{ requirements | safe }};
   courses = {{ courses | safe }};
 
+  for(var i in courses) {
+    courses[i]["text"] = courses[i]["text"] + " " + courses[i]["year"];
+  }
+
   switchTab('courses', ['courses', 'aocs', 'doubles', 'slashes'], 'summary');
 
   // populate select for year
