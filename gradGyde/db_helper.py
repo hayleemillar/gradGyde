@@ -86,7 +86,7 @@ def make_requirement(da_aoc_id, da_tag_id, required):
 def update_requirement(req_id, required):
     req = get_requirement(req_id)
     if req is not None:
-        req.num_req=required
+        req.num_req = required
         SESSION.commit()
 
 
@@ -172,7 +172,7 @@ def get_aocs(pref_type, name, da_year):
     if name is not None:
         filters.append(Aocs.aoc_name == name)
     filters.append(Aocs.aoc_type == pref_type)
-    print(filters)
+    #print(filters)
     return SESSION.query(Aocs).filter(*filters).all()
 
 def get_preffered_aocs(user, pref_type):
@@ -328,7 +328,7 @@ def get_classes_taken_json(classes_taken):
     if classes_taken is not None:
         classes = {}
         class_index = 0
-        print(classes_taken)
+        #print(classes_taken)
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
@@ -344,7 +344,7 @@ def search_classes_json(user, classes_taken):
     if classes_taken is not None:
         classes = {}
         class_index = 0
-        print(classes_taken)
+        #print(classes_taken)
         for course in classes_taken:
             class_key = 'class'+str(class_index)
             class_info = {'name' : course.class_name,
@@ -556,7 +556,7 @@ def delete_aoc(aoc):
     merge_and_delete(aoc)
 
 def take_lac_default(student, lac_id):
-    print(lac_id)
+    #print(lac_id)
     lac = get_requirement_with_tag(lac_id)
     name = lac.Tags.tag_name
     if name == 'LAC course':
@@ -585,15 +585,20 @@ def add_aoc(da_type, form, r_f):
         req = form[req_key]
         if req is not None:
             tags.append(req)
-            print(req)
+            #print(req)
         num = form[req_num_key]
         if num == "":
             num = 0
         if num is not None:
             amounts.append(num)
-            print(num)
+            #print(num)
         index = index+1
     create_aoc([name, da_type, da_year], tags, amounts)
+    index = 1
+    assign_classes(tags, r_f)
+    #print(get_aoc(name, da_type))
+
+def assign_classes(tags, r_f):
     index = 1
     while index < limit+1:
         req_class_key = "req"+str(index)+"courses"
@@ -601,9 +606,8 @@ def add_aoc(da_type, form, r_f):
         if req_class_list is not None:
             for da_class in req_class_list:
                 assign_tags(get_class_by_id(da_class), get_tag(tags[index-1]))
-                print(get_class_tags(da_class))
-        index=index+1
-    print(get_aoc(name, da_type))
+                ##print(get_class_tags(da_class))
+        index = index+1
 
 def get_all_classes_json():
     class_query = get_all_classes()

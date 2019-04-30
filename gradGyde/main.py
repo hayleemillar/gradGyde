@@ -123,9 +123,9 @@ def dash_stud():
     aocs = get_aoc_json(user, 'divisional')
     doubles = get_aoc_json(user, 'double')
     slashes = get_aoc_json(user, 'slash')
-    #print(aocs)
-    #print(doubles)
-    #print(slashes)
+    ##print(aocs)
+    ##print(doubles)
+    ##print(slashes)
     return render_template('dash_stud.html',
                            name=session['user_name'],
                            aocs=aocs,
@@ -155,7 +155,7 @@ def lacs():
         return redirect('/admin')
     user = get_user(session['user_email'])
     lac = get_lacs_json(user)
-    #print(lac)
+    ##print(lac)
     return render_template('lac.html', lac=lac)
 
 
@@ -165,7 +165,7 @@ def lacs_form_submit():
         return redirect('/login')
     if session['user_type'] == UserType.ADMIN.value:
         return redirect('/admin')
-    #print(request.form)
+    ##print(request.form)
     user = get_user(session['user_email'])
     old_json = json.loads(request.form['old'])
     new_json = json.loads(request.form["new"])
@@ -215,9 +215,9 @@ def my_courses():
         return redirect('/admin')
     user = get_user(session['user_email'])
     course_list = get_classes_taken(user)
-    #print(course_list)
+    ##print(course_list)
     courses = get_classes_taken_json(course_list)
-    #print(courses)
+    ##print(courses)
     return render_template('courses.html',
                            courses=courses)
 
@@ -244,7 +244,7 @@ def explore_results():
         search_name = None
     if search_year == "" or search_year == "Any":
         search_year = None
-    #print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
+    ##print(request.args) = ([('type', 'courses'), ('name', ''), ('year', ''), ('semester', 'Fall')]
     # query db to get results based on user input.
     # NOTE: the user isn't required to fill in every field
     if search_type == "courses":
@@ -315,8 +315,8 @@ def admin():
     requirements = get_all_requirements_json()
 
     courses = get_all_classes_json()
-    # print(requirements)
-    # print(courses)
+    # #print(requirements)
+    # #print(courses)
     return render_template('admin.html',
                            tags=tags,
                            requirements=requirements,
@@ -404,7 +404,7 @@ def admin_addcourse():
     credit = request.form['credit']
     tags = request.form.getlist('tags')
     create_class([name, semester, da_year, credit], tags)
-    print(tags)
+    #print(tags)
     return redirect('/admin')
 
 
@@ -415,8 +415,8 @@ def admin_addaoc():
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
     form = request.form.to_dict()
-    # print(request.form.getlist("req1courses"))
-    # print(form)
+    # #print(request.form.getlist("req1courses"))
+    # #print(form)
     add_aoc("divisional", form, request.form)
     return redirect('/admin')
 
@@ -428,7 +428,7 @@ def admin_adddouble():
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
     form = request.form.to_dict()
-    print(form)
+    #print(form)
     add_aoc("double", form, request.form)
     return redirect('/admin')
 
@@ -440,6 +440,6 @@ def admin_addslash():
     if session['user_type'] == UserType.STUDENT.value:
         return redirect('/student_dashboard')
     form = request.form.to_dict()
-    print(form)
+    #print(form)
     add_aoc("slash", form, request.form)
     return redirect('/admin')
