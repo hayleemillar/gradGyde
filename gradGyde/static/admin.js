@@ -2,8 +2,9 @@
 /**
  * Switches which tab is active.
  * Changes HTML displayed according to which tab is active.
- * @param oldTabID
  * @param newTabID
+ * @param tabIDArray
+ * @param elementID
  */
 function switchTab(newTabID, tabIDArray, elementID) {
 
@@ -42,11 +43,10 @@ function switchTab(newTabID, tabIDArray, elementID) {
 /**
  * Generates what HTML is to be displayed.
  * @param tab
+ * @param elementID
+ * @param oldFormID
  */
 function generateForm(tab, elementID, oldFormID) {
-
-  var oldForm = document.getElementById(oldFormID);
-  oldForm.parentNode.removeChild(oldForm);
 
   var label;
   var input;
@@ -55,28 +55,41 @@ function generateForm(tab, elementID, oldFormID) {
   var option;
   var button;
 
+  // get old form and remove
+  var oldForm = document.getElementById(oldFormID);
+  oldForm.parentNode.removeChild(oldForm);
+
+  // get element
   var element = document.getElementById(elementID);
 
+  // start fresh with a new form
   var form = document.createElement("form");
-  // form.setAttribute("action", "/student_dashboard/explore-results");
 
+  // button to add course or add an area of interest
   button = document.createElement("button");
   button.setAttribute("type", "button");
   button.setAttribute("data-toggle", "modal");
   button.setAttribute("style", "margin: 0 auto");
 
+  // if button is for adding a course
   if (tab == "courses") {
     button.setAttribute("href", "#courseModal");
 
+    // add text accordingly, append to form
     text = document.createTextNode("Add Course");
     button.appendChild(text);
     form.appendChild(button);
 
+    // set form id
     form.setAttribute("id", "form-courses");
 
+    // break 
     form.appendChild(document.createElement("br"));
     form.appendChild(document.createElement("br"));
     form.appendChild(document.createElement("br"));
+
+
+    // the main portion of the form now for adding courses
 
     /***************
      * COURSE NAME *
@@ -85,9 +98,11 @@ function generateForm(tab, elementID, oldFormID) {
     label = document.createElement("label");
     label.setAttribute("for", "inputName");
 
+    // text
     text = document.createTextNode("Course Name");
     label.appendChild(text);
 
+    // append to form
     form.appendChild(label);
 
     // input
@@ -98,6 +113,7 @@ function generateForm(tab, elementID, oldFormID) {
     input.setAttribute("id", "inputName");
     input.setAttribute("placeholder", "Enter course name");
 
+    // append to form
     form.appendChild(input);
 
     // line break
@@ -207,6 +223,7 @@ function generateForm(tab, elementID, oldFormID) {
     form.appendChild(button);
 
 
+  // if an area of interest (AOC, double, slash)
   } else {
 
     /********
@@ -216,6 +233,7 @@ function generateForm(tab, elementID, oldFormID) {
     label = document.createElement("label");
     label.setAttribute("for", "inputName");
 
+    // switch cases to determine which type
     switch (tab) {
       case "aocs":
 
@@ -751,6 +769,8 @@ function addRequirement(elementID, type) {
   div.appendChild(select);
 
   form.appendChild(div);
+
+  // select2 and jquery to populate search dropdown in forms
 
   $("." + type.toLowerCase() + "req" + index).select2({
     data: reqs,

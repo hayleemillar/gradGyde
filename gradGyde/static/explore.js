@@ -3,7 +3,8 @@
  * Switches which tab is active.
  * Changes HTML displayed according to which tab is active.
  * @param oldTabID
- * @param newTabID
+ * @param tabIDArray
+ * @param elementID
  */
 function switchTab(newTabID, tabIDArray, elementID) {
 
@@ -42,6 +43,8 @@ function switchTab(newTabID, tabIDArray, elementID) {
 /**
  * Generates what HTML is to be displayed.
  * @param tab
+ * @param elementID
+ * @param oldFormID
  */
 function generateForm(tab, elementID, oldFormID) {
 
@@ -327,7 +330,8 @@ function generateForm(tab, elementID, oldFormID) {
 
 /*
  * Gets the results and displays in results section of the page.
- * @param type
+ * @param searchType
+ * @param event
  */
 function getResults(searchType, event) {
   event.preventDefault();
@@ -522,6 +526,7 @@ function getResults(searchType, event) {
 
 /**
  * Generates HTML form of requirements based on area of interest.
+ * @param aoiName
  * @param aoi
  */
 function generateRequirementsHTML(aoiName, aoi) {
@@ -590,6 +595,7 @@ function generateRequirementsHTML(aoiName, aoi) {
 
 /**
  * Post request to add course as taken by user.
+ * @param courseID
  */
 function addCourse(courseID) {
   $.post("/addcourse", {

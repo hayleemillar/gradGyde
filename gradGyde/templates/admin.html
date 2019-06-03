@@ -149,24 +149,6 @@
             <label for="inputAOCYear">Year</label><br/>
             <select name='year' id="inputAOCYear" class="mdb-select colorful-select dropdown-primary md-form" required>
             </select>
-
-            <!-- <label for="selectAOCReq1">Requirement 1</label><br/>
-            <select class="AOCreq1 form-control" name="req1" style="width:100%;" id="selectAOCReq1" required>
-            </select>
-
-            <br/>
-            <br/>
-
-            <div class="tab">
-              <label for="inputAOCReq1Credit">Number Credits Required for Requirement 1</label><br/>
-              <input name='req1Credit' type="number" class="form-control" id="inputAOCReq1Credit" placeholder="Enter number credits required" min="0" required>
-
-              <br/>
-
-              <label for="selectAOCReq1Courses">Courses for Requirement 1</label><br/>
-              <select class="aocReq1courses form-control" name="req1courses" style="width:100%;" id="selectAOCReq1Courses" multiple="true" required disabled>
-              </select>
-            </div> -->
           </div>
 
           <br/>
@@ -206,24 +188,6 @@
             <label for="inputDoubleYear">Year</label><br/>
             <select name='year' id="inputDoubleYear" class="mdb-select colorful-select dropdown-primary md-form" required>
             </select>
-
-            <!-- <label for="selectDoubleReq1">Requirement 1</label><br/>
-            <select class="Doublereq1 form-control" name="req1" style="width:100%;" id="selectDoubleReq1" required>
-            </select>
-
-            <br/>
-            <br/>
-
-            <div class="tab">
-              <label for="inputDoubleReq1Credit">Number Credits Required for Requirement 1</label><br/>
-              <input name='req1Credit' type="number" class="form-control" id="inputDoubleReq1Credit" placeholder="Enter number credits required" min="0" required>
-
-              <br/>
-
-              <label for="selectDoubleReq1Courses">Courses for Requirement 1</label><br/>
-              <select class="doubleReq1courses form-control" name="req1courses" style="width:100%;" id="selectDoubleReq1Courses" multiple="true" required disabled>
-              </select>
-            </div> -->
           </div>
 
           <br/>
@@ -263,24 +227,6 @@
             <label for="inputSlashYear">Year</label><br/>
             <select name='year' id="inputSlashYear" class="mdb-select colorful-select dropdown-primary md-form" required>
             </select>
-
-            <!-- <label for="selectSlashReq1">Requirement 1</label><br/>
-            <select class="slashReq1 form-control" name="req1" style="width:100%;" id="selectSlashReq1" required>
-            </select>
-
-            <br/>
-            <br/>
-
-            <div class="tab">
-              <label for="inputSlashReq1Credit">Number Credits Required for Requirement 1</label><br/>
-              <input name='req1Credit' type="number" class="form-control" id="inputSlashReq1Credit" placeholder="Enter number credits required" min="0" required>
-
-              <br/>
-
-              <label for="selectSlashReq1Courses">Courses for Requirement 1</label><br/>
-              <select class="slashReq1courses form-control" name="slashcourses" style="width:100%;" id="selectSlashReq1Courses" multiple="true" required disabled>
-              </select>
-            </div> -->
           </div>
 
           <br/>
@@ -373,36 +319,6 @@
   addRequirement('aoc-sub-form', 'AOC');
   addRequirement('double-sub-form', 'Double');
   addRequirement('slash-sub-form', 'Slash');
-
-  // $(".req1").select2({
-  //   data: reqs,
-  //   tags: true,
-  //   createTag: function (params) {
-  //     var term = $.trim(params.term);
-
-
-  //     if (term === '') {
-  //       return null;
-  //     }
-
-  //     document.getElementById("selectAOCReq1Courses").disabled = false;
-
-  //     return {
-  //       id: term,
-  //       text: term,
-  //       newTag: true, // add additional parameters
-  //     }
-  //   }
-  // });
-
-  // $(".req1courses").select2({
-  //   data: courses,
-  //   tags: true,
-  //   createTag: function(params) {
-  //     return undefined;
-  //   }
-  // });
-
 </script>
 
 </html>

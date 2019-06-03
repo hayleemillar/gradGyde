@@ -195,14 +195,13 @@ function populateAoiTabs(activeFirst, aois, tabElementID) {
 
 /**
  * Generates HTML form of requirements based on area of interest.
- * @param aoi
+ * @param aoiName
+ * @param aois
+ * @param aoiType
  */
 function generateRequirementsHTML(aoiName, aois, aoiType) {
   var html = "";
   var title;
-
-  // console.log(aois[aoi]["name"]);
-  // console.log(aoiName);
 
   // for each aoi
   for (aoi in aois) {
@@ -280,6 +279,12 @@ function generateRequirementsHTML(aoiName, aois, aoiType) {
 
 /**
  * Switches the form HTML according to aoi
+ * @param aocs
+ * @param doubles
+ * @param slashes
+ * @param aoiName
+ * @param aoiType
+ * @param elementID
  */
 function switchRequirements(aocs, doubles, slashes, aoiName, aoiType, elementID) {
 
